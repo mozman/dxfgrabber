@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-# --------------------------------------------------------------------------
-# dxfexplorer: copyright (C) 2012 by Manfred Moitzi (mozman)
-# --------------------------------------------------------------------------
+# dxfexplorer - copyright (C) 2012 by Manfred Moitzi (mozman)
 # Purpose: read and explore DXF drawings - all DXF versions supported
 # Created: 21.07.2012
 # License: MIT License
@@ -14,3 +12,12 @@ __author__ = "mozman <mozman@gmx.at>"
 __doc__ = """A Python library to read and explore DXF drawings - all DXF versins supported."""
 
 
+# Python2/3 support should be done here
+import sys
+if sys.version_info[0] == 3:
+    # for Python 3
+    tostr = str
+else:
+    # for Python 2
+    tostr = unicode
+# end of Python2/3 support
