@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+#coding:utf-8
+# Author:  mozman
+# Purpose: setup
+# Created: 21.07.2012
+# License: MIT License
+
+import os
+from distutils.core import setup
+
+VERSION = "0.1.0"
+AUTHOR_NAME = 'Manfred Moitzi'
+AUTHOR_EMAIL = 'mozman@gmx.at'
+
+def read(fname):
+    try:
+        return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    except IOError:
+        return "File '%s' not found.\n" % fname
+
+setup(name='dxfexplorer',
+    version=VERSION,
+    description='A Python library to read and explore DXF drawings - all DXF versions supported.',
+    author=AUTHOR_NAME,
+    url='http://bitbucket.org/mozman/dxfexplorer',
+    download_url='http://bitbucket.org/mozman/dxfexplorer/downloads',
+    author_email=AUTHOR_EMAIL,
+    packages=['dxfexplorer'],
+    provides=['dxfexplorer'],
+    keywords=['DXF', 'CAD'],
+    long_description=read('README.txt')+read('NEWS.txt'),
+    platforms="OS Independent",
+    license="MIT License",
+    classifiers=[
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.2",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Scientific/Engineering",
+    ]
+     )
