@@ -7,8 +7,30 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .defaultchunk import iterchunks
-from .table import GenericTable, Table
+from .defaultchunk import iterchunks, DefaultChunk
+from .layers import LayerTable
+
+TABLENAMES = {
+    'layer': 'layers',
+    'ltype': 'linetypes',
+    'appid': 'appids',
+    'dimstyle': 'dimstyles',
+    'style': 'styles',
+    'ucs': 'ucs',
+    'view': 'views',
+    'vport': 'viewports',
+    'block_record': 'block_records',
+    }
+
+def tablename(dxfname):
+    """ Translate DXF-table-name to attribute-name. ('LAYER' -> 'layers') """
+    name = dxfname.lower()
+    return TABLENAMES.get(name, name+'s')
+
+class GenericTable(DefaultChunk):
+    @property
+    def name(self):
+        return tablename(self.tags[1].value)
 
 class TablesSection(object):
     name = 'tables'
@@ -39,11 +61,7 @@ class TablesSection(object):
             raise AttributeError(key)
 
 TABLESMAP = {
-    'LAYER': Table,
-    'LTYPE': Table,
-    'STYLE': Table,
-    'DIMSTYLE': Table,
-    'BLOCK_RECORD': Table,
+    'LAYER': LayerTable,
 }
 
 def get_table_class(name):
