@@ -29,7 +29,6 @@ class DXFNamespace(object):
         """ GenericWrapper.dxf.DXF_ATTRIBUTE_NAME """
         return self.wrapper.get_dxf_attrib(key)
 
-
 class GenericWrapper:
     DXFATTRIBS = {}
 
@@ -65,6 +64,9 @@ class GenericWrapper:
     def _get_extended_type(self, code, xtype):
         tags = ExtendedType(self.tags)
         return tags.get_value(code, xtype)
+
+    def paperspace(self):
+        return self.dxf.get('paperspace', 0) == 1
 
 class ExtendedType:
     def __init__(self, tags):

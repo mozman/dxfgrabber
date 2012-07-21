@@ -137,7 +137,7 @@ class Polyline(GenericWrapper):
     def get_vertex_flags(self):
         return const.VERTEX_FLAGS[self.getmode()]
 
-    def getmode(self):
+    def get_mode(self):
         flags = self.dxf.flags
         if flags & const.POLYLINE_3D_POLYLINE > 0:
             return 'polyline3d'

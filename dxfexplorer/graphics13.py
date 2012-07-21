@@ -46,7 +46,6 @@ point_subclass = DefSubclass('AcDbPoint', {
 })
 
 class Point(graphics12.Point):
-    TEMPLATE = _POINT_TPL
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, point_subclass)
 
 circle_subclass = DefSubclass('AcDbCircle', {
@@ -208,7 +207,7 @@ insert_subclass = DefSubclass('AcDbBlockReference', {
         'extrusion': DXFAttr(210, 'Point3D'),
     })
 
-class Insert(graphics.Insert):
+class Insert(graphics12.Insert):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, insert_subclass)
     
 attrib_subclass = (

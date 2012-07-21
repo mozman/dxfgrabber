@@ -14,9 +14,9 @@ from . import const
 class BasicShape:
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
-        self.layer = wrapper.dxf.layer()
-        self.linetype = wrapper.dxf.linetype()
-        self.color = wrapper.dxf.color()
+        self.layer = wrapper.dxf.get('layer', '0')
+        self.linetype = wrapper.dxf.get('linetype', "")
+        self.color = wrapper.dxf.get('color', 0)
         self.paperspace = wrapper.paperspace() == 1
 
 class Line(BasicShape):
@@ -81,7 +81,7 @@ class Insert(BasicShape):
 class SeqEnd:
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
-        self.paperspace = wrapper.paperspace() == 1
+        self.paperspace = wrapper.paperspace()
 
 class Attrib(BasicShape):
     def __init__(self, wrapper):
@@ -99,11 +99,23 @@ class Polyline(BasicShape):
         self.vertices = None
         self.mode = wrapper.get_mode()
         self.flags = wrapper.dxf.flags
-        self.mcount = wrapper.dxf.mcount
-        self.ncount = wrapper.dxf.ncount
+        self.mcount = wrapper.dxf.get("mcount", 0)
+        self.ncount = wrapper.dxf.get("ncount", 0)
         self.is_mclosed = wrapper.is_mclosed()
         self.is_nclosed = wrapper.is_nclosed()
         self.elevation = wrapper.dxf.elevation
+
+    def __len__(self):
+        return len(self.vertices)
+
+    def __getitem__(self, item):
+        return self.vertices[item]
+
+    def __iter__(self):
+        return iter(self.vertices)
+
+    def points(self):
+        return (vertex.location for vertex in self.vertices)
 
     def append_data(self, vertices):
         self.vertices = vertices
@@ -116,7 +128,7 @@ class Polyline(BasicShape):
         else:
             return self
 
-class Face:
+class _Face:
     def __init__(self, face):
         self._vertices = []
         self._face = face
@@ -158,7 +170,7 @@ class Polyface:
                 return False
 
         def getface(vertex):
-            face = Face(vertex)
+            face = _Face(vertex)
             for index in vertex.vtx:
                 if index != 0:
                     index = abs(index) - 1
@@ -204,15 +216,19 @@ class Vertex(BasicShape):
     def __init__(self, wrapper):
         super(Vertex, self).__init__(wrapper)
         self.location = wrapper.dxf.location
-        self.flags = wrapper.dxf.flags
-        self.bulge = wrapper.dxf.bulge
-        self.tangent = wrapper.dxf.tangent
-        self.vtx = [
-            wrapper.dxf.vtx0,
-            wrapper.dxf.vtx1,
-            wrapper.dxf.vtx2,
-            wrapper.dxf.vtx3
-        ]
+        self.flags = wrapper.dxf.get('flags', 0)
+        self.bulge = wrapper.dxf.get('bulge', 0)
+        self.tangent = wrapper.dxf.get('tangent', None)
+        self.vtx = self._get_vtx(wrapper)
+
+    def _get_vtx(self, wrapper):
+        vtx = []
+        for vname in const.VERTEXNAMES:
+            try:
+                vtx.append(wrapper.dxf.get(vname))
+            except ValueError:
+                pass
+        return tuple(vtx)
 
 class LWPolyline(BasicShape):
     def __init__(self, wrapper):
@@ -224,7 +240,7 @@ class Ellipse(BasicShape):
     def __init__(self, wrapper):
         super(Ellipse, self).__init__(wrapper)
         self.center = wrapper.dxf.center
-        self.majoeaxis = wrapper.dxf.majoraxis
+        self.majoraxis = wrapper.dxf.majoraxis
         self.ratio = wrapper.dxf.ratio
         self.startparam = wrapper.dxf.startparam
         self.endparam = wrapper.dxf.endparam

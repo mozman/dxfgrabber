@@ -40,8 +40,6 @@ class EntitySection(object):
         return iter(self._entityspace)
 
     def __getitem__(self, index):
-        if isinstance(index, int):
-            raise ValueError('Integer index required')
         return self._entityspace[index]
 
     # end of public interface
