@@ -26,7 +26,7 @@ class LayerTable:
         dxfversion = drawing.dxfversion
         self._layers = dict()
         for entrytags in self._classified_tags(tags):
-            dxflayer = wrap(ClassifiedTags(entrytags), dxfversion)
+            dxflayer = wrap(entrytags, dxfversion)
             self._layers[dxflayer.dxf.name] = Layer(dxflayer)
 
     # start public interface
@@ -36,6 +36,12 @@ class LayerTable:
 
     def __contains__(self, name):
         return name in self._layers
+
+    def __iter__(self):
+        return self._layers.values()
+
+    def layernames(self):
+        return sorted(self._layers.keys())
 
     # end public interface
 
@@ -47,7 +53,7 @@ class LayerTable:
             yield ClassifiedTags(entrytags)
 
 def wrap(tags, dxfversion):
-    return DXF12Layer(tags) if dxfversion == "AC1009" else DXFLayer(tags)
+    return DXF12Layer(tags) if dxfversion == "AC1009" else DXF13Layer(tags)
 
 
 class DXF12Layer(GenericWrapper):
@@ -79,10 +85,7 @@ layer_subclass = DefSubclass('AcDbLayerTableRecord', {
     'flags': DXFAttr(70, None),
     'color': DXFAttr(62, None), # dxf color index
     'linetype': DXFAttr(6, None), # linetype name
-    'plot': DXFAttr(290, None), # dont plot this layer if 0 else 1
-    'lineweight': DXFAttr(370, None), # enum value???
-    'plotstylename': DXFAttr(390, None), # handle to PlotStyleName object
 })
 
-class DXFLayer(DXF12Layer):
+class DXF13Layer(DXF12Layer):
     DXFATTRIBS = DXFAttributes(none_subclass, symbol_subclass, layer_subclass)

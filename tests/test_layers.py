@@ -1,0 +1,4472 @@
+#!/usr/bin/env python
+#coding:utf-8
+# Author:  mozman -- <mozman@gmx.at>
+# Purpose: test layers
+# Created: 21.07.12
+# Copyright (C) 2012, Manfred Moitzi
+# License: MIT License
+from __future__ import unicode_literals
+
+import unittest
+
+from dxfexplorer.tags import Tags
+from dxfexplorer.layers import LayerTable
+from dxfexplorer.testtools import DrawingProxy
+
+class TestDXF12Layer(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(DXF12LAYERS)
+        self.layers = LayerTable(tags, DrawingProxy("AC1009"))
+
+    def test_get_existing_layer(self):
+        layer = self.layers.get("$-LI-FORMAT-FALTMARKEN")
+        self.assertEqual("$-LI-FORMAT-FALTMARKEN", layer.name)
+
+    def test_contains(self):
+        self.assertTrue("$-LI-FORMAT-FALTMARKEN" in self.layers)
+
+    def test_get_color(self):
+        layer = self.layers.get("$-LI-FORMAT-FALTMARKEN")
+        self.assertEqual(6, layer.color)
+
+    def test_get_linetype(self):
+        layer = self.layers.get("$-LI-FORMAT-FALTMARKEN")
+        self.assertEqual("AUSGEZOGEN", layer.linetype)
+
+    def test_not_existing_layer(self):
+        with self.assertRaises(KeyError):
+            layer = self.layers.get("DIESEN-GIBT-ES-NICHT")
+
+    def test_layernames(self):
+        self.assertEqual(52, len(self.layers.layernames()))
+
+class TestDXFLayer(TestDXF12Layer):
+    def setUp(self):
+        tags = Tags.fromtext(DXFLAYERS)
+        self.layers = LayerTable(tags, DrawingProxy("AC1024"))
+
+    def test_get_linetype(self):
+        layer = self.layers.get("$-LI-FORMAT-FALTMARKEN")
+        self.assertEqual("CONTINUOUS", layer.linetype)
+
+    def test_get_color(self):
+        layer = self.layers.get("$-LI-FORMAT-FALTMARKEN")
+        self.assertEqual(210, layer.color)
+
+    def test_layernames(self):
+        self.assertEqual(106, len(self.layers.layernames()))
+
+DXFLAYERS = """  0
+TABLE
+  2
+LAYER
+  5
+18
+102
+{ACAD_XDICTIONARY
+360
+19
+102
+}
+330
+0
+100
+AcDbSymbolTable
+ 70
+   106
+  0
+LAYER
+  5
+7
+102
+{ACAD_XDICTIONARY
+360
+63D5
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+0
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+     7
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+     7
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+30B
+102
+{ACAD_XDICTIONARY
+360
+63D7
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-7
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+B3
+102
+{ACAD_XDICTIONARY
+360
+63D9
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+-LOGO
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+     7
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+     7
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+AD
+102
+{ACAD_XDICTIONARY
+360
+63DB
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-007
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+478
+102
+{ACAD_XDICTIONARY
+360
+63DD
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$$-BESCHRIFTUNG
+ 70
+     0
+ 62
+   255
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+   255
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+   255
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+46F
+102
+{ACAD_XDICTIONARY
+360
+63DF
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-NW-SCHR
+ 70
+     0
+ 62
+    50
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+    50
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+    50
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+349
+102
+{ACAD_XDICTIONARY
+360
+63E1
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+--253
+ 70
+     0
+ 62
+   253
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+   253
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+   253
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+6C
+102
+{ACAD_XDICTIONARY
+360
+63E3
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-001
+ 70
+     0
+ 62
+   232
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+   232
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+   232
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+40
+102
+{ACAD_XDICTIONARY
+360
+63E5
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+-200-FORMAT
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-14
+1070
+     0
+1070
+   210
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-14}
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+   210
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+2FD
+102
+{ACAD_XDICTIONARY
+360
+63E7
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-DATEIINFO
+ 70
+     0
+ 62
+   125
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{75-LÄNGENSCHNITT-2005
+1070
+     0
+1070
+   125
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+75-LÄNGENSCHNITT-2005}
+  0
+LAYER
+  5
+359
+102
+{ACAD_XDICTIONARY
+360
+63E9
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-FORMAT-RAHMEN
+ 70
+     0
+ 62
+   255
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+309
+102
+{ACAD_XDICTIONARY
+360
+63EB
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-GRADIENTE
+ 70
+     0
+ 62
+   141
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+367
+102
+{ACAD_XDICTIONARY
+360
+63ED
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-KRÜMMUNG
+ 70
+     0
+ 62
+    50
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+35F
+102
+{ACAD_XDICTIONARY
+360
+63EF
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-ÜBERHÖHUNG
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+361
+102
+{ACAD_XDICTIONARY
+360
+63F1
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-KRÜMMUNG
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+71
+102
+{ACAD_XDICTIONARY
+360
+63F3
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+TITEL_025
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{60-ZULETZT
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1000
+60-ZULETZT}
+1000
+{60-OHNE SOLID
+1070
+     0
+1070
+   255
+1000
+CONTINUOUS
+1000
+60-OHNE SOLID}
+  0
+LAYER
+  5
+31A
+102
+{ACAD_XDICTIONARY
+360
+63F5
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-ÜBERHÖHUNGEN
+ 70
+     0
+ 62
+    50
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+357
+102
+{ACAD_XDICTIONARY
+360
+63F7
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-FORMAT
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+548
+102
+{ACAD_XDICTIONARY
+360
+63F9
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-VE-KONSTRUKTION
+ 70
+     0
+ 62
+   252
+  6
+HIDDEN
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+330
+102
+{ACAD_XDICTIONARY
+360
+63FB
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-FORMAT
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+450
+102
+{ACAD_XDICTIONARY
+360
+63FD
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-HEKTOMETER-GROSS
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+4A5
+102
+{ACAD_XDICTIONARY
+360
+63FF
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-HEKTOMETER-KLEIN
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+4B2
+102
+{ACAD_XDICTIONARY
+360
+6401
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-HEKTOMETER
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+452
+102
+{ACAD_XDICTIONARY
+360
+6403
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-SY-HEKTOMETER
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+3AD
+102
+{ACAD_XDICTIONARY
+360
+6405
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-NEIGUNGSWECHSEL
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+3CA
+102
+{ACAD_XDICTIONARY
+360
+6407
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-SY-NEIGUNGSWECHSEL
+ 70
+     0
+ 62
+    50
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+54C
+102
+{ACAD_XDICTIONARY
+360
+6409
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-VE
+ 70
+     0
+ 62
+   111
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+34B
+102
+{ACAD_XDICTIONARY
+360
+640B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-SY-VE
+ 70
+     0
+ 62
+   255
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+30E
+102
+{ACAD_XDICTIONARY
+360
+640D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-SY-RICHTUNG
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+425
+102
+{ACAD_XDICTIONARY
+360
+640F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-OBJEKT
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+4BC
+102
+{ACAD_XDICTIONARY
+360
+6411
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-GEMEINDEVERZEICHNIS
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+2FF
+102
+{ACAD_XDICTIONARY
+360
+6413
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-HAUPTPUNKTE
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+301
+102
+{ACAD_XDICTIONARY
+360
+6415
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-HAUPTPUNKTE
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+33
+102
+{ACAD_XDICTIONARY
+360
+6417
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-GRADIENTE-SOLID
+ 70
+     0
+ 62
+   220
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+5AB
+102
+{ACAD_XDICTIONARY
+360
+6419
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-BESTAND
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+3F7
+102
+{ACAD_XDICTIONARY
+360
+641B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-NW
+ 70
+     0
+ 62
+   125
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+435
+102
+{ACAD_XDICTIONARY
+360
+641D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-SOLID-OBJEKTE
+ 70
+     0
+ 62
+   220
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+75C
+102
+{ACAD_XDICTIONARY
+360
+641F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-BESTAND-GLEISE
+ 70
+     0
+ 62
+   210
+  6
+HIDDEN
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+40E
+102
+{ACAD_XDICTIONARY
+360
+6421
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-GRADIENTE-KONSTRUKTION
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+5D4
+102
+{ACAD_XDICTIONARY
+360
+6423
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-PROFILE
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+5D1
+102
+{ACAD_XDICTIONARY
+360
+6425
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-PROFILE-ORDNER
+ 70
+     0
+ 62
+   251
+  6
+DASHED2
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+2E3
+102
+{ACAD_XDICTIONARY
+360
+6427
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+_30
+ 70
+     0
+ 62
+    30
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+31C
+102
+{ACAD_XDICTIONARY
+360
+6429
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-OBJEKTE
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{69-LAGEPLAN-1000-OHNE SOLID
+1070
+     0
+1070
+     2
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+0
+1000
+69-LAGEPLAN-1000-OHNE SOLID}
+1000
+{69-LAGEPLAN-1000-PLOT
+1070
+     0
+1070
+     2
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+0
+1000
+69-LAGEPLAN-1000-PLOT}
+  0
+LAYER
+  5
+526
+102
+{ACAD_XDICTIONARY
+360
+642B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-PROFILE-OBJEKTE
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+523
+102
+{ACAD_XDICTIONARY
+360
+642D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-PROFILE-OBJEKTE
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+411
+102
+{ACAD_XDICTIONARY
+360
+642F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-OBJEKT-ACHSE
+ 70
+     0
+ 62
+   210
+  6
+STRICHPUNKT
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+437
+102
+{ACAD_XDICTIONARY
+360
+6431
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-TX-UND-LI-WEICHEN
+ 70
+     0
+ 62
+    50
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+414
+102
+{ACAD_XDICTIONARY
+360
+6433
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-OBJEKT-SAUBER
+ 70
+     0
+ 62
+   211
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+41B
+102
+{ACAD_XDICTIONARY
+360
+6435
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-OBJEKT-SCHUTZBETON
+ 70
+     0
+ 62
+   211
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+433
+102
+{ACAD_XDICTIONARY
+360
+6437
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-WEG-BITUM_TS
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+39
+102
+{ACAD_XDICTIONARY
+360
+6439
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-FORMAT-FALTMARKEN
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{PLOT EXKL MASSENERMITTLUNG
+1070
+     0
+1070
+    50
+1000
+CONTINUOUS
+1000
+PLOT EXKL MASSENERMITTLUNG}
+  0
+LAYER
+  5
+473
+102
+{ACAD_XDICTIONARY
+360
+643B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-NW
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{OHNE SOLID
+1070
+     0
+1070
+     7
+1000
+CONTINUOUS
+1000
+OHNE SOLID}
+  0
+LAYER
+  5
+47B
+102
+{ACAD_XDICTIONARY
+360
+643D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-251
+ 70
+     0
+ 62
+   251
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+5CE
+102
+{ACAD_XDICTIONARY
+360
+643F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-PROFILE
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+AcAecLayerStandard
+1000
+
+1000
+
+  0
+LAYER
+  5
+716
+102
+{ACAD_XDICTIONARY
+360
+6441
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-HAUPTPUNKTE-Ordner
+ 70
+     0
+ 62
+   125
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+AcAecLayerStandard
+1000
+
+1000
+
+  0
+LAYER
+  5
+CE4
+102
+{ACAD_XDICTIONARY
+360
+6443
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+007-018
+ 70
+     0
+ 62
+   210
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{78-VERMESSUNGSANFORDERUNG
+1070
+     0
+1070
+   210
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+78-VERMESSUNGSANFORDERUNG}
+  0
+LAYER
+  5
+CE5
+102
+{ACAD_XDICTIONARY
+360
+6445
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+-VERMESSUNGSANFORDERUNG-solid
+ 70
+     0
+ 62
+    72
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+AcAecLayerStandard
+1000
+
+1000
+
+1001
+RAK
+1000
+{78-VERMESSUNGSANFORDERUNG
+1070
+     0
+1070
+    72
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+78-VERMESSUNGSANFORDERUNG}
+  0
+LAYER
+  5
+CE6
+102
+{ACAD_XDICTIONARY
+360
+6447
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+007-013
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{73-LAGEPLAN-PLOT
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-PLOT}
+1000
+{73-LAGEPLAN-OHNE SOLID
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-OHNE SOLID}
+1000
+{78-VERMESSUNGSANFORDERUNG
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+78-VERMESSUNGSANFORDERUNG}
+  0
+LAYER
+  5
+CE7
+102
+{ACAD_XDICTIONARY
+360
+6449
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+-TITEL
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{73-LAGEPLAN-PLOT
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-PLOT}
+1000
+{73-LAGEPLAN-OHNE SOLID
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-OHNE SOLID}
+1000
+{78-VERMESSUNGSANFORDERUNG
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+78-VERMESSUNGSANFORDERUNG}
+  0
+LAYER
+  5
+CE8
+102
+{ACAD_XDICTIONARY
+360
+644B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+000_DATEIINFO
+ 70
+     0
+ 62
+    53
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{73-LAGEPLAN-PLOT
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-PLOT}
+1000
+{73-LAGEPLAN-OHNE SOLID
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-OHNE SOLID}
+1000
+{78-VERMESSUNGSANFORDERUNG
+1070
+     0
+1070
+    53
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+78-VERMESSUNGSANFORDERUNG}
+  0
+LAYER
+  5
+EBD
+102
+{ACAD_XDICTIONARY
+360
+644D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-AUSFERTIGUNG
+ 70
+     0
+ 62
+   241
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{73-QS-PLOT-2005
+1070
+     0
+1070
+   241
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-QS-PLOT-2005}
+  0
+LAYER
+  5
+186E
+102
+{ACAD_XDICTIONARY
+360
+644F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$TX-006
+ 70
+     0
+ 62
+   213
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+1001
+RAK
+1000
+{73-LAGEPLAN-PLOT
+1070
+     0
+1070
+   213
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-PLOT}
+1000
+{73-LAGEPLAN-OHNE SOLID
+1070
+     0
+1070
+   213
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+73-LAGEPLAN-OHNE SOLID}
+1000
+{SOLID-FLÄCHEN
+1070
+     0
+1070
+   213
+1000
+CONTINUOUS
+1071
+       -3
+1071
+        1
+1005
+8
+1000
+SOLID-FLÄCHEN}
+  0
+LAYER
+  5
+2B1C
+102
+{ACAD_XDICTIONARY
+360
+6451
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-LI-Layoutfenster
+ 70
+     0
+ 62
+   125
+  6
+CONTINUOUS
+290
+     0
+370
+    -3
+390
+8
+347
+805
+1001
+AcAecLayerStandard
+1000
+
+1000
+
+  0
+LAYER
+  5
+3278
+102
+{ACAD_XDICTIONARY
+360
+6453
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+$-GRAU-LI-GRADIENTE
+ 70
+     0
+ 62
+   248
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51AA
+102
+{ACAD_XDICTIONARY
+360
+6455
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+2
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51AB
+102
+{ACAD_XDICTIONARY
+360
+6457
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+6
+ 70
+     0
+ 62
+     6
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51AC
+102
+{ACAD_XDICTIONARY
+360
+6459
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+1
+ 70
+     0
+ 62
+     1
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51AD
+102
+{ACAD_XDICTIONARY
+360
+645B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+4
+ 70
+     0
+ 62
+     4
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51AE
+102
+{ACAD_XDICTIONARY
+360
+645D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+5
+ 70
+     0
+ 62
+     5
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51AF
+102
+{ACAD_XDICTIONARY
+360
+645F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+3
+ 70
+     0
+ 62
+     3
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B0
+102
+{ACAD_XDICTIONARY
+360
+6461
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+PROKO
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B1
+102
+{ACAD_XDICTIONARY
+360
+6463
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+N2
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B2
+102
+{ACAD_XDICTIONARY
+360
+6465
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+N3
+ 70
+     0
+ 62
+     3
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B3
+102
+{ACAD_XDICTIONARY
+360
+6467
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+2DADO
+ 70
+     0
+ 62
+     2
+  6
+DASHDOT
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B4
+102
+{ACAD_XDICTIONARY
+360
+6469
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+SCHACHT
+ 70
+     0
+ 62
+     3
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B5
+102
+{ACAD_XDICTIONARY
+360
+646B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+SCHACHT_T
+ 70
+     0
+ 62
+     3
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B6
+102
+{ACAD_XDICTIONARY
+360
+646D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+SOHLE_T
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B7
+102
+{ACAD_XDICTIONARY
+360
+646F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+GEL_T
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B8
+102
+{ACAD_XDICTIONARY
+360
+6471
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DIST_T
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51B9
+102
+{ACAD_XDICTIONARY
+360
+6473
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+3HID
+ 70
+     0
+ 62
+     3
+  6
+HIDDEN
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51BA
+102
+{ACAD_XDICTIONARY
+360
+6475
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DECKEL
+ 70
+     0
+ 62
+     4
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51BB
+102
+{ACAD_XDICTIONARY
+360
+6477
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+2HID
+ 70
+     0
+ 62
+     2
+  6
+HIDDEN
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51BC
+102
+{ACAD_XDICTIONARY
+360
+6479
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ROHR_L
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51BD
+102
+{ACAD_XDICTIONARY
+360
+647B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN100
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51BE
+102
+{ACAD_XDICTIONARY
+360
+647D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN200
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51BF
+102
+{ACAD_XDICTIONARY
+360
+647F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN300
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C0
+102
+{ACAD_XDICTIONARY
+360
+6481
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN400
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C1
+102
+{ACAD_XDICTIONARY
+360
+6483
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN500
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C2
+102
+{ACAD_XDICTIONARY
+360
+6485
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN600
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C3
+102
+{ACAD_XDICTIONARY
+360
+6487
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN150
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C4
+102
+{ACAD_XDICTIONARY
+360
+6489
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN250
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C5
+102
+{ACAD_XDICTIONARY
+360
+648B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN350
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C6
+102
+{ACAD_XDICTIONARY
+360
+648D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+DN450
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C7
+102
+{ACAD_XDICTIONARY
+360
+648F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+FORMAT
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C8
+102
+{ACAD_XDICTIONARY
+360
+6491
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+8
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51C9
+102
+{ACAD_XDICTIONARY
+360
+6493
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+9
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51CA
+102
+{ACAD_XDICTIONARY
+360
+6495
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+KAN2SOHL
+ 70
+     0
+ 62
+     1
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51CB
+102
+{ACAD_XDICTIONARY
+360
+6497
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ENTWSCHK
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51CC
+102
+{ACAD_XDICTIONARY
+360
+6499
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+KAN2
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51CD
+102
+{ACAD_XDICTIONARY
+360
+649B
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+KAN3
+ 70
+     0
+ 62
+     3
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51CE
+102
+{ACAD_XDICTIONARY
+360
+649D
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+KAN2S
+ 70
+     0
+ 62
+     7
+  6
+DASHED
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51CF
+102
+{ACAD_XDICTIONARY
+360
+649F
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ENTWSCHK1
+ 70
+     0
+ 62
+    10
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51D0
+102
+{ACAD_XDICTIONARY
+360
+64A1
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+TEST_TEXTE
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51D1
+102
+{ACAD_XDICTIONARY
+360
+64A3
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+TEST2_TEXTE
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51D2
+102
+{ACAD_XDICTIONARY
+360
+64A5
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+B-S
+ 70
+     0
+ 62
+     4
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+LAYER
+  5
+51D3
+102
+{ACAD_XDICTIONARY
+360
+64A7
+102
+}
+330
+18
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+H-S
+ 70
+     0
+ 62
+     2
+  6
+CONTINUOUS
+370
+    -3
+390
+8
+347
+805
+  0
+ENDTAB
+"""
+DXF12LAYERS = """  0
+TABLE
+  2
+LAYER
+ 70
+    52
+  0
+LAYER
+  2
+0
+ 70
+     0
+ 62
+     7
+  6
+CONTINUOUS
+  0
+LAYER
+  2
+$$-BESCHRIFTUNG
+ 70
+     0
+ 62
+   255
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-_BERH_HUNGEN
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-FORMAT
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-FORMAT-FALTMARKEN
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-FORMAT-RAHMEN
+ 70
+     0
+ 62
+   255
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-GRADIENTE
+ 70
+     0
+ 62
+   131
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-GRADIENTE-KONSTRUKTIO
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-GRADIENTE-SOLID
+ 70
+     0
+ 62
+   200
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-HAUPTPUNKTE
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-HAUPTPUNKTE-ORDNER
+ 70
+     0
+ 62
+   124
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-HEKTOMETER
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-KR_MMUNG
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-NW
+ 70
+     0
+ 62
+   124
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-OBJEKT
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-OBJEKT-ACHSE
+ 70
+     0
+ 62
+     6
+  6
+STRICHPUNKT2_S5
+  0
+LAYER
+  2
+$-LI-OBJEKT-SAUBER
+ 70
+     0
+ 62
+   211
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-OBJEKT-SCHUTZBETON
+ 70
+     0
+ 62
+   211
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-PROFILE
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-PROFILE-OBJEKTE
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-PROFILE-ORDNER
+ 70
+     0
+ 62
+   251
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-VE
+ 70
+     0
+ 62
+   254
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-LI-VE-KONSTRUKTION
+ 70
+     0
+ 62
+   252
+  6
+VERDECKT2_S2
+  0
+LAYER
+  2
+$-LI-WEG-BITUM_TS
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-NW
+ 70
+     0
+ 62
+     7
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-NW-SCHR
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-SOLID-OBJEKTE
+ 70
+     0
+ 62
+   200
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-SY-HEKTOMETER
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-SY-NEIGUNGSWECHSEL
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-SY-RICHTUNG
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-SY-VE
+ 70
+     0
+ 62
+   255
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-_BERH_HUNG
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-FORMAT
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-HAUPTPUNKTE
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-HEKTOMETER-GROSS
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-HEKTOMETER-KLEIN
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-KR_MMUNG
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-NEIGUNGSWECHSEL
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-PROFILE
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-PROFILE-OBJEKTE
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$-TX-UND-LI-WEICHEN
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$TX-001
+ 70
+     0
+ 62
+    32
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$TX-006
+ 70
+     0
+ 62
+   203
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$TX-007
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$TX-251
+ 70
+     0
+ 62
+   251
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$TX-7
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+$TX-OBJEKTE
+ 70
+     0
+ 62
+     2
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+--253
+ 70
+     0
+ 62
+   253
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+-200-FORMAT
+ 70
+     0
+ 62
+     6
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+-LOGO
+ 70
+     0
+ 62
+     7
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+_30
+ 70
+     0
+ 62
+    30
+  6
+AUSGEZOGEN
+  0
+LAYER
+  2
+TITEL_025
+ 70
+     0
+ 62
+    63
+  6
+AUSGEZOGEN
+  0
+ENDTAB
+"""

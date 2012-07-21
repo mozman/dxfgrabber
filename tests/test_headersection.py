@@ -74,6 +74,3 @@ $EXTMAX
   0
 ENDSEC
 """
-
-if __name__=='__main__':
-    unittest.main()

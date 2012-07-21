@@ -9,11 +9,11 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from collections import OrderedDict
 
+from .codepage import toencoding
 from .defaultchunk import DefaultChunk, iterchunks
 from .headersection import HeaderSection
-#from .tablessection import TablesSection
-#from .blockssection import BlocksSection
-#from .entitysection import EntitySection, ClassesSection, ObjectsSection
+from .tablessection import TablesSection
+from .entitysection import EntitySection
 
 class Sections(object):
     def __init__(self, tagreader, drawing):
@@ -28,7 +28,9 @@ class Sections(object):
         for section in iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
             if bootstrap:
                 new_section = HeaderSection(section)
-                drawing._bootstraphook(new_section)
+                drawing.dxfversion = new_section['$ACADVER']
+                codepage = new_section.get('$DWGCODEPAGE', 'ANSI_1252')
+                drawing.encoding = toencoding(codepage)
                 bootstrap = False
             else:
                 section_class = get_section_class(name(section))
@@ -42,11 +44,8 @@ class Sections(object):
             raise AttributeError(key)
 
 SECTIONMAP = {
-    #'CLASSES': ClassesSection,
-    #'TABLES': TablesSection,
-    #'BLOCKS': BlocksSection,
+    'TABLES': TablesSection,
     #'ENTITIES': EntitySection,
-    #'OBJECTS': ObjectsSection,
 }
 
 def get_section_class(name):
