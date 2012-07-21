@@ -9,7 +9,7 @@ version = (0, 1, 0)
 VERSION = "%d.%d.%d"  % version
 
 __author__ = "mozman <mozman@gmx.at>"
-__doc__ = """A Python library to read and explore DXF drawings - all DXF versins supported."""
+__doc__ = """A Python library to read and explore DXF drawings - all DXF versions supported."""
 
 
 # Python2/3 support should be done here
@@ -21,3 +21,21 @@ else:
     # for Python 2
     tostr = unicode
 # end of Python2/3 support
+
+from .tags import dxfinfo
+
+def read(stream):
+    from .drawing import Drawing
+    return Drawing(stream)
+
+def readfile(filename):
+    def get_encoding():
+        with open(filename) as fp:
+            info = dxfinfo(fp)
+        return info.encoding
+
+    from .drawing import Drawing
+    with open(filename, encoding=get_encoding()) as fp:
+        dwg = Drawing(fp)
+    dwg.filename = filename
+    return dwg
