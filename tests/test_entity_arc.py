@@ -7,35 +7,76 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfexplorer.tags import Tags
-from dxfexplorer.entitysection import EntitySection
+from dxfexplorer.classifiedtags import ClassifiedTags
+from dxfexplorer.entities import entity_factory
 
-class DrawingProxy:
-    def __init__(self, version):
-        self.dxfversion = version
 
 class TestArcDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(ARC_DXF12)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+        tags = ClassifiedTags.fromtext(ARC_DXF12)
+        self.entity = entity_factory(tags, 'AC1009')
 
-class TestArcDXF13(unittest.TestCase):
+    def test_arc_data(self):
+        entity = self.entity
+        self.assertEqual(entity.dxftype, 'ARC')
+        self.assertEqual(entity.center, (0., 0., 0.))
+        self.assertEqual(entity.radius, 5.0)
+        self.assertEqual(entity.startangle, 0.0)
+        self.assertEqual(entity.endangle, 90.0)
+        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.layer, '0')
+        self.assertEqual(entity.linetype, '')
+        self.assertFalse(entity.paperspace)
+
+class TestArcDXF13(TestArcDXF12):
     def setUp(self):
-        tags = Tags.fromtext(ARC_DXF13)
-        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
+        tags = ClassifiedTags.fromtext(ARC_DXF13)
+        self.entity = entity_factory(tags, 'AC1024')
 
 ARC_DXF12 = """  0
-SECTION
-  2
-ENTITIES
-  0
-ENDSEC
+ARC
+  5
+3E5
+  8
+0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 40
+5.0
+ 50
+0.0
+ 51
+90.0
 """
 
 ARC_DXF13 = """  0
-SECTION
-  2
-ENTITIES
-  0
-ENDSEC
+ARC
+  5
+3E5
+330
+1F
+100
+AcDbEntity
+  8
+0
+100
+AcDbCircle
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 40
+5.0
+100
+AcDbArc
+ 50
+0.0
+ 51
+90.0
 """

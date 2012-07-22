@@ -12,6 +12,7 @@ import unittest
 from dxfexplorer.tags import Tags
 from dxfexplorer.layers import LayerTable
 
+
 class DrawingProxy:
     def __init__(self, version):
         self.dxfversion = version

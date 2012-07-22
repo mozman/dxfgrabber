@@ -187,12 +187,12 @@ class LWPolyline(GenericWrapper):
                     if point:
                         yield tuple(point)
                         point = []
-                point.append(tag)
+                point.append(tag.value)
         if point:
             yield tuple(point)
 
     def is_closed(self):
-        return self.dxf.flags & const.LWPOLYLINE_CLOSED
+        return bool(self.dxf.flags & const.LWPOLYLINE_CLOSED)
 
     @property
     def points(self):
@@ -225,6 +225,7 @@ attrib_subclass = (
         'thickness': DXFAttr(39, None),
         'height': DXFAttr(40, None),
         'text': DXFAttr(1, None),
+        'style': DXFAttr(7, None), # DXF-specs: 'AcDbAttribute'; AutoCAD: 'AcDbText'
         }),
     DefSubclass('AcDbAttribute', {
         'tag': DXFAttr(2, None),
@@ -233,7 +234,6 @@ attrib_subclass = (
         'rotation': DXFAttr(50, None),
         'width': DXFAttr(41, None),
         'oblique': DXFAttr(51, None),
-        'style': DXFAttr(7, None),
         'textgenerationflag': DXFAttr(71, None),
         'halign': DXFAttr(72, None),
         'valign': DXFAttr(74, None),

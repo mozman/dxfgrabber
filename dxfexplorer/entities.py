@@ -10,10 +10,14 @@ __author__ = "mozman <mozman@gmx.at>"
 from . import dxf12, dxf13
 from . import const
 
-class Entity(object):
+class SeqEnd(object):
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
-        self.paperspace = wrapper.paperspace() == 1
+
+class Entity(SeqEnd):
+    def __init__(self, wrapper):
+        super(Entity, self).__init__(wrapper)
+        self.paperspace = wrapper.paperspace()
 
 class Shape(Entity):
     def __init__(self, wrapper):
@@ -31,7 +35,7 @@ class Line(Shape):
 class Point(Shape):
     def __init__(self, wrapper):
         super(Point, self).__init__(wrapper)
-        self.point = wrapper.point
+        self.point = wrapper.dxf.point
 
 class Circle(Shape):
     def __init__(self, wrapper):
@@ -59,40 +63,43 @@ Solid = Trace
 class Face(Trace):
     def __init__(self, wrapper):
         super(Face, self).__init__(wrapper)
-        self.invisible_edge = wrapper.dxf.invisible_edge
+        self.invisible_edge = wrapper.dxf.get('invisible_edge', 0)
+
+    def is_edge_invisible(self, edge):
+        # edges 0 .. 3
+        return bool(self.invisible_edge & (1 << edge))
 
 class Text(Shape):
     def __init__(self, wrapper):
         super(Text, self).__init__(wrapper)
         self.insert = wrapper.dxf.insert
-        self.height = wrapper.dxf.height
         self.text = wrapper.dxf.text
-        self.rotation = wrapper.dxf.rotation
+        self.height = wrapper.dxf.get('height', 1.)
+        self.rotation = wrapper.dxf.get('rotation', 0.)
+        self.style = wrapper.dxf.get('style', "")
 
 class Insert(Shape):
     def __init__(self, wrapper):
         super(Insert, self).__init__(wrapper)
         self.name = wrapper.dxf.name
         self.insert = wrapper.dxf.insert
-        self.rotation = wrapper.dxf.rotation
+        self.rotation = wrapper.dxf.get('rotation', 0.)
         self.attribsfollow = wrapper.dxf.attribsfollow
         self.attribs = []
+
+    def find_attrib(self, attrib_tag):
+        for attrib in self.attribs:
+            if attrib.tag == attrib_tag:
+                return attrib
+        return None
 
     def append_data(self, attribs):
         self.attribs = attribs
 
-class SeqEnd(Entity):
-    pass
-
-class Attrib(Shape):
+class Attrib(Text):
     def __init__(self, wrapper):
         super(Attrib, self).__init__(wrapper)
-        self.insert = wrapper.dxf.insert
-        self.height = wrapper.dxf.height
-        self.text = wrapper.dxf.text
         self.tag = wrapper.dxf.tag
-        self.rotation = wrapper.dxf.rotation
-
 
 class Polyline(Shape):
     def __init__(self, wrapper):
@@ -102,9 +109,9 @@ class Polyline(Shape):
         self.flags = wrapper.dxf.flags
         self.mcount = wrapper.dxf.get("mcount", 0)
         self.ncount = wrapper.dxf.get("ncount", 0)
-        self.is_mclosed = wrapper.is_mclosed()
-        self.is_nclosed = wrapper.is_nclosed()
-        self.elevation = wrapper.dxf.elevation
+        self.is_mclosed = bool(wrapper.is_mclosed())
+        self.is_nclosed = bool(wrapper.is_nclosed())
+        self.elevation = wrapper.dxf.get('elevation', (0., 0., 0.))
 
     def __len__(self):
         return len(self.vertices)
@@ -193,8 +200,8 @@ class Polymesh:
         self.paperspace = polyline.paperspace
         self.mcount = polyline.mcount
         self.ncount = polyline.ncount
-        self.is_mclosed = polyline.is_mclosed()
-        self.is_nclosed = polyline.is_nclosed()
+        self.is_mclosed = polyline.is_mclosed
+        self.is_nclosed = polyline.is_nclosed
         self._vertices = polyline.vertices
 
     def __iter__(self):
@@ -209,7 +216,7 @@ class Polymesh:
         m, n = pos
         if 0 <= m < mcount and 0 <= n < ncount:
             pos = m * ncount + n
-            return self._vertices(pos)
+            return self._vertices[pos]
         else:
             raise IndexError(repr(pos))
 
@@ -242,9 +249,9 @@ class Ellipse(Shape):
         super(Ellipse, self).__init__(wrapper)
         self.center = wrapper.dxf.center
         self.majoraxis = wrapper.dxf.majoraxis
-        self.ratio = wrapper.dxf.ratio
-        self.startparam = wrapper.dxf.startparam
-        self.endparam = wrapper.dxf.endparam
+        self.ratio = wrapper.dxf.get('ratio', 1.0) # circle
+        self.startparam = wrapper.dxf.get('startparam', 0.)
+        self.endparam = wrapper.dxf.get('endparam', 6.283185307179586) # 2*pi
 
 class Ray(Shape):
     def __init__(self, wrapper):
@@ -259,7 +266,7 @@ EntityTable = {
     'ARC': (Arc, dxf12.Arc, dxf13.Arc),
     'TRACE': (Trace, dxf12.Trace, dxf13.Trace),
     'SOLID': (Solid, dxf12.Solid, dxf13.Solid),
-    'FACE': (Face, dxf12.Face, dxf13.Face),
+    '3DFACE': (Face, dxf12.Face, dxf13.Face),
     'TEXT': (Text, dxf12.Text, dxf13.Text),
     'INSERT': (Insert, dxf12.Insert, dxf13.Insert),
     'SEQEND': (SeqEnd, dxf12.SeqEnd, dxf13.SeqEnd),

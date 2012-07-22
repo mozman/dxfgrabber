@@ -7,35 +7,58 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfexplorer.tags import Tags
-from dxfexplorer.entitysection import EntitySection
-
-class DrawingProxy:
-    def __init__(self, version):
-        self.dxfversion = version
+from dxfexplorer.classifiedtags import ClassifiedTags
+from dxfexplorer.entities import entity_factory
 
 class TestPointDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(POINT_DXF12)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+        tags = ClassifiedTags.fromtext(POINT_DXF12)
+        self.entity = entity_factory(tags, 'AC1009')
 
-class TestPointDXF13(unittest.TestCase):
+    def test_point_data(self):
+        entity = self.entity
+        self.assertEqual(entity.dxftype, 'POINT')
+        self.assertEqual(entity.point, (10., 20., 30.))
+        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.layer, '0')
+        self.assertEqual(entity.linetype, '')
+        self.assertFalse(entity.paperspace)
+
+class TestPointDXF13(TestPointDXF12):
     def setUp(self):
-        tags = Tags.fromtext(POINT_DXF13)
-        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
+        tags = ClassifiedTags.fromtext(POINT_DXF13)
+        self.entity = entity_factory(tags, 'AC1024')
 
 POINT_DXF12 = """  0
-SECTION
-  2
-ENTITIES
-  0
-ENDSEC
+POINT
+  5
+42F
+  8
+0
+ 10
+10.0
+ 20
+20.0
+ 30
+30.0
 """
 
 POINT_DXF13 = """  0
-SECTION
-  2
-ENTITIES
-  0
-ENDSEC
+POINT
+  5
+42F
+330
+1F
+100
+AcDbEntity
+  8
+0
+100
+AcDbPoint
+ 10
+10.0
+ 20
+20.0
+ 30
+30.0
 """
