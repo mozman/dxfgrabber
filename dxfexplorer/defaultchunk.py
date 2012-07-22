@@ -16,15 +16,8 @@ class DefaultChunk(object):
         self._drawing = drawing
 
     @property
-    def dxffactory(self):
-        return self._drawing.dxffactory
-
-    @property
     def name(self):
         return self.tags[1].value.lower()
-
-    def write(self, stream):
-        self.tags.write(stream)
 
 def iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
     while True:

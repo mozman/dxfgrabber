@@ -7,16 +7,12 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import TagGroups, TAG_STRING_FORMAT
+from .tags import TagGroups
 
-class HeaderSection(object):
-    name = 'header'
+class HeaderSection(dict):
     def __init__(self, tags):
-        self.hdrvars = dict()
+        super(HeaderSection, self).__init__()
         self._build(tags)
-
-    def __contains__(self, key):
-        return key in self.hdrvars
 
     def _build(self, tags):
         assert tags[0] == (0, 'SECTION')
@@ -29,22 +25,10 @@ class HeaderSection(object):
                 value = tuple(group[1:])
             else:
                 value = group[1]
-            self.hdrvars[name] = HeaderVar(value)
+            var = _HeaderVar(value)
+            self[name] = var.get_point() if var.ispoint else var.value
 
-    def __getitem__(self, key):
-        var = self.hdrvars[key]
-        if var.ispoint:
-            return var.getpoint()
-        else:
-            return var.value
-
-    def get(self, key, default=None):
-        if key in self.hdrvars:
-            return self.__getitem__(key)
-        else:
-            return default
-
-class HeaderVar:
+class _HeaderVar:
     def __init__(self, tag):
         self.tag = tag
 
@@ -60,14 +44,8 @@ class HeaderVar:
     def ispoint(self):
         return isinstance(self.tag[0], tuple)
 
-    def getpoint(self):
+    def get_point(self):
         if self.ispoint:
             return tuple( [tag[1] for tag in self.tag] )
         else:
             raise ValueError
-
-    def __str__(self):
-        if self.ispoint:
-            return "".join([TAG_STRING_FORMAT % tag for tag in self.tag])
-        else:
-            return TAG_STRING_FORMAT % self.tag
