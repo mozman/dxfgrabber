@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-# Purpose: 
+# Purpose:
 # Created: 21.07.12
 # License: MIT License
 from __future__ import unicode_literals
@@ -17,7 +17,7 @@ class DrawingProxy:
 
 class TestLines(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(LINES)
+        tags = Tags.fromtext(LINES_DXF12)
         self.entities = EntitySection(tags, DrawingProxy('AC1009'))
 
     def test_lines(self):
@@ -28,8 +28,20 @@ class TestLines(unittest.TestCase):
         self.assertEqual(line.start, (0., 0., 0.))
         self.assertEqual(line.end, (1., 0., 0.))
 
+class TestLinesDXF13(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(LINES_DXF13)
+        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
 
-LINES = """  0
+LINES_DXF13 = """  0
+SECTION
+  2
+ENTITIES
+  0
+ENDSEC
+"""
+
+LINES_DXF12 = """  0
 SECTION
   2
 ENTITIES

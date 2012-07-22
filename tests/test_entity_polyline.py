@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-# Purpose: 
+# Purpose:
 # Created: 21.07.12
 # License: MIT License
 from __future__ import unicode_literals
@@ -14,9 +14,9 @@ class DrawingProxy:
     def __init__(self, version):
         self.dxfversion = version
 
-class TestPolyline(unittest.TestCase):
+class TestPolylineDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(POLYLINE)
+        tags = Tags.fromtext(POLYLINE_DXF12)
         self.entities = EntitySection(tags, DrawingProxy('AC1009'))
 
     def test_polyline(self):
@@ -30,9 +30,21 @@ class TestPolyline(unittest.TestCase):
         polyline = self.entities[0]
         points = list(polyline.points())
         self.assertEqual(points[3], (0., 1., 0.))
-        
 
-POLYLINE = """  0
+class TestPolylineDXF13(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(POLYLINE_DXF13)
+        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
+
+POLYLINE_DXF13 = """  0
+SECTION
+  2
+ENTITIES
+  0
+ENDSEC
+"""
+
+POLYLINE_DXF12 = """  0
 SECTION
   2
 ENTITIES

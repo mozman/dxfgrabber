@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-# Purpose: 
+# Purpose:
 # Created: 21.07.12
 # License: MIT License
 from __future__ import unicode_literals
@@ -14,9 +14,9 @@ class DrawingProxy:
     def __init__(self, version):
         self.dxfversion = version
 
-class TestCircles(unittest.TestCase):
+class TestCirclesDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(CIRCLES)
+        tags = Tags.fromtext(CIRCLES_DXF12)
         self.entities = EntitySection(tags, DrawingProxy('AC1009'))
 
     def test_circles(self):
@@ -28,8 +28,20 @@ class TestCircles(unittest.TestCase):
         self.assertEqual(circle.radius, 5.)
         self.assertEqual(circle.layer, 'mozman')
 
+class TestCirclesDXF13(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(CIRCLES_DXF13)
+        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
 
-CIRCLES = """  0
+CIRCLES_DXF13 = """  0
+SECTION
+  2
+ENTITIES
+  0
+ENDSEC
+"""
+
+CIRCLES_DXF12 = """  0
 SECTION
   2
 ENTITIES
