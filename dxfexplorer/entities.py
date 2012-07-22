@@ -252,7 +252,7 @@ class Ray(Shape):
         self.start = wrapper.dxf.start
         self.unitvector = wrapper.dxf.unitvector
 
-ShapeTable = {
+EntityTable = {
     'LINE':( Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
     'CIRCLE': (Circle, dxf12.Circle, dxf13.Arc),
@@ -272,8 +272,8 @@ ShapeTable = {
 
 }
 
-def shape_factory(tags, dxfversion):
+def entity_factory(tags, dxfversion):
     dxftype = tags.get_type()
-    cls, dxf12wrapper, dxf13wrapper = ShapeTable[dxftype]
+    cls, dxf12wrapper, dxf13wrapper = EntityTable[dxftype]
     shape = cls(dxf12wrapper(tags) if dxfversion=="AC1009" else dxf13wrapper(tags))
     return shape

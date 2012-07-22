@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 #coding:utf-8
-# Purpose: DXF 12 graphics entities
+# Purpose: DXF12 tag wrapper
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
+
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 from .genericwrapper import GenericWrapper
 from . import const
+
 
 def make_attribs(additional={}):
     dxfattribs = {
@@ -21,6 +23,7 @@ def make_attribs(additional={}):
     }
     dxfattribs.update(additional)
     return DXFAttributes(DefSubclass(None, dxfattribs))
+
 
 class Line(GenericWrapper):
     DXFATTRIBS = make_attribs({
@@ -34,11 +37,13 @@ class Point(GenericWrapper):
         'point': DXFAttr(10, 'Point2D/3D'),
     })
 
+
 class Circle(GenericWrapper):
     DXFATTRIBS = make_attribs({
         'center': DXFAttr(10, 'Point2D/3D'),
         'radius': DXFAttr(40, None),
     })
+
 
 class Arc(GenericWrapper):
     DXFATTRIBS = make_attribs({
@@ -48,6 +53,7 @@ class Arc(GenericWrapper):
         'endangle': DXFAttr(51, None),
     })
 
+
 class Trace(GenericWrapper):
     DXFATTRIBS = make_attribs({
         'vtx0' : DXFAttr(10, 'Point2D/3D'),
@@ -56,7 +62,9 @@ class Trace(GenericWrapper):
         'vtx3' : DXFAttr(13, 'Point2D/3D'),
     })
 
+
 Solid = Trace
+
 
 class Face(GenericWrapper):
     DXFATTRIBS = make_attribs({
@@ -99,9 +107,11 @@ class Insert(GenericWrapper):
         'rowspacing': DXFAttr(45, None),
     })
 
+
 class SeqEnd(GenericWrapper):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, { 'handle': DXFAttr(5, None),
                    'paperspace': DXFAttr(67, None),}))
+
 
 class Attrib(GenericWrapper):
     DXFATTRIBS = make_attribs({
@@ -120,6 +130,7 @@ class Attrib(GenericWrapper):
         'valign': DXFAttr(74, None), # vertical justification
         'alignpoint': DXFAttr(11, 'Point2D/3D'),
     })
+
 
 class Polyline(GenericWrapper):
     DXFATTRIBS = make_attribs({
@@ -152,6 +163,7 @@ class Polyline(GenericWrapper):
         return self.dxf.flags & const.POLYLINE_MESH_CLOSED_M_DIRECTION
     def is_nclosed(self):
         return self.dxf.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION
+
 
 class Vertex(GenericWrapper):
     DXFATTRIBS = make_attribs({

@@ -11,40 +11,38 @@ from itertools import islice
 
 from .tags import TagGroups
 from .classifiedtags import ClassifiedTags
-from .shapes import shape_factory
-
-class EntitySpace(list):
-    """
-    An EntitySpace is a collection of drawing entities.
-    """
-    def add(self, entity):
-        self.append(entity)
+from .entities import entity_factory
 
 class EntitySection(object):
     name = 'entities'
     def __init__(self, tags, drawing):
-        self._entityspace = EntitySpace()
-        dxfversion = drawing.dxfversion
-        self._build_first_pass(tags, dxfversion)
-        self._build_second_pass()
+        self._entities = list()
+        self._build_entities(tags, drawing.dxfversion)
 
-    def get_entityspace(self):
-        return self._entityspace
+    def get_entities(self):
+        return self._entities
 
     # start of public interface
 
     def __len__(self):
-        return len(self._entityspace)
+        return len(self._entities)
 
     def __iter__(self):
-        return iter(self._entityspace)
+        return iter(self._entities)
 
     def __getitem__(self, index):
-        return self._entityspace[index]
+        return self._entities[index]
 
     # end of public interface
 
-    def _build_first_pass(self, tags, dxfversion):
+    def _build_entities(self, tags, dxfversion):
+        def build_entity(group):
+            try:
+                entity = entity_factory(ClassifiedTags(group), dxfversion)
+            except KeyError:
+                entity = None # ignore unsupported entities
+            return entity
+
         assert tags[0] == (0, 'SECTION')
         assert tags[1] == (2, self.name.upper())
         assert tags[-1] == (0, 'ENDSEC')
@@ -52,38 +50,31 @@ class EntitySection(object):
         if len(tags) == 3: # empty entities section
             return
 
-        for group in TagGroups(islice(tags, 2, len(tags)-1)):
-            try:
-                entity = shape_factory(ClassifiedTags(group), dxfversion)
-                self._entityspace.add(entity)
-            except KeyError:
-                pass # ignore unsupported entity types
-
-    def _build_second_pass(self):
+        entities = self._entities
         collector = None
-        new_entity_space = EntitySpace()
-        for entity in self._entityspace:
-            if collector:
-                if entity.dxftype == 'SEQEND':
-                    collector.stop()
-                    new_entity_space.add(collector.entity)
-                    collector = False
+        for group in TagGroups(islice(tags, 2, len(tags)-1)):
+            entity = build_entity(group)
+            if entity is not None:
+                if collector:
+                    if entity.dxftype == 'SEQEND':
+                        collector.stop()
+                        entities.append(collector.entity)
+                        collector = None
+                    else:
+                        collector.append(entity)
+                elif entity.dxftype == 'POLYLINE':
+                    collector = _Collector(entity)
+                elif entity.dxftype == 'INSERT' and entity.attribsfollow:
+                    collector = _Collector(entity)
                 else:
-                    collector.add(entity)
-            elif entity.dxftype == 'POLYLINE':
-                collector = Collector(entity)
-            elif entity.dxftype == 'INSERT' and entity.attribsfollow:
-                collector = Collector(entity)
-            else:
-                new_entity_space.add(entity)
-        self._entityspace = new_entity_space
+                    entities.append(entity)
 
-class Collector:
+class _Collector:
     def __init__(self, entity):
         self.entity = entity
         self._data = list()
 
-    def add(self, entity):
+    def append(self, entity):
         self._data.append(entity)
 
     def stop(self):
