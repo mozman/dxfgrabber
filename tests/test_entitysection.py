@@ -11,6 +11,51 @@ from dxfexplorer.tags import Tags
 from dxfexplorer.entitysection import EntitySection
 from dxfexplorer.testtools import  DrawingProxy
 
+
+class TestLines(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(LINES)
+        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+
+    def test_lines(self):
+        self.assertEqual(len(self.entities), 4)
+
+    def test_lines_data(self):
+        line = self.entities[0]
+        self.assertEqual(line.start, (0., 0., 0.))
+        self.assertEqual(line.end, (1., 0., 0.))
+
+class TestCircles(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(CIRCLES)
+        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+
+    def test_circles(self):
+        self.assertEqual(len(self.entities), 2)
+
+    def test_circle_data(self):
+        circle = self.entities[0]
+        self.assertEqual(circle.center, (0., 0., 0.))
+        self.assertEqual(circle.radius, 5.)
+        self.assertEqual(circle.layer, 'mozman')
+
+class TestPolyline(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.fromtext(POLYLINE)
+        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+
+    def test_polyline(self):
+        self.assertEqual(len(self.entities), 1)
+
+    def test_polyline_data(self):
+        polyline = self.entities[0]
+        self.assertEqual(len(polyline), 4)
+
+    def test_polyline_points(self):
+        polyline = self.entities[0]
+        points = list(polyline.points())
+        self.assertEqual(points[3], (0., 1., 0.))
+
 LINES = """  0
 SECTION
   2
@@ -180,46 +225,3 @@ SEQEND
   0
 ENDSEC
 """
-class TestLines(unittest.TestCase):
-    def setUp(self):
-        tags = Tags.fromtext(LINES)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
-
-    def test_lines(self):
-        self.assertEqual(len(self.entities), 4)
-
-    def test_lines_data(self):
-        line = self.entities[0]
-        self.assertEqual(line.start, (0., 0., 0.))
-        self.assertEqual(line.end, (1., 0., 0.))
-
-class TestCircles(unittest.TestCase):
-    def setUp(self):
-        tags = Tags.fromtext(CIRCLES)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
-
-    def test_circles(self):
-        self.assertEqual(len(self.entities), 2)
-
-    def test_circle_data(self):
-        circle = self.entities[0]
-        self.assertEqual(circle.center, (0., 0., 0.))
-        self.assertEqual(circle.radius, 5.)
-        self.assertEqual(circle.layer, 'mozman')
-
-class TestPolyline(unittest.TestCase):
-    def setUp(self):
-        tags = Tags.fromtext(POLYLINE)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
-
-    def test_polyline(self):
-        self.assertEqual(len(self.entities), 1)
-
-    def test_polyline_data(self):
-        polyline = self.entities[0]
-        self.assertEqual(len(polyline), 4)
-
-    def test_polyline_points(self):
-        polyline = self.entities[0]
-        points = list(polyline.points())
-        self.assertEqual(points[3], (0., 1., 0.))

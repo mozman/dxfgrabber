@@ -7,16 +7,11 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import Tags
-
 class DrawingProxy:
     """ a lightweight drawing proxy for testing
     """
     def __init__(self, version):
         self.dxfversion = version
-
-    def _bootstraphook(self, header):
-        pass
 
 def normlines(text):
     lines = text.split('\n')

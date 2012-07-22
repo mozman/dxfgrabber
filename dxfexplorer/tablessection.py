@@ -50,7 +50,7 @@ class TablesSection(object):
 
         itertags = skiptags(iter(tags), 2) # (0, 'SECTION'), (2, 'TABLES')
         for table in iterchunks(itertags, stoptag='ENDSEC', endofchunk='ENDTAB'):
-            table_class = get_table_class(name(table))
+            table_class = table_factory(name(table))
             new_table = table_class(table, self._drawing)
             self._tables[new_table.name] = new_table
 
@@ -60,9 +60,10 @@ class TablesSection(object):
         except KeyError:
             raise AttributeError(key)
 
+# support for further tables types are possible
 TABLESMAP = {
     'LAYER': LayerTable,
 }
 
-def get_table_class(name):
+def table_factory(name):
     return TABLESMAP.get(name, GenericTable)
