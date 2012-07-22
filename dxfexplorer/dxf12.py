@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
-from .entity import GenericWrapper
+from .genericwrapper import GenericWrapper
 from . import const
 
 def make_attribs(additional={}):

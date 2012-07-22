@@ -3,7 +3,7 @@
 # Purpose: 
 # Created: 21.07.12
 # License: MIT License
-
+from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest

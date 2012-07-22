@@ -4,39 +4,42 @@
 # Created: 21.07.2012, parts taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License
-
+from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from . import graphics12, graphics13
+from . import dxf12, dxf13
 from . import const
 
-
-class BasicShape:
+class Entity(object):
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
+        self.paperspace = wrapper.paperspace() == 1
+
+class Shape(Entity):
+    def __init__(self, wrapper):
+        super(Shape, self).__init__(wrapper)
         self.layer = wrapper.dxf.get('layer', '0')
         self.linetype = wrapper.dxf.get('linetype', "")
         self.color = wrapper.dxf.get('color', 0)
-        self.paperspace = wrapper.paperspace() == 1
 
-class Line(BasicShape):
+class Line(Shape):
     def __init__(self, wrapper):
         super(Line, self).__init__(wrapper)
         self.start = wrapper.dxf.start
         self.end = wrapper.dxf.end
 
-class Point(BasicShape):
+class Point(Shape):
     def __init__(self, wrapper):
         super(Point, self).__init__(wrapper)
         self.point = wrapper.point
 
-class Circle(BasicShape):
+class Circle(Shape):
     def __init__(self, wrapper):
         super(Circle, self).__init__(wrapper)
         self.center = wrapper.dxf.center
         self.radius = wrapper.dxf.radius
 
-class Arc(BasicShape):
+class Arc(Shape):
     def __init__(self, wrapper):
         super(Arc, self).__init__(wrapper)
         self.center = wrapper.dxf.center
@@ -44,7 +47,7 @@ class Arc(BasicShape):
         self.startangle = wrapper.dxf.startangle
         self.endangle = wrapper.dxf.endangle
 
-class Trace(BasicShape):
+class Trace(Shape):
     def __init__(self, wrapper):
         super(Trace, self).__init__(wrapper)
         self.points = [
@@ -58,7 +61,7 @@ class Face(Trace):
         super(Face, self).__init__(wrapper)
         self.invisible_edge = wrapper.dxf.invisible_edge
 
-class Text(BasicShape):
+class Text(Shape):
     def __init__(self, wrapper):
         super(Text, self).__init__(wrapper)
         self.insert = wrapper.dxf.insert
@@ -66,7 +69,7 @@ class Text(BasicShape):
         self.text = wrapper.dxf.text
         self.rotation = wrapper.dxf.rotation
 
-class Insert(BasicShape):
+class Insert(Shape):
     def __init__(self, wrapper):
         super(Insert, self).__init__(wrapper)
         self.name = wrapper.dxf.name
@@ -78,12 +81,10 @@ class Insert(BasicShape):
     def append_data(self, attribs):
         self.attribs = attribs
 
-class SeqEnd:
-    def __init__(self, wrapper):
-        self.dxftype = wrapper.dxftype()
-        self.paperspace = wrapper.paperspace()
+class SeqEnd(Entity):
+    pass
 
-class Attrib(BasicShape):
+class Attrib(Shape):
     def __init__(self, wrapper):
         super(Attrib, self).__init__(wrapper)
         self.insert = wrapper.dxf.insert
@@ -93,7 +94,7 @@ class Attrib(BasicShape):
         self.rotation = wrapper.dxf.rotation
 
 
-class Polyline(BasicShape):
+class Polyline(Shape):
     def __init__(self, wrapper):
         super(Polyline, self).__init__(wrapper)
         self.vertices = None
@@ -212,7 +213,7 @@ class Polymesh:
         else:
             raise IndexError(repr(pos))
 
-class Vertex(BasicShape):
+class Vertex(Shape):
     def __init__(self, wrapper):
         super(Vertex, self).__init__(wrapper)
         self.location = wrapper.dxf.location
@@ -230,13 +231,13 @@ class Vertex(BasicShape):
                 pass
         return tuple(vtx)
 
-class LWPolyline(BasicShape):
+class LWPolyline(Shape):
     def __init__(self, wrapper):
         super(LWPolyline, self).__init__(wrapper)
         self.points = list(wrapper)
         self.is_closed = wrapper.is_closed()
 
-class Ellipse(BasicShape):
+class Ellipse(Shape):
     def __init__(self, wrapper):
         super(Ellipse, self).__init__(wrapper)
         self.center = wrapper.dxf.center
@@ -245,29 +246,29 @@ class Ellipse(BasicShape):
         self.startparam = wrapper.dxf.startparam
         self.endparam = wrapper.dxf.endparam
 
-class Ray(BasicShape):
+class Ray(Shape):
     def __init__(self, wrapper):
         super(Ray, self).__init__(wrapper)
         self.start = wrapper.dxf.start
         self.unitvector = wrapper.dxf.unitvector
 
 ShapeTable = {
-    'LINE':( Line, graphics12.Line, graphics13.Line),
-    'POINT': (Point, graphics12.Point, graphics13.Point),
-    'CIRCLE': (Circle, graphics12.Circle, graphics13.Arc),
-    'ARC': (Arc, graphics12.Arc, graphics13.Arc),
-    'TRACE': (Trace, graphics12.Trace, graphics13.Trace),
-    'SOLID': (Solid, graphics12.Solid, graphics13.Solid),
-    'FACE': (Face, graphics12.Face, graphics13.Face),
-    'TEXT': (Text, graphics12.Text, graphics13.Text),
-    'INSERT': (Insert, graphics12.Insert, graphics13.Insert),
-    'SEQEND': (SeqEnd, graphics12.SeqEnd, graphics13.SeqEnd),
-    'ATTRIB': (Attrib, graphics12.Attrib, graphics13.Attrib),
-    'POLYLINE': (Polyline, graphics12.Polyline, graphics13.Polyline),
-    'VERTEX': (Vertex, graphics12.Vertex, graphics13.Vertex),
-    'LWPOLYLINE': (LWPolyline, None, graphics13.LWPolyline),
-    'ELLIPSE': (Ellipse, None, graphics13.Ellipse),
-    'RAY': (Ray, None, graphics13.Ray),
+    'LINE':( Line, dxf12.Line, dxf13.Line),
+    'POINT': (Point, dxf12.Point, dxf13.Point),
+    'CIRCLE': (Circle, dxf12.Circle, dxf13.Arc),
+    'ARC': (Arc, dxf12.Arc, dxf13.Arc),
+    'TRACE': (Trace, dxf12.Trace, dxf13.Trace),
+    'SOLID': (Solid, dxf12.Solid, dxf13.Solid),
+    'FACE': (Face, dxf12.Face, dxf13.Face),
+    'TEXT': (Text, dxf12.Text, dxf13.Text),
+    'INSERT': (Insert, dxf12.Insert, dxf13.Insert),
+    'SEQEND': (SeqEnd, dxf12.SeqEnd, dxf13.SeqEnd),
+    'ATTRIB': (Attrib, dxf12.Attrib, dxf13.Attrib),
+    'POLYLINE': (Polyline, dxf12.Polyline, dxf13.Polyline),
+    'VERTEX': (Vertex, dxf12.Vertex, dxf13.Vertex),
+    'LWPOLYLINE': (LWPolyline, None, dxf13.LWPolyline),
+    'ELLIPSE': (Ellipse, None, dxf13.Ellipse),
+    'RAY': (Ray, None, dxf13.Ray),
 
 }
 

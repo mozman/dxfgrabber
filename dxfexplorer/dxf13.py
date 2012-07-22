@@ -8,9 +8,8 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from . import graphics12
-from .entity import GenericWrapper
-from .tags import DXFTag
+from . import dxf12
+from .genericwrapper import GenericWrapper
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 from . import const
 
@@ -36,7 +35,7 @@ line_subclass = DefSubclass('AcDbLine', {
         'extrusion': DXFAttr(210, 'Point3D'),
 })
 
-class Line(graphics12.Line):
+class Line(dxf12.Line):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, line_subclass)
 
 point_subclass = DefSubclass('AcDbPoint', {
@@ -45,7 +44,7 @@ point_subclass = DefSubclass('AcDbPoint', {
         'extrusion': DXFAttr(210, 'Point3D'),
 })
 
-class Point(graphics12.Point):
+class Point(dxf12.Point):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, point_subclass)
 
 circle_subclass = DefSubclass('AcDbCircle', {
@@ -54,7 +53,7 @@ circle_subclass = DefSubclass('AcDbCircle', {
         'thickness': DXFAttr(39, None),
         'extrusion': DXFAttr(210, 'Point3D'),
 })
-class Circle(graphics12.Circle):
+class Circle(dxf12.Circle):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, circle_subclass)
 
 arc_subclass = (
@@ -70,7 +69,7 @@ arc_subclass = (
         }),
     )
 
-class Arc(graphics12.Arc):
+class Arc(dxf12.Arc):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *arc_subclass)
 
 trace_subclass = DefSubclass('AcDbTrace', {
@@ -81,7 +80,7 @@ trace_subclass = DefSubclass('AcDbTrace', {
         'thickness': DXFAttr(39, None),
         'extrusion': DXFAttr(210, 'Point3D'),
     })
-class Trace(graphics12.Trace):
+class Trace(dxf12.Trace):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, trace_subclass)
 
 Solid = Trace
@@ -94,7 +93,7 @@ face_subclass = DefSubclass('AcDbFace', {
         'invisible_edge': DXFAttr(70, None),
     })
 
-class Face(graphics12.Face):
+class Face(dxf12.Face):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, face_subclass)
 
 text_subclass =  (
@@ -115,7 +114,7 @@ text_subclass =  (
     DefSubclass('AcDbText', { 'valign': DXFAttr(73, None) }))
 
 
-class Text(graphics12.Text):
+class Text(dxf12.Text):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *text_subclass)
 
 polyline_subclass = DefSubclass('AcDb2dPolyline', {
@@ -132,7 +131,7 @@ polyline_subclass = DefSubclass('AcDb2dPolyline', {
         'extrusion': DXFAttr(210, 'Point3D'),
 })
 
-class Polyline(graphics12.Polyline):
+class Polyline(dxf12.Polyline):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, polyline_subclass)
 
 vertex_subclass = (
@@ -153,11 +152,11 @@ vertex_subclass = (
 
 
 
-class Vertex(graphics12.Vertex):
+class Vertex(dxf12.Vertex):
     VTX3D = const.VTX_3D_POLYFACE_MESH_VERTEX | const.VTX_3D_POLYGON_MESH_VERTEX | const.VTX_3D_POLYLINE_VERTEX
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *vertex_subclass)
 
-class SeqEnd(graphics12.SeqEnd):
+class SeqEnd(dxf12.SeqEnd):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass)
     
 lwpolyline_subclass = DefSubclass('AcDbPolyline', {
@@ -207,7 +206,7 @@ insert_subclass = DefSubclass('AcDbBlockReference', {
         'extrusion': DXFAttr(210, 'Point3D'),
     })
 
-class Insert(graphics12.Insert):
+class Insert(dxf12.Insert):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, insert_subclass)
     
 attrib_subclass = (
@@ -233,7 +232,7 @@ DefSubclass('AcDbAttribute', {
 
 }))
 
-class Attrib(graphics12.Attrib):
+class Attrib(dxf12.Attrib):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *attrib_subclass)
 
 ellipse_subclass = DefSubclass('AcDbEllipse', {

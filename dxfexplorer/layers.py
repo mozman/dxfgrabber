@@ -9,7 +9,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from .tags import TagGroups
 from .classifiedtags import ClassifiedTags
-from .entity import GenericWrapper
+from .genericwrapper import GenericWrapper
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
