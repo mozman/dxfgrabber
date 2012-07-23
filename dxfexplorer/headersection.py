@@ -10,6 +10,7 @@ __author__ = "mozman <mozman@gmx.at>"
 from .tags import TagGroups
 
 class HeaderSection(dict):
+    name = "header"
     def __init__(self, tags):
         super(HeaderSection, self).__init__()
         self._build(tags)

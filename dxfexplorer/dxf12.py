@@ -146,10 +146,14 @@ class Polyline(GenericWrapper):
     })
 
     def get_vertex_flags(self):
-        return const.VERTEX_FLAGS[self.getmode()]
+        return const.VERTEX_FLAGS[self.get_mode()]
+
+    @property
+    def flags(self):
+        return self.dxf.get('flags', 0)
 
     def get_mode(self):
-        flags = self.dxf.flags
+        flags = self.flags
         if flags & const.POLYLINE_3D_POLYLINE > 0:
             return 'polyline3d'
         elif flags & const.POLYLINE_3D_POLYMESH > 0:
@@ -160,9 +164,10 @@ class Polyline(GenericWrapper):
             return 'polyline2d'
 
     def is_mclosed(self):
-        return self.dxf.flags & const.POLYLINE_MESH_CLOSED_M_DIRECTION
+        return self.flags & const.POLYLINE_MESH_CLOSED_M_DIRECTION
+
     def is_nclosed(self):
-        return self.dxf.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION
+        return self.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION
 
 
 class Vertex(GenericWrapper):

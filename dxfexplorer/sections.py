@@ -45,7 +45,7 @@ class Sections(object):
 
 SECTIONMAP = {
     'TABLES': TablesSection,
-    #'ENTITIES': EntitySection,
+    'ENTITIES': EntitySection,
 }
 
 def get_section_class(name):

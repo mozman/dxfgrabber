@@ -22,6 +22,7 @@ class Layer:
         self.on = wrapper.is_on()
 
 class LayerTable:
+    name = 'layers'
     def __init__(self, tags, drawing):
         dxfversion = drawing.dxfversion
         self._layers = dict()
@@ -39,6 +40,9 @@ class LayerTable:
 
     def __iter__(self):
         return self._layers.values()
+
+    def __len__(self):
+        return len(self._layers)
 
     def layernames(self):
         return sorted(self._layers.keys())

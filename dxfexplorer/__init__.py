@@ -11,6 +11,7 @@ VERSION = "%d.%d.%d"  % version
 __author__ = "mozman <mozman@gmx.at>"
 __doc__ = """A Python library to read and explore DXF drawings - all DXF versions supported."""
 
+import io
 
 # Python2/3 support should be done here
 import sys
@@ -35,7 +36,7 @@ def readfile(filename):
         return info.encoding
 
     from .drawing import Drawing
-    with open(filename, encoding=get_encoding()) as fp:
+    with io.open(filename, encoding=get_encoding()) as fp:
         dwg = Drawing(fp)
     dwg.filename = filename
     return dwg

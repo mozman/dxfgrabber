@@ -18,7 +18,7 @@ class Drawing(object):
         self.filename = None
 
         sections = Sections(tagreader, self)
-        self.header = sections.tables.header
+        self.header = sections.header
         self.layers = sections.tables.layers
         self.entities = sections.entities
 

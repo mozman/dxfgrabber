@@ -84,7 +84,7 @@ class Insert(Shape):
         self.name = wrapper.dxf.name
         self.insert = wrapper.dxf.insert
         self.rotation = wrapper.dxf.get('rotation', 0.)
-        self.attribsfollow = wrapper.dxf.attribsfollow
+        self.attribsfollow = wrapper.dxf.get('attribsfollow', 0)
         self.attribs = []
 
     def find_attrib(self, attrib_tag):
@@ -106,7 +106,7 @@ class Polyline(Shape):
         super(Polyline, self).__init__(wrapper)
         self.vertices = None
         self.mode = wrapper.get_mode()
-        self.flags = wrapper.dxf.flags
+        self.flags = wrapper.flags
         self.mcount = wrapper.dxf.get("mcount", 0)
         self.ncount = wrapper.dxf.get("ncount", 0)
         self.is_mclosed = bool(wrapper.is_mclosed())

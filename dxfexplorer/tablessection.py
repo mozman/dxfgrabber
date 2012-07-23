@@ -33,6 +33,7 @@ class GenericTable(DefaultChunk):
         return tablename(self.tags[1].value)
 
 class TablesSection(object):
+    name = 'tables'
     def __init__(self, tags, drawing):
         self._drawing = drawing
         self._tables = dict()
