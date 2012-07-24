@@ -23,8 +23,10 @@ class Shape(Entity):
     def __init__(self, wrapper):
         super(Shape, self).__init__(wrapper)
         self.layer = wrapper.dxf.get('layer', '0')
-        self.linetype = wrapper.dxf.get('linetype', "")
-        self.color = wrapper.dxf.get('color', 0)
+        self.linetype = wrapper.dxf.get('linetype', None) # None=BYLAYER
+        self.ltscale = wrapper.dxf.get('ltscale', 1.0)
+        self.invisible = wrapper.dxf.get('invisible', 0) # 0=visible
+        self.color = wrapper.dxf.get('color', const.BYLAYER) # 256=BYLAYER, 0=BYBLOCK
 
 class Line(Shape):
     def __init__(self, wrapper):

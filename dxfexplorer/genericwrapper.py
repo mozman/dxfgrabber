@@ -40,17 +40,24 @@ class GenericWrapper:
         return self.tags.noclass[0].value
 
     def get_dxf_attrib(self, key, default=ValueError):
-        if key in self.DXFATTRIBS:
-            try:
-                dxfattr = self.DXFATTRIBS[key]
-                return self._get_dxf_attrib(dxfattr)
-            except ValueError:
-                if default is ValueError:
-                    raise ValueError("DXFAttrib '%s' does not exist." % key)
-                else:
-                    return default
-        else:
-            raise AttributeError(key)
+        def get_default(msg):
+            if default is ValueError:
+                raise ValueError(msg)
+            else:
+                return default
+        try:
+            dxfattr = self.DXFATTRIBS[key]
+        except KeyError:
+            # attribute is not defined - returning the default value is useful
+            # to query newer DXF attributes on older DXF files.
+            # !! Problem: misspelled attributes with default values do not
+            # raise an Exception !!
+            return get_default("DXFAttrib '%s' is not defined." % key)
+
+        try:
+            return self._get_dxf_attrib(dxfattr)
+        except ValueError: # attribute is defined but no value is present
+            return get_default("DXFAttrib '%s': value is not present." % key)
 
     def _get_dxf_attrib(self, dxfattr):
         # no subclass is subclass index 0

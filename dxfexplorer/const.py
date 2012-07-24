@@ -7,6 +7,9 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
+BYBLOCK = 0
+BYLAYER = 256
+
 acadrelease = {
     'AC1009': 'R12',
     'AC1012': 'R13',

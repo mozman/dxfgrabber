@@ -29,9 +29,9 @@ class TestInsertDXF12(unittest.TestCase):
         self.assertEqual(insert.insert, (999.0, 999., 0.))
         self.assertEqual(insert.name, "TEST")
         self.assertEqual(insert.rotation, 0.)
-        self.assertEqual(insert.color, 0)
+        self.assertEqual(insert.color, 256)
         self.assertEqual(insert.layer, '0')
-        self.assertEqual(insert.linetype, '')
+        self.assertEqual(insert.linetype, None)
         self.assertFalse(insert.paperspace)
 
     def test_attribs(self):

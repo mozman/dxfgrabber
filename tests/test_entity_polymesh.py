@@ -25,9 +25,9 @@ class TestPolymeshDXF12(unittest.TestCase):
     def test_polymesh_properties(self):
         polymesh = self.entities[0]
         self.assertEqual(polymesh.dxftype, 'POLYMESH')
-        self.assertEqual(polymesh.color, 0)
+        self.assertEqual(polymesh.color, 256)
         self.assertEqual(polymesh.layer, '0')
-        self.assertEqual(polymesh.linetype, '')
+        self.assertEqual(polymesh.linetype, None)
         self.assertEqual(polymesh.mcount, 3)
         self.assertEqual(polymesh.ncount, 3)
         self.assertFalse(polymesh.is_mclosed)

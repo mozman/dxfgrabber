@@ -24,9 +24,9 @@ class TestTextDXF12(unittest.TestCase):
         self.assertEqual(entity.rotation, 0.0)
         self.assertEqual(entity.height, 3.0)
         self.assertEqual(entity.style.upper(), "NOTES")
-        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
-        self.assertEqual(entity.linetype, '')
+        self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
 class TestTextDXF12(TestTextDXF12):

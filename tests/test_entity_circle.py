@@ -26,8 +26,8 @@ class TestCircleDXF12(unittest.TestCase):
         self.assertEqual(circle.center, (0., 0., 0.))
         self.assertEqual(circle.radius, 5.)
         self.assertEqual(circle.layer, 'mozman')
-        self.assertEqual(circle.color, 0)
-        self.assertEqual(circle.linetype, '')
+        self.assertEqual(circle.color, 256)
+        self.assertEqual(circle.linetype, None)
         self.assertFalse(circle.paperspace)
 
 class TestCircleDXF13(TestCircleDXF12):

@@ -18,9 +18,9 @@ class TestRay(unittest.TestCase):
     def test_ray_properties(self):
         ray = self.entity
         self.assertEqual(ray.dxftype, 'RAY')
-        self.assertEqual(ray.color, 0)
+        self.assertEqual(ray.color, 256)
         self.assertEqual(ray.layer, '0')
-        self.assertEqual(ray.linetype, '')
+        self.assertEqual(ray.linetype, None)
         self.assertFalse(ray.paperspace)
 
     def test_ray_data(self):

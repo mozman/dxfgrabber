@@ -23,9 +23,9 @@ class TestArcDXF12(unittest.TestCase):
         self.assertEqual(entity.radius, 5.0)
         self.assertEqual(entity.startangle, 0.0)
         self.assertEqual(entity.endangle, 90.0)
-        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
-        self.assertEqual(entity.linetype, '')
+        self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
 class TestArcDXF13(TestArcDXF12):

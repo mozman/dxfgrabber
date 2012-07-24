@@ -190,9 +190,12 @@ class LWPolyline(GenericWrapper):
                 point.append(tag.value)
         if point:
             yield tuple(point)
+    @property
+    def flags(self):
+        return self.dxf.get('flags', 0)
 
     def is_closed(self):
-        return bool(self.dxf.flags & const.LWPOLYLINE_CLOSED)
+        return bool(self.flags & const.LWPOLYLINE_CLOSED)
 
     @property
     def points(self):

@@ -19,9 +19,9 @@ class TestPointDXF12(unittest.TestCase):
         entity = self.entity
         self.assertEqual(entity.dxftype, 'POINT')
         self.assertEqual(entity.point, (10., 20., 30.))
-        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
-        self.assertEqual(entity.linetype, '')
+        self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
 class TestPointDXF13(TestPointDXF12):

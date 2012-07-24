@@ -21,9 +21,9 @@ class TestLineDXF12(unittest.TestCase):
         self.assertEqual(line.dxftype, 'LINE')
         self.assertEqual(line.start, (0., 0., 0.))
         self.assertEqual(line.end, (1., 0., 0.))
-        self.assertEqual(line.color, 0)
+        self.assertEqual(line.color, 256)
         self.assertEqual(line.layer, '0')
-        self.assertEqual(line.linetype, '')
+        self.assertEqual(line.linetype, None)
         self.assertFalse(line.paperspace)
 
 class TestLineDXF13(TestLineDXF12):

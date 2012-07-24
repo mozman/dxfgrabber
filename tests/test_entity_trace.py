@@ -22,9 +22,9 @@ class TestTraceDXF12(unittest.TestCase):
         self.assertEqual(entity.points[1], (1., 0., 0.))
         self.assertEqual(entity.points[2], (1., 1., 0.))
         self.assertEqual(entity.points[3], (0., 1., 0.))
-        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
-        self.assertEqual(entity.linetype, '')
+        self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
 class TestTraceDXF13(TestTraceDXF12):

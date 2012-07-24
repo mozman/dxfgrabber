@@ -19,9 +19,9 @@ class TestLWPolyline(unittest.TestCase):
         polyline = self.entity
         self.assertEqual(polyline.dxftype, 'LWPOLYLINE')
         self.assertTrue(polyline.is_closed)
-        self.assertEqual(polyline.color, 0)
+        self.assertEqual(polyline.color, 256)
         self.assertEqual(polyline.layer, '0')
-        self.assertEqual(polyline.linetype, '')
+        self.assertEqual(polyline.linetype, None)
         self.assertFalse(polyline.paperspace)
 
     def test_lwpolyline_first_point(self):

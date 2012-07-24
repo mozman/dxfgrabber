@@ -25,9 +25,9 @@ class TestPolyfaceDXF12(unittest.TestCase):
     def test_polyface_properties(self):
         polyface = self.entities[0]
         self.assertEqual(polyface.dxftype, 'POLYFACE')
-        self.assertEqual(polyface.color, 0)
+        self.assertEqual(polyface.color, 256)
         self.assertEqual(polyface.layer, '0')
-        self.assertEqual(polyface.linetype, '')
+        self.assertEqual(polyface.linetype, None)
         self.assertFalse(polyface.paperspace)
 
     def test_face_count(self):

@@ -23,9 +23,9 @@ class TestEllipse(unittest.TestCase):
         self.assertEqual(entity.ratio, 0.33)
         self.assertEqual(entity.startparam, 0.0)
         self.assertEqual(entity.endparam, 6.28)
-        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
-        self.assertEqual(entity.linetype, '')
+        self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
 ELLIPSE = """  0

@@ -24,9 +24,9 @@ class TestAttribDXF12(unittest.TestCase):
         self.assertEqual(entity.rotation, 0.0)
         self.assertEqual(entity.height, 3.0)
         self.assertEqual(entity.style, "NOTES")
-        self.assertEqual(entity.color, 0)
+        self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
-        self.assertEqual(entity.linetype, '')
+        self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
 class TestAttribDXF13(TestAttribDXF12):
