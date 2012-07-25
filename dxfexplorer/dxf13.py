@@ -330,3 +330,24 @@ class Spline(GenericWrapper):
                     yield tuple(point)
                     point = None
 
+mtext_subclass = DefSubclass('AcDbMText', {
+    'insert': DXFAttr(10, 'Point3D'),
+    'height': DXFAttr(40, None),
+    'attachmentpoint': DXFAttr(71, None),
+    'text': DXFAttr(1, None), # also group code 3, if more than 255 chars
+    'style': DXFAttr(7, None), # text style
+    'extrusion': DXFAttr(210, 'Point3D'),
+    'xdirection': DXFAttr(11, 'Point3D'),
+    'rotation': DXFAttr(50, None), # xdirection beats rotation
+    'linespacing': DXFAttr(44, None), # valid from 0.25 to 4.00
+    })
+
+class MText(GenericWrapper):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, mtext_subclass)
+
+    def rawtext(self):
+        subclass = self.tags.subclasses[2]
+        lines = [ tag.value for tag in subclass.findall(3) ]
+        lines.append(self.dxf.text)
+        return ''.join(lines)
+

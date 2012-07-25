@@ -9,6 +9,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from . import dxf12, dxf13
 from . import const
+import math
 
 class SeqEnd(object):
     def __init__(self, wrapper):
@@ -301,6 +302,34 @@ class Spline(Shape):
     def is_linear(self):
         return bool(self.flags & const.SPLINE_LINEAR)
 
+def deg2vec(deg):
+    rad = float(deg) * math.pi / 180.0
+    return math.cos(rad), math.sin(rad), 0.
+
+def normalized(vector):
+    x, y, z = vector
+    m = (x**2 + y**2 + z**2)**0.5
+    return x/m, y/m, z/m
+
+class MText(Shape):
+    def __init__(self, wrapper):
+
+        super(MText, self).__init__(wrapper)
+        self.insert = wrapper.dxf.insert
+        self.rawtext = wrapper.rawtext()
+        self.height = wrapper.dxf.get('height', 1.0)
+        self.linespacing = wrapper.dxf.get('linespacing', 1.0)
+        self.attachmentpoint = wrapper.dxf.get('attachmentpoint', 1)
+        self.style = wrapper.dxf.get('style', 'STANDARD')
+        self.extrusion = wrapper.dxf.get('extrusion', (0., 0., 1.))
+        try:
+            xdir = wrapper.dxf.xdirection
+        except ValueError:
+            xdir = deg2vec(wrapper.dxf.get('rotation', 0.0))
+        self.xdirection = normalized(xdir)
+
+    def lines(self):
+        return self.rawtext.split('\P')
 
 EntityTable = {
     'LINE':( Line, dxf12.Line, dxf13.Line),
@@ -321,6 +350,7 @@ EntityTable = {
     'RAY': (Ray, None, dxf13.Ray),
     'XLINE': (XLine, None, dxf13.XLine),
     'SPLINE': (Spline, None, dxf13.Spline),
+    'MTEXT': (MText, None, dxf13.MText),
 }
 
 def entity_factory(tags, dxfversion):
