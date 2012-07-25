@@ -11,3 +11,4 @@ proj.directory-list = [{'dirloc': loc('.'),
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
+testing.auto-test-file-specs = ('dxfexplorer/tests/test_*.py',)

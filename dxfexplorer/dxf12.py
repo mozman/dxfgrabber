@@ -164,10 +164,10 @@ class Polyline(GenericWrapper):
             return 'polyline2d'
 
     def is_mclosed(self):
-        return self.flags & const.POLYLINE_MESH_CLOSED_M_DIRECTION
+        return bool(self.flags & const.POLYLINE_MESH_CLOSED_M_DIRECTION)
 
     def is_nclosed(self):
-        return self.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION
+        return bool(self.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION)
 
 
 class Vertex(GenericWrapper):

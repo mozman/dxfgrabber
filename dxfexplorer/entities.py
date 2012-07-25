@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-# Purpose: 
+# Purpose:
 # Created: 21.07.2012, parts taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License
@@ -87,7 +87,7 @@ class Insert(Shape):
         self.name = wrapper.dxf.name
         self.insert = wrapper.dxf.insert
         self.rotation = wrapper.dxf.get('rotation', 0.)
-        self.attribsfollow = wrapper.dxf.get('attribsfollow', 0)
+        self.attribsfollow = bool(wrapper.dxf.get('attribsfollow', 0))
         self.attribs = []
 
     def find_attrib(self, attrib_tag):
@@ -112,8 +112,8 @@ class Polyline(Shape):
         self.flags = wrapper.flags
         self.mcount = wrapper.dxf.get("mcount", 0)
         self.ncount = wrapper.dxf.get("ncount", 0)
-        self.is_mclosed = bool(wrapper.is_mclosed())
-        self.is_nclosed = bool(wrapper.is_nclosed())
+        self.is_mclosed = wrapper.is_mclosed()
+        self.is_nclosed = wrapper.is_nclosed()
         self.elevation = wrapper.dxf.get('elevation', (0., 0., 0.))
 
     def __len__(self):
@@ -174,11 +174,8 @@ class Polyface:
     def _iterfaces(self, vertices):
         def isface(vertex):
             flags = vertex.flags
-            if flags & const.VTX_3D_POLYFACE_MESH_VERTEX > 0 and\
-               flags & const.VTX_3D_POLYGON_MESH_VERTEX == 0:
-                return True
-            else:
-                return False
+            return flags & const.VTX_3D_POLYFACE_MESH_VERTEX and \
+                   not flags & const.VTX_3D_POLYGON_MESH_VERTEX
 
         def getface(vertex):
             face = _Face(vertex)
