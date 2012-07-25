@@ -83,3 +83,10 @@ BLK_REFERENCED = 64              # This definition is a referenced external refe
 
 LWPOLYLINE_CLOSED = 1
 LWPOLYLINE_PLINEGEN = 128
+
+SPLINE_CLOSED = 1
+SPLINE_PERIODIC = 2
+SPLINE_RATIONAL = 4
+SPLINE_PLANAR = 8
+SPLINE_LINEAR = 16 # planar bit is also set
+

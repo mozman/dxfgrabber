@@ -269,3 +269,64 @@ ray_subclass = DefSubclass('AcDbRay', {
 
 class Ray(GenericWrapper):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, ray_subclass)
+
+
+xline_subclass = DefSubclass('AcDbXline', {
+    'start': DXFAttr(10, 'Point3D'),
+    'unitvector': DXFAttr(11, 'Point3D'),
+    })
+
+class XLine(GenericWrapper):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, xline_subclass)
+
+
+spline_subclass = DefSubclass('AcDbSpline', {
+    'normalvector': DXFAttr(210, 'Point3D'), # omitted if spline is not planar
+    'flags': DXFAttr(70, None),
+    'degree': DXFAttr(71, None),
+    'nknots': DXFAttr(72, None),
+    'ncontrolpoints': DXFAttr(73, None),
+    'nfitcounts': DXFAttr(74, None),
+    'knot_tolerance': DXFAttr(42, None), # default 0.0000001
+    'controlpoint_tolerance': DXFAttr(43, None), # default 0.0000001
+    'fit_tolerance': DXFAttr(44, None), # default 0.0000000001
+    'starttangent': DXFAttr(12, 'Point3D'), # optional
+    'endtangent': DXFAttr(13, 'Point3D'), # optional
+})
+
+class Spline(GenericWrapper):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, spline_subclass)
+
+    def knots(self):
+        # groupcode 40, multiple values: nknots
+        subclass = self.tags.subclasses[2] # subclass AcDbSpline
+        return ( tag.value for tag in subclass if tag.code== 40 )
+
+    def weights(self):
+        # groupcode 41, multiple values
+        subclass = self.tags.subclasses[2] # subclass AcDbSpline
+        return ( tag.value for tag in subclass if tag.code== 41 )
+
+    def controlpoints(self):
+        # groupcode 10,20,30, multiple values: nfitpoints
+        return self._get_points(10)
+
+    def fitpoints(self):
+        # groupcode 11,21,31, multiple values: nfitpoints
+        return self._get_points(11)
+
+    def _get_points(self, code):
+        # groupcode 10,20,30, multiple values: ncontrolpoints
+        subclass = self.tags.subclasses[2] # subclass AcDbSpline
+        point = None
+        zcode = code + 20
+        for tag in subclass:
+            if point is None:
+                if tag.code == code:
+                    point = [tag.value]
+            else:
+                point.append(tag.value)
+                if tag.code == zcode:
+                    yield tuple(point)
+                    point = None
+

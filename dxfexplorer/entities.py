@@ -261,6 +261,45 @@ class Ray(Shape):
         self.start = wrapper.dxf.start
         self.unitvector = wrapper.dxf.unitvector
 
+XLine = Ray
+
+class Spline(Shape):
+    def __init__(self, wrapper):
+        super(Spline, self).__init__(wrapper)
+        self.normalvector = wrapper.dxf.get('normalvector', None)
+        self.flags = wrapper.dxf.get('flags', 0)
+        self.degree = wrapper.dxf.get('degree', 3)
+        self.starttangent = wrapper.dxf.get('starttangent', None)
+        self.endtangent = wrapper.dxf.get('endtangent', None)
+        self.knots = list(wrapper.knots())
+        self.weigths = list(wrapper.weights())
+        self.tol_knot = wrapper.dxf.get('knot_tolernace', .0000001)
+        self.tol_controlpoint = wrapper.dxf.get('controlpoint_tolernace', .0000001)
+        self.tol_fitpoint = wrapper.dxf.get('fitpoint_tolernace', .0000000001)
+        self.controlpoints = list(wrapper.controlpoints())
+        self.fitpoints = list(wrapper.fitpoints())
+
+    @property
+    def is_closed(self):
+        return bool(self.flags & const.SPLINE_CLOSED)
+
+    @property
+    def is_periodic(self):
+        return bool(self.flags & const.SPLINE_PERIODIC)
+
+    @property
+    def is_rational(self):
+        return bool(self.flags & const.SPLINE_RATIONAL)
+
+    @property
+    def is_planar(self):
+        return bool(self.flags & const.SPLINE_PLANAR)
+
+    @property
+    def is_linear(self):
+        return bool(self.flags & const.SPLINE_LINEAR)
+
+
 EntityTable = {
     'LINE':( Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
@@ -278,7 +317,8 @@ EntityTable = {
     'LWPOLYLINE': (LWPolyline, None, dxf13.LWPolyline),
     'ELLIPSE': (Ellipse, None, dxf13.Ellipse),
     'RAY': (Ray, None, dxf13.Ray),
-
+    'XLINE': (XLine, None, dxf13.XLine),
+    'SPLINE': (Spline, None, dxf13.Spline),
 }
 
 def entity_factory(tags, dxfversion):
