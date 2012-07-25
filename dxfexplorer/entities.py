@@ -243,7 +243,7 @@ class Vertex(Shape):
 class LWPolyline(Shape):
     def __init__(self, wrapper):
         super(LWPolyline, self).__init__(wrapper)
-        self.points = list(wrapper)
+        self.points = tuple(wrapper)
         self.is_closed = wrapper.is_closed()
 
 class Ellipse(Shape):
@@ -271,13 +271,15 @@ class Spline(Shape):
         self.degree = wrapper.dxf.get('degree', 3)
         self.starttangent = wrapper.dxf.get('starttangent', None)
         self.endtangent = wrapper.dxf.get('endtangent', None)
-        self.knots = list(wrapper.knots())
-        self.weigths = list(wrapper.weights())
+        self.knots = tuple(wrapper.knots())
+        self.weights = tuple(wrapper.weights())
         self.tol_knot = wrapper.dxf.get('knot_tolernace', .0000001)
         self.tol_controlpoint = wrapper.dxf.get('controlpoint_tolernace', .0000001)
         self.tol_fitpoint = wrapper.dxf.get('fitpoint_tolernace', .0000000001)
-        self.controlpoints = list(wrapper.controlpoints())
-        self.fitpoints = list(wrapper.fitpoints())
+        self.controlpoints = tuple(wrapper.controlpoints())
+        self.fitpoints = tuple(wrapper.fitpoints())
+        if len(self.weights) == 0:
+            self.weights = tuple([1.0] * len(self.controlpoints))
 
     @property
     def is_closed(self):
