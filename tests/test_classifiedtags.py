@@ -10,8 +10,8 @@ from __future__ import unicode_literals
 import unittest
 
 from io import StringIO
-from dxfexplorer.tags import Tags
-from dxfexplorer.classifiedtags import ClassifiedTags
+from dxfgrabber.tags import Tags
+from dxfgrabber.classifiedtags import ClassifiedTags
 
 class TestClassifiedTags(unittest.TestCase):
     def setUp(self):

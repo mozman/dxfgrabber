@@ -1,11 +1,11 @@
 
-dxfexplorer
-===========
+dxfgrabber
+==========
 
 Abstract
 --------
 
-A Python library to read and explore DXF drawings - all DXF versions supported.
+A Python library to grab informations from DXF drawings - all DXF versions supported.
 
 
 Installation
@@ -20,6 +20,6 @@ Documentation
 
 Source at bitbucket.org:
 
-http://bitbucket.org/mozman/dxfexplorer
+http://bitbucket.org/mozman/dxfgrabber
 
 mozman -- <mozman@gmx.at>

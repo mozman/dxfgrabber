@@ -18,15 +18,15 @@ def read(fname):
     except IOError:
         return "File '%s' not found.\n" % fname
 
-setup(name='dxfexplorer',
+setup(name='dxfgrabber',
     version=VERSION,
-    description='A Python library to read and explore DXF drawings - all DXF versions supported.',
+    description='A Python library to grab informations from DXF drawings - all DXF versions supported.',
     author=AUTHOR_NAME,
-    url='http://bitbucket.org/mozman/dxfexplorer',
-    download_url='http://bitbucket.org/mozman/dxfexplorer/downloads',
+    url='http://bitbucket.org/mozman/dxfgrabber',
+    download_url='http://bitbucket.org/mozman/dxfgrabber/downloads',
     author_email=AUTHOR_EMAIL,
-    packages=['dxfexplorer'],
-    provides=['dxfexplorer'],
+    packages=['dxfgrabber'],
+    provides=['dxfgrabber'],
     keywords=['DXF', 'CAD'],
     long_description=read('README.txt')+read('NEWS.txt'),
     platforms="OS Independent",

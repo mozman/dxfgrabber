@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-# dxfexplorer - copyright (C) 2012 by Manfred Moitzi (mozman)
+# dxfgrabber - copyright (C) 2012 by Manfred Moitzi (mozman)
 # Purpose: read and explore DXF drawings - all DXF versions supported
 # Created: 21.07.2012
 # License: MIT License

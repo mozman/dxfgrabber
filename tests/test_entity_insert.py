@@ -7,8 +7,8 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfexplorer.tags import Tags
-from dxfexplorer.entitysection import EntitySection
+from dxfgrabber.tags import Tags
+from dxfgrabber.entitysection import EntitySection
 
 class DrawingProxy:
     def __init__(self, version):

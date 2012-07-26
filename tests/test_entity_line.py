@@ -8,8 +8,8 @@ __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
 
-from dxfexplorer.classifiedtags import ClassifiedTags
-from dxfexplorer.entities import entity_factory
+from dxfgrabber.classifiedtags import ClassifiedTags
+from dxfgrabber.entities import entity_factory
 
 class TestLineDXF12(unittest.TestCase):
     def setUp(self):

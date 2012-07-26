@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 
 import unittest
 
-from dxfexplorer.tags import Tags
-from dxfexplorer.headersection import HeaderSection
+from dxfgrabber.tags import Tags
+from dxfgrabber.headersection import HeaderSection
 
 class TestHeaderSection(unittest.TestCase):
     def setUp(self):

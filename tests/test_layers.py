@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 
 import unittest
 
-from dxfexplorer.tags import Tags
-from dxfexplorer.layers import LayerTable
+from dxfgrabber.tags import Tags
+from dxfgrabber.layers import LayerTable
 
 
 class DrawingProxy:

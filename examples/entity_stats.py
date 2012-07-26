@@ -13,7 +13,7 @@ import time
 
 sys.path.insert(0, os.path.abspath('..'))
 
-import dxfexplorer
+import dxfgrabber
 from collections import Counter
 
 def print_layers(counter):
@@ -24,7 +24,7 @@ def print_layers(counter):
 def main(filename):
     print("reading file: {}".format(filename))
     starttime = time.time()
-    dxf = dxfexplorer.readfile(filename)
+    dxf = dxfgrabber.readfile(filename)
     endtime = time.time()
     print("time to read: {:.2f}s".format(endtime-starttime))
     print("entities: {:d}".format(len(dxf.entities)))

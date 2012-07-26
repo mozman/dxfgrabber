@@ -10,8 +10,8 @@ from __future__ import unicode_literals
 import unittest
 from io import StringIO
 
-from dxfexplorer.tags import StringIterator, Tags
-from dxfexplorer.tags import dxfinfo, strtag
+from dxfgrabber.tags import StringIterator, Tags
+from dxfgrabber.tags import dxfinfo, strtag
 
 TEST_TAGREADER = """  0
 SECTION
