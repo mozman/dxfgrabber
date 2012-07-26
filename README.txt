@@ -5,7 +5,7 @@ dxfgrabber
 Abstract
 --------
 
-A Python library to grab informations from DXF drawings - all DXF versions supported.
+A Python library to grab information from DXF drawings - all DXF versions supported.
 
 
 Installation

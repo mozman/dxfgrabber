@@ -20,7 +20,7 @@ def read(fname):
 
 setup(name='dxfgrabber',
     version=VERSION,
-    description='A Python library to grab informations from DXF drawings - all DXF versions supported.',
+    description='A Python library to grab information from DXF drawings - all DXF versions supported.',
     author=AUTHOR_NAME,
     url='http://bitbucket.org/mozman/dxfgrabber',
     download_url='http://bitbucket.org/mozman/dxfgrabber/downloads',
