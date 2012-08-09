@@ -26,8 +26,11 @@ else:
 from .tags import dxfinfo
 
 def read(stream):
-    from .drawing import Drawing
-    return Drawing(stream)
+    if hasattr(stream, 'readline'):
+        from .drawing import Drawing
+        return Drawing(stream)
+    else:
+        raise AttributeError('stream object requires a readline() method.')
 
 def readfile(filename):
     def get_encoding():
