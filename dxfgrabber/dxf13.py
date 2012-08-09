@@ -351,3 +351,25 @@ class MText(GenericWrapper):
         lines.append(self.dxf.text)
         return ''.join(lines)
 
+block_subclass = (
+    DefSubclass('AcDbEntity', { 'layer': DXFAttr(8, None) }),
+    DefSubclass('AcDbBlockBegin', {
+        'name': DXFAttr(2, None),
+        'name2': DXFAttr(3, None),
+        'description': DXFAttr(4, None),
+        'flags': DXFAttr(70, None),
+        'basepoint': DXFAttr(10, 'Point2D/3D'),
+        'xrefpath': DXFAttr(1, None),
+        })
+    )
+
+class Block(dxf12.Block):
+    DXFATTRIBS = DXFAttributes(none_subclass, *block_subclass)
+
+endblock_subclass = (
+    DefSubclass('AcDbEntity', { 'layer': DXFAttr(8, None) }),
+    DefSubclass('AcDbBlockEnd', {}),
+    )
+
+class EndBlk(dxf12.EndBlk):
+    DXFATTRIBS = DXFAttributes(none_subclass, *endblock_subclass)

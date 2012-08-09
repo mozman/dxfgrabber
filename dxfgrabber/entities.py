@@ -328,6 +328,42 @@ class MText(Shape):
     def lines(self):
         return self.rawtext.split('\P')
 
+class Block(Shape):
+    def __init__(self, wrapper):
+        super(Block, self).__init__(wrapper)
+        self.basepoint = wrapper.dxf.basepoint
+        self.name = wrapper.dxf.name
+        self.flags = wrapper.dxf.get('flags', 0)
+        self.xrefpath = wrapper.dxf.get('xrefpath', "")
+        self._entities = list()
+
+    @property
+    def is_xref(self):
+        return bool(self.flags & const.BLK_XREF)
+
+    @property
+    def is_xref_overlay(self):
+        return bool(self.flags & const.BLK_XREF_OVERLAY)
+
+    @property
+    def is_anonymous(self):
+        return bool(self.flags & const.BLK_ANONYMOUS)
+
+    def set_entities(self, entities):
+        self._entities = entities
+
+    def __iter__(self):
+        return iter(self._entities)
+
+    def __getitem__(self, item):
+        return self._entities[item]
+
+    def __len__(self):
+        return len(self._entities)
+
+class BlockEnd(SeqEnd):
+    pass
+
 EntityTable = {
     'LINE':( Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
@@ -342,6 +378,8 @@ EntityTable = {
     'ATTRIB': (Attrib, dxf12.Attrib, dxf13.Attrib),
     'POLYLINE': (Polyline, dxf12.Polyline, dxf13.Polyline),
     'VERTEX': (Vertex, dxf12.Vertex, dxf13.Vertex),
+    'BLOCK': (Block, dxf12.Block, dxf13.Block),
+    'ENDBLK': (BlockEnd, dxf12.EndBlk, dxf13.EndBlk),
     'LWPOLYLINE': (LWPolyline, None, dxf13.LWPolyline),
     'ELLIPSE': (Ellipse, None, dxf13.Ellipse),
     'RAY': (Ray, None, dxf13.Ray),

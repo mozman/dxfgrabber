@@ -7,8 +7,6 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from collections import OrderedDict
-
 from .codepage import toencoding
 from .defaultchunk import DefaultChunk, iterchunks
 from .headersection import HeaderSection
@@ -17,7 +15,7 @@ from .entitysection import EntitySection
 
 class Sections(object):
     def __init__(self, tagreader, drawing):
-        self._sections = OrderedDict()
+        self._sections = dict()
         self._setup_sections(tagreader, drawing)
 
     def _setup_sections(self, tagreader, drawing):

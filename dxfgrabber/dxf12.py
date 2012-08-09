@@ -183,3 +183,15 @@ class Vertex(GenericWrapper):
         'vtx2': DXFAttr(73, None),
         'vtx3': DXFAttr(74, None),
     })
+
+class Block(GenericWrapper):
+    DXFATTRIBS = make_attribs({
+        'name': DXFAttr(2, None),
+        'name2': DXFAttr(3, None),
+        'flags': DXFAttr(70, None),
+        'basepoint': DXFAttr(10, 'Point2D/3D'),
+        'xrefpath': DXFAttr(1, None),
+        })
+
+class EndBlk(SeqEnd):
+    DXFATTRIBS = DXFAttributes(DefSubclass(None, { 'handle': DXFAttr(5, None) }))

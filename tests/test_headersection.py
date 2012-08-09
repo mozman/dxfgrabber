@@ -4,7 +4,7 @@
 # Purpose: test header section
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
-# License: MIT License
+# License: GPLv3
 from __future__ import unicode_literals
 
 import unittest

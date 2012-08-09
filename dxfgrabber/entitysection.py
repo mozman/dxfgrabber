@@ -15,9 +15,10 @@ from .entities import entity_factory
 
 class EntitySection(object):
     name = 'entities'
+
     def __init__(self, tags, drawing):
         self._entities = list()
-        self._build_entities(tags, drawing.dxfversion)
+        self._build(tags, drawing.dxfversion)
 
     def get_entities(self):
         return self._entities
@@ -35,39 +36,43 @@ class EntitySection(object):
 
     # end of public interface
 
-    def _build_entities(self, tags, dxfversion):
-        def build_entity(group):
-            try:
-                entity = entity_factory(ClassifiedTags(group), dxfversion)
-            except KeyError:
-                entity = None # ignore unsupported entities
-            return entity
-
+    def _build(self, tags, dxfversion):
         assert tags[0] == (0, 'SECTION')
         assert tags[1] == (2, self.name.upper())
         assert tags[-1] == (0, 'ENDSEC')
 
         if len(tags) == 3: # empty entities section
             return
+        groups = TagGroups(islice(tags, 2, len(tags)-1))
+        self._entities = build_entities(groups, dxfversion)
 
-        entities = self._entities
-        collector = None
-        for group in TagGroups(islice(tags, 2, len(tags)-1)):
-            entity = build_entity(group)
-            if entity is not None:
-                if collector:
-                    if entity.dxftype == 'SEQEND':
-                        collector.stop()
-                        entities.append(collector.entity)
-                        collector = None
-                    else:
-                        collector.append(entity)
-                elif entity.dxftype == 'POLYLINE':
-                    collector = _Collector(entity)
-                elif entity.dxftype == 'INSERT' and entity.attribsfollow:
-                    collector = _Collector(entity)
+def build_entities(tag_groups, dxfversion):
+    def build_entity(group):
+        try:
+            entity = entity_factory(ClassifiedTags(group), dxfversion)
+        except KeyError:
+            entity = None # ignore unsupported entities
+        return entity
+
+    entities = list()
+    collector = None
+    for group in tag_groups:
+        entity = build_entity(group)
+        if entity is not None:
+            if collector:
+                if entity.dxftype == 'SEQEND':
+                    collector.stop()
+                    entities.append(collector.entity)
+                    collector = None
                 else:
-                    entities.append(entity)
+                    collector.append(entity)
+            elif entity.dxftype == 'POLYLINE':
+                collector = _Collector(entity)
+            elif entity.dxftype == 'INSERT' and entity.attribsfollow:
+                collector = _Collector(entity)
+            else:
+                entities.append(entity)
+    return entities
 
 class _Collector:
     def __init__(self, entity):
