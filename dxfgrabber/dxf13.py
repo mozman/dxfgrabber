@@ -249,14 +249,43 @@ class Attrib(dxf12.Attrib):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *attrib_subclass)
 
 
-ellipse_subclass = DefSubclass('AcDbEllipse', {
-        'center': DXFAttr(10, 'Point2D/3D'),
-        'majoraxis': DXFAttr(11, 'Point2D/3D'), # relative to the center
+attdef_subclass = (
+    DefSubclass('AcDbText', {
+        'insert': DXFAttr(10, 'Point2D/3D'),
+        'thickness': DXFAttr(39, None),
+        'height': DXFAttr(40, None),
+        'text': DXFAttr(1, None),
+        }),
+    DefSubclass('AcDbAttributeDefinition', {
+        'rotation': DXFAttr(50, None),
+        'width': DXFAttr(41, None),
+        'oblique': DXFAttr(51, None),
+        'style': DXFAttr(7, None),
+        'textgenerationflag': DXFAttr(71, None),
+        'halign': DXFAttr(72, None),
+        'alignpoint': DXFAttr(11, 'Point2D/3D'),
         'extrusion': DXFAttr(210, 'Point3D'),
-        'ratio': DXFAttr(40, None),
-        'startparam': DXFAttr(41, None), # this value is 0.0 for a full ellipse
-        'endparam': DXFAttr(42, None), # this value is 2*pi for a full ellipse
-    })
+        }),
+    DefSubclass('AcDbAttributeDefinition', {
+        'prompt': DXFAttr(3, None),
+        'tag': DXFAttr(2, None),
+        'flags': DXFAttr(70, None),
+        'fieldlength': DXFAttr(73, None),
+        'valign': DXFAttr(74, None),
+        }))
+
+class Attdef(dxf12.Attrib):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *attdef_subclass)
+
+
+ellipse_subclass = DefSubclass('AcDbEllipse', {
+    'center': DXFAttr(10, 'Point2D/3D'),
+    'majoraxis': DXFAttr(11, 'Point2D/3D'), # relative to the center
+    'extrusion': DXFAttr(210, 'Point3D'),
+    'ratio': DXFAttr(40, None),
+    'startparam': DXFAttr(41, None), # this value is 0.0 for a full ellipse
+    'endparam': DXFAttr(42, None), # this value is 2*pi for a full ellipse
+})
 
 class Ellipse(GenericWrapper):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, ellipse_subclass)

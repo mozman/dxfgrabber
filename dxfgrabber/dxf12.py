@@ -113,11 +113,12 @@ class SeqEnd(GenericWrapper):
                    'paperspace': DXFAttr(67, None),}))
 
 
-class Attrib(GenericWrapper):
+class Attrib(GenericWrapper): # also ATTDEF
     DXFATTRIBS = make_attribs({
         'insert': DXFAttr(10, 'Point2D/3D'),
         'height': DXFAttr(40, None),
         'text': DXFAttr(1, None),
+        'prompt': DXFAttr(3, None), # just in ATTDEF not ATTRIB
         'tag': DXFAttr(2, None),
         'flags': DXFAttr(70, None),
         'fieldlength': DXFAttr(73, None),
@@ -130,7 +131,6 @@ class Attrib(GenericWrapper):
         'valign': DXFAttr(74, None), # vertical justification
         'alignpoint': DXFAttr(11, 'Point2D/3D'),
     })
-
 
 class Polyline(GenericWrapper):
     DXFATTRIBS = make_attribs({

@@ -99,7 +99,7 @@ class Insert(Shape):
     def append_data(self, attribs):
         self.attribs = attribs
 
-class Attrib(Text):
+class Attrib(Text): # also ATTDEF
     def __init__(self, wrapper):
         super(Attrib, self).__init__(wrapper)
         self.tag = wrapper.dxf.tag
@@ -376,6 +376,7 @@ EntityTable = {
     'INSERT': (Insert, dxf12.Insert, dxf13.Insert),
     'SEQEND': (SeqEnd, dxf12.SeqEnd, dxf13.SeqEnd),
     'ATTRIB': (Attrib, dxf12.Attrib, dxf13.Attrib),
+    'ATTDEF': (Attrib, dxf12.Attrib, dxf13.Attdef),
     'POLYLINE': (Polyline, dxf12.Polyline, dxf13.Polyline),
     'VERTEX': (Vertex, dxf12.Vertex, dxf13.Vertex),
     'BLOCK': (Block, dxf12.Block, dxf13.Block),
