@@ -244,6 +244,15 @@ class LWPolyline(Shape):
         self.points = tuple(wrapper)
         self.is_closed = wrapper.is_closed()
 
+    def __len__(self):
+        return len(self.points)
+
+    def __getitem__(self, item):
+        return self.points[item]
+
+    def __iter__(self):
+        return iter(self.points)
+
 class Ellipse(Shape):
     def __init__(self, wrapper):
         super(Ellipse, self).__init__(wrapper)

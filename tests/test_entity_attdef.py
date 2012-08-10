@@ -85,15 +85,15 @@ AcDbAttr
 ATTDEF_DXF13 = """  0
 ATTDEF
   5
-511
+3EA
 102
 {ACAD_XDICTIONARY
 360
-512
+3EB
 102
 }
 330
-510
+3D6
 100
 AcDbEntity
   8
@@ -110,24 +110,36 @@ AcDbText
 3.0
   1
 TestInput
-100
-AcDbAttributeDefinition
   7
 NOTES
-280
-     0
-280
-     1
 100
 AcDbAttributeDefinition
   3
-InputPrompt
+InputText
   2
 MYATTRIB
  70
-0
- 73
-0
- 74
-0
+     0
+1001
+AcadAnnotative
+1000
+AnnotativeData
+1002
+{
+1070
+     1
+1070
+     1
+1002
+}
+1001
+AcadAnnoPO
+1070
+     1
+1001
+AcDbAttr
+1070
+     0
+1070
+     1
 """

@@ -255,8 +255,6 @@ attdef_subclass = (
         'thickness': DXFAttr(39, None),
         'height': DXFAttr(40, None),
         'text': DXFAttr(1, None),
-        }),
-    DefSubclass('AcDbAttributeDefinition', {
         'rotation': DXFAttr(50, None),
         'width': DXFAttr(41, None),
         'oblique': DXFAttr(51, None),
