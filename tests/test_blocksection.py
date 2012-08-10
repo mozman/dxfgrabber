@@ -4,7 +4,7 @@
 # Purpose: test blocks section
 # Created: 08.08.2012
 # Copyright (C) 2012, Manfred Moitzi
-# License: GPLv3
+# License: MIT-License
 from __future__ import unicode_literals
 
 import unittest
