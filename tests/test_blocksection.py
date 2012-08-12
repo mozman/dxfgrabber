@@ -14,6 +14,7 @@ from dxfgrabber.blockssection import BlocksSection
 
 class DrawingProxy:
     def __init__(self, version):
+        self.grab_blocks = True
         self.dxfversion = version
 
 class TestBlockSectionDXF12(unittest.TestCase):

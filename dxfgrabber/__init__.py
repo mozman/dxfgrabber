@@ -5,34 +5,35 @@
 # Created: 21.07.2012
 # License: MIT License
 
-version = (0, 3, 0)
+version = (0, 4, 0)
 VERSION = "%d.%d.%d"  % version
 
 __author__ = "mozman <mozman@gmx.at>"
 __doc__ = """A Python library to grab information from DXF drawings - all DXF versions supported."""
 
-import io
 
-# Python2/3 support should be done here
+# Python27/3x support should be done here
 import sys
-if sys.version_info[0] == 3:
-    # for Python 3
-    tostr = str
-else:
-    # for Python 2
-    tostr = unicode
-# end of Python2/3 support
+PYTHON3 = sys.version_info[0] > 2
 
+if PYTHON3:
+    tostr = str
+else: # PYTHON27
+    tostr = unicode
+# end of Python 27/3x adaption
+# if tostr does not work, look at package 'dxfwrite' for escaping unicode chars
+
+import io
 from .tags import dxfinfo
 
-def read(stream):
+def read(stream, options=None):
     if hasattr(stream, 'readline'):
         from .drawing import Drawing
-        return Drawing(stream)
+        return Drawing(stream, options)
     else:
         raise AttributeError('stream object requires a readline() method.')
 
-def readfile(filename):
+def readfile(filename, options=None):
     def get_encoding():
         with open(filename) as fp:
             info = dxfinfo(fp)
@@ -40,6 +41,6 @@ def readfile(filename):
 
     from .drawing import Drawing
     with io.open(filename, encoding=get_encoding()) as fp:
-        dwg = Drawing(fp)
+        dwg = Drawing(fp, options)
     dwg.filename = filename
     return dwg

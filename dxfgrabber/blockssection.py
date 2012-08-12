@@ -17,7 +17,8 @@ class BlocksSection(object):
     name = 'blocks'
     def __init__(self, tags, drawing):
         self._blocks = dict()
-        self._build(tags, drawing.dxfversion)
+        if drawing.grab_blocks:
+            self._build(tags, drawing.dxfversion)
 
     def _build(self, tags, dxfversion):
         assert tags[0] == (0, 'SECTION')
