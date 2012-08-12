@@ -8,7 +8,7 @@
 import os
 from distutils.core import setup
 
-VERSION = "0.1.0"
+VERSION = "0.4.0"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
 
@@ -32,14 +32,14 @@ setup(name='dxfgrabber',
     platforms="OS Independent",
     license="MIT License",
     classifiers=[
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.2",
+    "Programming Language :: Python :: 3.3",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Intended Audience :: End Users/Desktop",
-    "Topic :: Scientific/Engineering",
-    ]
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",    ]
      )

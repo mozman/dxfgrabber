@@ -2,6 +2,10 @@
 News
 ====
 
+Version 0.4.0 - 2012.08.12
+
+  * beta status
+
 Version 0.1.0 - 2012.07.21
 
   * Initial setup
