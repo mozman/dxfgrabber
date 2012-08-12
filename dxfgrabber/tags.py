@@ -7,8 +7,9 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from collections import namedtuple
 from io import StringIO
+from collections import namedtuple
+
 
 from .codepage import toencoding
 from .const import acadrelease

@@ -8,8 +8,14 @@
 from __future__ import unicode_literals
 
 import unittest
+import sys
 
-from io import StringIO
+if "PyPy" in sys.version:
+    from cStringIO import StringIO
+else:
+    from io import StringIO
+# some tests run too slow with the pypy implementation of io.StringIO (status 12.08.2012)
+
 from dxfgrabber.drawing import Drawing
 
 class TestDrawingDXF12withBlocks(unittest.TestCase):
