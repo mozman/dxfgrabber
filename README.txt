@@ -16,7 +16,8 @@ Installation
 Documentation
 =============
 
-/docs/build/html/index.html
+http://dxfgrabber.readthedocs.org
+http://packages.python.org/dxfgrabber/
 
 Source at bitbucket.org:
 
