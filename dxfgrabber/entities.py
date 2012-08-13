@@ -125,6 +125,10 @@ class Polyline(Shape):
     def __iter__(self):
         return iter(self.vertices)
 
+    @property
+    def is_closed(self):
+        return self.is_mclosed
+
     def points(self):
         return (vertex.location for vertex in self.vertices)
 
@@ -139,7 +143,7 @@ class Polyline(Shape):
         else:
             return self
 
-class _Face:
+class _Face(object):
     def __init__(self, face):
         self._vertices = []
         self._face = face
@@ -153,11 +157,13 @@ class _Face:
     def __iter__(self):
         return (vertex.location for vertex in self._vertices)
 
-class Polyface:
+class Polyface(object):
     def __init__(self, polyline):
         self.dxftype = "POLYFACE"
         self.layer = polyline.layer
         self.linetype = polyline.linetype
+        self.ltscale = polyline.ltscale
+        self.invisible = polyline.invisible
         self.color = polyline.color
         self.paperspace = polyline.paperspace
         self._faces = list(self._iterfaces(polyline.vertices))
@@ -191,11 +197,13 @@ class Polyface:
             if isface(vertex):
                 yield getface(vertex)
 
-class Polymesh:
+class Polymesh(object):
     def __init__(self, polyline):
         self.dxftype = "POLYMESH"
         self.layer = polyline.layer
         self.linetype = polyline.linetype
+        self.ltscale = polyline.ltscale
+        self.invisible = polyline.invisible
         self.color = polyline.color
         self.paperspace = polyline.paperspace
         self.mcount = polyline.mcount

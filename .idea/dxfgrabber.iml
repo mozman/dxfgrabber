@@ -7,5 +7,8 @@
     <orderEntry type="jdk" jdkName="Python 3.2.3 virtualenv at D:\dev\__env__\venv32" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="" />
+  </component>
 </module>
 

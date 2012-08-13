@@ -13,7 +13,7 @@ from .genericwrapper import GenericWrapper
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
-class Layer:
+class Layer(object):
     def __init__(self, wrapper):
         self.name = wrapper.dxf.name
         self.color = wrapper.get_color()
@@ -21,7 +21,7 @@ class Layer:
         self.locked = wrapper.is_locked()
         self.on = wrapper.is_on()
 
-class LayerTable:
+class LayerTable(object):
     name = 'layers'
     def __init__(self, tags, drawing):
         dxfversion = drawing.dxfversion
