@@ -33,7 +33,7 @@ Read DXF files
 
 .. function:: read(stream[, options=None])
 
-    like :func:`readfile`, but reads the DXF data from a stream. `stream`
+    Like :func:`readfile`, but reads the DXF data from a `stream`. `stream`
     only requires a method :meth:`readline()`
 
 Options dict for reading DXF files
@@ -93,7 +93,7 @@ Drawing Content
 
 .. attribute:: Drawing.layers
 
-    Contains all layer definitions in a object of type :class:`LayerTable`.
+    Contains all layer definitions in an object of type :class:`LayerTable`.
 
 .. attribute:: Drawing.blocks
 
@@ -120,7 +120,7 @@ Layer Table
 
 .. method:: LayerTable.__iter__()
 
-    Support for iterator protocol
+    Iterate over all layers, yields :class:`Layer` objects.
 
 .. method:: LayerTable.__len__()
 
@@ -165,7 +165,7 @@ Blocks Section
 
 .. method:: BlocksSection.__iter__()
 
-    Support for iterator protocol, iterates over blocks not block names!
+    Iterates over blocks, yields :class:`Block` objects.
 
 .. method:: BlocksSection.__contains__(self, name)
 
@@ -194,7 +194,7 @@ Entity Section
 
 .. method:: EntitySection.__iter__()
 
-    Support for iterator protocol, iterates over all entities.
+    Iterates over all entities.
 
 .. method:: EntitySection.__getitem__(index)
 

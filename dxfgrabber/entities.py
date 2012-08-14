@@ -28,6 +28,19 @@ class Shape(Entity):
         self.ltscale = wrapper.dxf.get('ltscale', 1.0)
         self.invisible = wrapper.dxf.get('invisible', 0) # 0=visible
         self.color = wrapper.dxf.get('color', const.BYLAYER) # 256=BYLAYER, 0=BYBLOCK
+        # if adding additional DXF attributes, do it also for PolyShape
+
+class PolyShape(object):
+    """ Base class for Polyface and Polymesh, both are special cases of POLYLINE.
+    """
+    def __init__(self, polyline, dxftype):
+        self.dxftype = dxftype
+        self.paperspace = polyline.paperspace
+        self.layer = polyline.layer
+        self.linetype = polyline.linetype
+        self.ltscale = polyline.ltscale
+        self.invisible = polyline.invisible
+        self.color = polyline.color
 
 class Line(Shape):
     def __init__(self, wrapper):
@@ -157,15 +170,9 @@ class _Face(object):
     def __iter__(self):
         return (vertex.location for vertex in self._vertices)
 
-class Polyface(object):
+class Polyface(PolyShape):
     def __init__(self, polyline):
-        self.dxftype = "POLYFACE"
-        self.layer = polyline.layer
-        self.linetype = polyline.linetype
-        self.ltscale = polyline.ltscale
-        self.invisible = polyline.invisible
-        self.color = polyline.color
-        self.paperspace = polyline.paperspace
+        super(Polyface, self).__init__(polyline, 'POLYFACE')
         self._faces = list(self._iterfaces(polyline.vertices))
 
     def __getitem__(self, item):
@@ -197,15 +204,9 @@ class Polyface(object):
             if isface(vertex):
                 yield getface(vertex)
 
-class Polymesh(object):
+class Polymesh(PolyShape):
     def __init__(self, polyline):
-        self.dxftype = "POLYMESH"
-        self.layer = polyline.layer
-        self.linetype = polyline.linetype
-        self.ltscale = polyline.ltscale
-        self.invisible = polyline.invisible
-        self.color = polyline.color
-        self.paperspace = polyline.paperspace
+        super(Polymesh, self).__init__(polyline, 'POLYMESH')
         self.mcount = polyline.mcount
         self.ncount = polyline.ncount
         self.is_mclosed = polyline.is_mclosed

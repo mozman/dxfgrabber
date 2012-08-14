@@ -335,7 +335,7 @@ class Spline(GenericWrapper):
         return ( tag.value for tag in subclass if tag.code== 41 )
 
     def controlpoints(self):
-        # groupcode 10,20,30, multiple values: nfitpoints
+        # groupcode 10,20,30, multiple values: ncontrolpoints
         return self._get_points(10)
 
     def fitpoints(self):
@@ -343,7 +343,6 @@ class Spline(GenericWrapper):
         return self._get_points(11)
 
     def _get_points(self, code):
-        # groupcode 10,20,30, multiple values: ncontrolpoints
         subclass = self.tags.subclasses[2] # subclass AcDbSpline
         point = None
         zcode = code + 20
