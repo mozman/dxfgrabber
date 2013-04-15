@@ -252,6 +252,7 @@ class LWPolyline(Shape):
         super(LWPolyline, self).__init__(wrapper)
         self.points = tuple(wrapper)
         self.is_closed = wrapper.is_closed()
+        self.elevation = wrapper.dxf.get('elevation', (0., 0., 0.))
 
     def __len__(self):
         return len(self.points)
