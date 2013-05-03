@@ -40,11 +40,7 @@ def readfile(filename, options=None):
         return readfile_as_utf8(filename, options, errors='ignore')
 
 def readfile_as_utf8(filename, options=None, errors='strict'):
-    from .drawing import Drawing
-    with io.open(filename, encoding='utf-8', errors=errors) as fp:
-        dwg = Drawing(fp, options)
-    dwg.filename = filename
-    return dwg
+    return _read_encoded_file(filename, options, encoding='utf-8', errors=errors)
 
 def readfile_as_asc(filename, options=None):
     def get_encoding():
@@ -52,9 +48,13 @@ def readfile_as_asc(filename, options=None):
             info = dxfinfo(fp)
         return info.encoding
 
+    return _read_encoded_file(filename, options, encoding=get_encoding())
+
+def _read_encoded_file(filename, options=None, encoding='utf-8', errors='strict'):
     from .drawing import Drawing
-    encoding = get_encoding()
-    with io.open(filename, encoding=encoding) as fp:
+
+    with io.open(filename, encoding=encoding, errors=errors) as fp:
         dwg = Drawing(fp, options)
     dwg.filename = filename
+    #print('reading file with encoding={}, errors={}'.format(encoding, errors))
     return dwg
