@@ -2,6 +2,11 @@
 News
 ====
 
+Version 0.5.0 - 2012.08.12
+
+  * beta status
+  * solved problems with 'utf-8' encoded dxf files
+
 Version 0.4.0 - 2012.08.12
 
   * beta status

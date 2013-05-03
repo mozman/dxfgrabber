@@ -41,7 +41,9 @@ class TagIterator(object):
             try:
                 code = int(self.readline())
                 value = self.readline().rstrip('\n')
-            except:
+            except UnicodeDecodeError:
+                raise # because UnicodeDecodeError() is a subclass of ValueError()
+            except (EOFError, ValueError):
                 raise StopIteration()
             self.lasttag = tagcast( (code, value) )
             return self.lasttag
