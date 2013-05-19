@@ -39,7 +39,7 @@ class LayerTable(object):
         return name in self._layers
 
     def __iter__(self):
-        return self._layers.values()
+        return iter(self._layers.values())
 
     def __len__(self):
         return len(self._layers)
