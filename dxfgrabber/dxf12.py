@@ -13,7 +13,7 @@ from .genericwrapper import GenericWrapper
 from . import const
 
 
-def make_attribs(additional={}):
+def make_attribs(additional=None):
     dxfattribs = {
         'handle': DXFAttr(5, None),
         'layer': DXFAttr(8, None), # layername as string, default is '0'
@@ -21,7 +21,8 @@ def make_attribs(additional={}):
         'color': DXFAttr(62, None), # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
         'paperspace': DXFAttr(67, None), # 0 .. modelspace, 1 .. paperspace, default is 0
     }
-    dxfattribs.update(additional)
+    if additional:
+        dxfattribs.update(additional)
     return DXFAttributes(DefSubclass(None, dxfattribs))
 
 

@@ -19,6 +19,7 @@ class Layer(object):
         self.color = wrapper.get_color()
         self.linetype = wrapper.dxf.linetype
         self.locked = wrapper.is_locked()
+        self.frozen = wrapper.is_frozen()
         self.on = wrapper.is_on()
 
 class LayerTable(object):
@@ -34,6 +35,9 @@ class LayerTable(object):
 
     def get(self, name):
         return self._layers[name]
+
+    def __getitem__(self, item):
+        return self.get(item)
 
     def __contains__(self, name):
         return name in self._layers
@@ -69,6 +73,10 @@ class DXF12Layer(GenericWrapper):
         'linetype': DXFAttr(6, None),
         }))
     LOCK = 0b00000100
+    FROZEN = 0b00000001
+
+    def is_frozen(self):
+        return self.dxf.flags & DXF12Layer.FROZEN > 0
 
     def is_locked(self):
         return self.dxf.flags & DXF12Layer.LOCK > 0
@@ -78,6 +86,7 @@ class DXF12Layer(GenericWrapper):
 
     def is_on(self):
         return not self.is_off()
+
 
     def get_color(self):
         return abs(self.dxf.color)

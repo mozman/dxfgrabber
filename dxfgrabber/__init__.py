@@ -5,7 +5,7 @@
 # Created: 21.07.2012
 # License: MIT License
 
-version = (0, 5, 0)
+version = (0, 5, 1)
 VERSION = "%d.%d.%d"  % version
 
 __author__ = "mozman <mozman@gmx.at>"
@@ -22,6 +22,8 @@ else: # PYTHON27
     tostr = unicode
 # end of Python 2/3 adaption
 # if tostr does not work, look at package 'dxfwrite' for escaping unicode chars
+
+from .const import BYBLOCK, BYLAYER
 
 import io
 from .tags import dxfinfo

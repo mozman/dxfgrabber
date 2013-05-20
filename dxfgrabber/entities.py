@@ -18,7 +18,7 @@ class SeqEnd(object):
 class Entity(SeqEnd):
     def __init__(self, wrapper):
         super(Entity, self).__init__(wrapper)
-        self.paperspace = wrapper.paperspace()
+        self.paperspace = bool(wrapper.paperspace())
 
 class Shape(Entity):
     def __init__(self, wrapper):

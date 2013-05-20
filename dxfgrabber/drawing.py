@@ -30,3 +30,9 @@ class Drawing(object):
         self.entities = sections.entities
         self.blocks = sections.blocks
 
+    def modelspace(self):
+        return (entity for entity in self.entities if not entity.paperspace)
+
+    def paperspace(self):
+        return (entity for entity in self.entities if entity.paperspace)
+

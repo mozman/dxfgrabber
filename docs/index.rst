@@ -103,6 +103,14 @@ Drawing Content
 
     Contains all drawing entities in a *list* like object of type :class:`EntitySection`.
 
+.. method:: Drawing.modelspace()
+
+    Iterate over all DXF entities in *modelspace*.
+
+.. method:: Drawing.paperspace()
+
+    Iterate over all DXF entities in *paperspace*.
+
 Layer Table
 -----------
 
@@ -112,7 +120,11 @@ Layer Table
 
 .. method:: LayerTable.get(name)
 
-    Return layer *name* as object of type :class:`Layer`. Raises *IndexError*
+    Return layer *name* as object of type :class:`Layer`. Raises *KeyError*
+
+.. method:: LayerTable.__getitem__(name)
+
+    Support for index operator: :code:`dwg.layers[name]`
 
 .. method:: LayerTable.layernames(name)
 
@@ -147,6 +159,10 @@ Layer
 
     type is *bool*
 
+.. attribute:: Layer.frozen
+
+    type is *bool*
+
 .. attribute:: Layer.on
 
     type is *bool*
@@ -174,8 +190,8 @@ Blocks Section
 
 .. method:: BlocksSection.__getitem__(name)
 
-   Returns block *name*, support for standard operator
-   ``block = blocks[name]``. Raises *KeyError*
+   Returns block *name*, support for the index operator: :code:`block = dwg.blocks[name]`.
+   Raises *KeyError*
 
 .. method:: BlocksSection.get(name[, default=None])
 
@@ -199,7 +215,7 @@ Entity Section
 .. method:: EntitySection.__getitem__(index)
 
    Returns entity a location *index*, *slicing* is possible, support for
-   standard operator ``entity = entities[index]``. Raises *IndexError*
+   the index operator :code:`dwg.entity = entities[index]`. Raises *IndexError*
 
 example for accessing entities::
 
@@ -216,6 +232,10 @@ Base Class Shape
 .. class:: Shape
 
     Base class for all drawing entities.
+
+.. attribute:: Shape.paperspace
+
+    ``True`` for *paperspace* and ``False`` for *modelspace*.
 
 .. attribute:: Shape.dxftype
 
@@ -738,5 +758,87 @@ MText
     Returns a *list* of lines. It is the :attr:`MText.rawtext` splitted into
     lines by the ``\P`` character.
 
+Howtos
+======
+
+Open a DXF file
+---------------
+
+Open files from file system::
+
+    dwg = readfile("myfile.dxf")
+
+To read file from a stream use: :func:`read`
+
+Query Header Variables
+----------------------
+
+The HEADER section of a DXF file contains the settings of variables associated with the drawing.
+
+Example::
+
+    dxfversion = dwg.header['$ACADVER']
+
+For available HEADER variables and their meaning see: `DXF Reference`_
+
+Query Entities
+--------------
+
+All entities of the DXF drawing, independent from *modelspace* or *paperspace*, resides in the :attr:`Drawing.entities`
+attribute and is an :class:`EntitySection` object. Iterate over all entities with the ``in`` operator::
+
+    all_lines = [entity for entity in dwg.entities if entity.dxftype == 'LINE']
+    all_entities_at_layer_0 = [entity for entity in dwg.entities if entity.layer == '0']
+
+Query Blocks
+------------
+
+Block references are just DXF entities called INSERT.
+
+Get all block references for block ``TestBlock``::
+
+    references = [entity for entity in dwg.entities if entity.dxftype == 'INSERT' and entity.name == 'TestBlock']
+
+
+See available attributes for the :class:`Insert` entity.
+
+To examine the Block content, get the block definition from the blocks section::
+
+    test_block = dwg.blocks['TestBlock']
+
+and use the ``in`` operator (Iterator protocol)::
+
+    circles_in_block = [entity for entity in test_block if entity.dxftape == 'CIRCLE']
+
+Layers
+------
+
+Layers are nothing special, they are just another attribute of the DXF entity, *dxfgrabber* stores the layer as a
+simple *string*. The DXF entitiy can inherit some attributes from the layer: *color, linetype*
+
+To get the real value of an attribute value == *BYLAYER*, get the layer definition::
+
+    layer = dwg.layers[dxf_entity.layer]
+    color = layer.color if dxf_entity.color == dxfgrabber.BYLAYER else dxf_entity.color
+    linetype = layer.linetype if dxf_entity.linetype is None else dxf_entity.linetype
+
+Layers can be :attr:`~Layer.locked` (if ``True`` else *unlocked*), :attr:`~Layer.on` (if ``True`` else *off*) or
+:attr:`~Layer.frozen` (if ``True`` else *thawed*).
+
+Layouts (Modelspace or Paperspace)
+----------------------------------
+
+*dxfgrabber* just supports the :attr:`~Shape.paperspace` attribute, it is not possible to examine in which layout a
+paperspace object resides (DXF12 has only one paperspace).
+
+Get all *modelspace* entities::
+
+    modelspace_entities = [entity for entity in dwg.entities if not entity.paperspace]
+
+shortcuts since 0.5.1::
+
+    modelspace_entities = list(dwg.modelspace())
+    paperspace_entities = list(dwg.paperspace())
 
 .. _Autodesk: http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853
+.. _DXF Reference: http://docs.autodesk.com/ACD/2014/ENU/index.html?url=files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm,topicNumber=d30e652301

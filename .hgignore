@@ -1,7 +1,7 @@
 syntax: glob
 build/*
 dist/*
-docs/build/*
+docs/_build/*
 .tox/*
 *.err
 *.orig
