@@ -10,7 +10,7 @@ last updated |today|.
 
 *dxfgrabber* is a Python library to grab information from DXF drawings - all DXF versions supported.
 
-Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython 3.2, CPython3.3 and PyPy.
+Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython3.3 and PyPy.
 
 License: *dxfgrabber* is licensed under the MIT license.
 
@@ -65,15 +65,16 @@ Drawing Content
 
     DXF version as *string*.
 
-    =========== =========================
+    =========== ===============
     DXF         AutoCAD Version
-    =========== =========================
+    =========== ===============
     ``AC1009``  AutoCAD R12
     ``AC1015``  AutoCAD R2000
     ``AC1018``  AutoCAD R2004
     ``AC1021``  AutoCAD R2007
-    ``AC1024``  AutoCAD R2010 up to R2013
-    =========== =========================
+    ``AC1024``  AutoCAD R2010
+    ``AC1027``  AutoCAD R2013
+    =========== ===============
 
 .. attribute:: Drawing.encoding
 

@@ -5,7 +5,7 @@
 # Created: 21.07.2012
 # License: MIT License
 
-version = (0, 5, 1)
+version = (0, 5, 2)
 VERSION = "%d.%d.%d"  % version
 
 __author__ = "mozman <mozman@gmx.at>"
@@ -46,7 +46,7 @@ def readfile_as_utf8(filename, options=None, errors='strict'):
 
 def readfile_as_asc(filename, options=None):
     def get_encoding():
-        with open(filename) as fp:
+        with io.open(filename) as fp:
             info = dxfinfo(fp)
         return info.encoding
 
@@ -58,5 +58,4 @@ def _read_encoded_file(filename, options=None, encoding='utf-8', errors='strict'
     with io.open(filename, encoding=encoding, errors=errors) as fp:
         dwg = Drawing(fp, options)
     dwg.filename = filename
-    #print('reading file with encoding={}, errors={}'.format(encoding, errors))
     return dwg

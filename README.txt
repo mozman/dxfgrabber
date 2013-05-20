@@ -18,7 +18,7 @@ Documentation
 
 http://dxfgrabber.readthedocs.org
 
-http://packages.python.org/dxfgrabber/
+http://pythonhosted.org/dxfgrabber/
 
 Source at bitbucket.org:
 
