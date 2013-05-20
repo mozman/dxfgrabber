@@ -5,8 +5,9 @@ News
 Version 0.5.1 - 2013.05.20
 
   * updated docs - added a *Howto* section
-  * added attribute frozen to class :class:`Layer`
-  * added modelspace() and paperspace() iterators to class :class:`Drawing`
+  * added attribute frozen to class Layer()
+  * index operator for: Drawing.layers[layername]
+  * added modelspace() and paperspace() iterators to class Drawing()
   * supported Python versions: CPython 2.7, CPython 3.3, pypy - no explicit testing with CPython 3.2
 
 Version 0.5.0 - 2013.05.04

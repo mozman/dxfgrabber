@@ -87,7 +87,6 @@ class DXF12Layer(GenericWrapper):
     def is_on(self):
         return not self.is_off()
 
-
     def get_color(self):
         return abs(self.dxf.color)
 

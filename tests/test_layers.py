@@ -27,6 +27,10 @@ class TestDXF12Layer(unittest.TestCase):
         layer = self.layers.get("VIEW_PORT")
         self.assertEqual("VIEW_PORT", layer.name)
 
+    def test_get_existing_layer_2(self):
+        layer = self.layers["VIEW_PORT"]
+        self.assertEqual("VIEW_PORT", layer.name)
+
     def test_contains(self):
         self.assertTrue("VIEW_PORT" in self.layers)
         self.assertTrue("0" in self.layers)
@@ -47,6 +51,18 @@ class TestDXF12Layer(unittest.TestCase):
     def test_layernames(self):
         self.assertEqual(3, len(self.layers.layernames()))
 
+    def test_is_on(self):
+        layer = self.layers.get("VIEW_PORT")
+        self.assertTrue(layer.on)
+
+    def test_is_locked(self):
+        layer = self.layers.get("VIEW_PORT")
+        self.assertFalse(layer.locked)
+
+    def test_is_frozen(self):
+        layer = self.layers.get("VIEW_PORT")
+        self.assertFalse(layer.frozen)
+
 class TestDXF13Layer(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(DXF13LAYERS)
@@ -54,6 +70,10 @@ class TestDXF13Layer(unittest.TestCase):
 
     def test_get_existing_layer(self):
         layer = self.layers.get("View Port")
+        self.assertEqual("View Port", layer.name)
+
+    def test_get_existing_layer_2(self):
+        layer = self.layers["View Port"]
         self.assertEqual("View Port", layer.name)
 
     def test_contains(self):
@@ -75,6 +95,18 @@ class TestDXF13Layer(unittest.TestCase):
 
     def test_layernames(self):
         self.assertEqual(3, len(self.layers.layernames()))
+
+    def test_is_on(self):
+        layer = self.layers.get("View Port")
+        self.assertTrue(layer.on)
+
+    def test_is_locked(self):
+        layer = self.layers.get("View Port")
+        self.assertFalse(layer.locked)
+
+    def test_is_frozen(self):
+        layer = self.layers.get("View Port")
+        self.assertFalse(layer.frozen)
 
 DXF13LAYERS = """  0
 TABLE

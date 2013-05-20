@@ -43,6 +43,12 @@ class TestDrawingDXF12withBlocks(unittest.TestCase):
     def test_entities(self):
         self.assertEqual(len(self.dwg.entities), 1)
 
+    def test_modelspace(self):
+        self.assertEqual(len(list(self.dwg.modelspace())), 1)
+
+    def test_paperspace(self):
+        self.assertEqual(len(list(self.dwg.paperspace())), 0)
+
 class TestDrawingDXF12withoutBlocks(TestDrawingDXF12withBlocks):
     def setUp(self):
         stream = StringIO(DXF12)
