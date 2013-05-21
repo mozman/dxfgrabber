@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Purpose: Manage drawing data of DXF files
+# Purpose: handle drawing data of DXF files
 # Created: 21.07.12
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License

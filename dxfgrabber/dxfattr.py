@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Purpose: dxfattr
+# Purpose: define dxf attributes
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License
@@ -36,7 +34,7 @@ class DXFAttributes:
         return name in self._attribs
 
     def keys(self):
-        return self._attribs.keys()
+        return iter(self._attribs.keys())
     
     def subclasses(self):
         return iter(self._subclasses)

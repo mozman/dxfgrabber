@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Author:  mozman -- <mozman@gmx.at>
-# Purpose: test Drawing class
 # Created: 12.08.2012
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT-License

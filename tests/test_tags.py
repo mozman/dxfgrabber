@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Author:  mozman -- <mozman@gmx.at>
-# Purpose: test tagreader
-# Created: 21.07.2012, taken from my ezdxf project
-# Copyright (C) 2012, Manfred Moitzi
+# Created: 21.07.2012
 # License: MIT License
 from __future__ import unicode_literals
 
@@ -207,7 +202,3 @@ LAST
   1
 TEST2
 """
-
-
-if __name__=='__main__':
-    unittest.main()

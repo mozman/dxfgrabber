@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Purpose:
 # Created: 22.07.12
 # License: MIT License
 from __future__ import unicode_literals

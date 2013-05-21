@@ -1,10 +1,5 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Author:  mozman -- <mozman@gmx.at>
-# Purpose: test header section
-# Created: 21.07.2012, taken from my ezdxf project
-# Copyright (C) 2012, Manfred Moitzi
-# License: GPLv3
+# Created: 21.07.2012
+# License: MIT License
 from __future__ import unicode_literals
 
 import unittest

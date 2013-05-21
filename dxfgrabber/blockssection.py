@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#coding:utf-8
 # Purpose: blocks section
 # Created: 09.08.2012, taken from my package ezdxf
 # Copyright (C) 2011, Manfred Moitzi

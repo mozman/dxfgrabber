@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#coding:utf-8
 # dxfgrabber - copyright (C) 2012 by Manfred Moitzi (mozman)
 # Purpose: grab information from DXF drawings - all DXF versions supported
 # Created: 21.07.2012

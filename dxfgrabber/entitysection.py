@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Purpose: entity section
+# Purpose: handle entity section
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License

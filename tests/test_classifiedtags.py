@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-#coding:utf-8
-# Author:  mozman -- <mozman@gmx.at>
-# Purpose: test classifiedtags
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
 # License: MIT License
@@ -112,7 +108,7 @@ CONTINUOUS
 1001
 RAK
 1000
-{75-LÄNGENSCHNITT-14
+{75-LANGENSCHNITT-14
 1070
 0
 1070
@@ -126,9 +122,9 @@ CONTINUOUS
 1005
 8
 1000
-75-LÄNGENSCHNITT-14}
+75-LANGENSCHNITT-14}
 1000
-{75-LÄNGENSCHNITT-2005
+{75-LANGENSCHNITT-2005
 1070
 0
 1070
@@ -142,7 +138,7 @@ CONTINUOUS
 1005
 8
 1000
-75-LÄNGENSCHNITT-2005}
+75-LANGENSCHNITT-2005}
 """
 class TestXDATA(unittest.TestCase):
     def setUp(self):
@@ -233,6 +229,3 @@ AcDbText
  73
 2
 """
-
-if __name__=='__main__':
-    unittest.main()
