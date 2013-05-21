@@ -34,6 +34,10 @@ class TestBlockSectionDXF12(unittest.TestCase):
         line = block[0]
         self.assertEqual(line.layer, 'LOGO')
 
+    def test_iter_blocks(self):
+        blocks = list(self.blocks)
+        self.assertEqual(2, len(blocks))
+
 class TestBlockSectionDXF13(TestBlockSectionDXF12):
     def setUp(self):
         tags = Tags.fromtext(BLOCKS_DXF13)

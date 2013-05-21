@@ -43,6 +43,13 @@ class TestDrawingDXF12withBlocks(unittest.TestCase):
     def test_entities(self):
         self.assertEqual(len(self.dwg.entities), 1)
 
+    def test_iter_entities(self):
+        entities = list(self.dwg.entities)
+        self.assertEqual(1, len(entities))
+
+    def test_get_entity(self):
+        self.assertEqual('INSERT', self.dwg.entities[0].dxftype)
+
     def test_modelspace(self):
         self.assertEqual(len(list(self.dwg.modelspace())), 1)
 

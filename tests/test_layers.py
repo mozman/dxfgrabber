@@ -63,6 +63,10 @@ class TestDXF12Layer(unittest.TestCase):
         layer = self.layers.get("VIEW_PORT")
         self.assertFalse(layer.frozen)
 
+    def test_iter_layers(self):
+        layers = list(self.layers)
+        self.assertEqual(3, len(layers))
+
 class TestDXF13Layer(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(DXF13LAYERS)
@@ -107,6 +111,10 @@ class TestDXF13Layer(unittest.TestCase):
     def test_is_frozen(self):
         layer = self.layers.get("View Port")
         self.assertFalse(layer.frozen)
+
+    def test_iter_layers(self):
+        layers = list(self.layers)
+        self.assertEqual(3, len(layers))
 
 DXF13LAYERS = """  0
 TABLE
