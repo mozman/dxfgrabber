@@ -26,7 +26,10 @@ class Drawing(object):
         self.header = sections.header
         self.layers = sections.tables.layers
         self.entities = sections.entities
-        self.blocks = sections.blocks
+        try:
+            self.blocks = sections.blocks
+        except AttributeError: # no blocks section
+            self.blocks = {}
 
     def modelspace(self):
         return (entity for entity in self.entities if not entity.paperspace)

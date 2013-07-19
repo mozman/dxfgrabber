@@ -25,7 +25,7 @@ class Sections(object):
         for section in iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
             if bootstrap:
                 new_section = HeaderSection(section)
-                drawing.dxfversion = new_section['$ACADVER']
+                drawing.dxfversion = new_section.get('$ACADVER', 'AC1009')
                 codepage = new_section.get('$DWGCODEPAGE', 'ANSI_1252')
                 drawing.encoding = toencoding(codepage)
                 bootstrap = False
