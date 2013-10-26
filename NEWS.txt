@@ -2,6 +2,12 @@
 News
 ====
 
+Version 0.5.3 -
+
+  * skip comment tags (999)
+  * dxfversion defaults to 'AC1009', if no header variable $ACADVER exists
+  * doesn't break, if no BLOCKS section exists
+
 Version 0.5.2 - 2013.05.20
 
   * bugfix: fixed \*nix newline problem in readfile_as_asc()

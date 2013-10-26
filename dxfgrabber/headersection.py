@@ -17,6 +17,8 @@ class HeaderSection(dict):
         assert tags[0] == (0, 'SECTION')
         assert tags[1] == (2, 'HEADER')
         assert tags[-1] == (0, 'ENDSEC')
+        if len(tags) == 3:  # empty header section!
+            return
         groups = TagGroups(tags[2:-1], splitcode=9)
         for group in groups:
             name = group[0].value

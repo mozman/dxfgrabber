@@ -8,7 +8,7 @@
 import os
 from distutils.core import setup
 
-VERSION = "0.5.2"
+VERSION = "0.5.3"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
 

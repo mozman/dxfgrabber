@@ -3,7 +3,7 @@
 # Created: 21.07.2012
 # License: MIT License
 
-version = (0, 5, 2)
+version = (0, 5, 3)
 VERSION = "%d.%d.%d"  % version
 
 __author__ = "mozman <mozman@gmx.at>"

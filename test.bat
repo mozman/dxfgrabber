@@ -5,3 +5,5 @@ ECHO Running Python 3.3 tests
 CALL test33.bat
 ECHO Running pypy tests
 CALL testpypy.bat
+ECHO Running pypy3 tests
+CALL testpypy3.bat

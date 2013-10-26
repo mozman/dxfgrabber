@@ -4,18 +4,8 @@
 from __future__ import unicode_literals
 
 import unittest
-import sys
 
-if "pypy" in sys.version.lower():
-    from cStringIO import StringIO
-else:
-    from io import StringIO
-
-# Status: 12.08.2012
-# some tests run too slow with the pypys implementation of io.StringIO, perhaps
-# pypys io.StringIO has just performance problems with big unicode strings, because
-# other tests using Tags.fromstring(), which uses io.StringIO, running fast enough,
-# but this tests uses just small input strings.
+from io import StringIO
 
 from dxfgrabber.drawing import Drawing
 
