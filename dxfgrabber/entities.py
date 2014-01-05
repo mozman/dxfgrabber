@@ -91,6 +91,9 @@ class Text(Shape):
         self.height = wrapper.dxf.get('height', 1.)
         self.rotation = wrapper.dxf.get('rotation', 0.)
         self.style = wrapper.dxf.get('style', "")
+        self.halign = wrapper.dxf.get('halign', 0)
+        self.valign = wrapper.dxf.get('valign', 0)
+        self.alignpoint = wrapper.dxf.get('alignpoint', None)
 
 class Insert(Shape):
     def __init__(self, wrapper):

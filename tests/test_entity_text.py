@@ -26,6 +26,13 @@ class TestTextDXF12(unittest.TestCase):
         self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
+    def test_text_alignment(self):
+        entity = self.entity
+        self.assertEqual(entity.halign, 0)
+        self.assertEqual(entity.valign, 0)
+        self.assertEqual(entity.alignpoint, None)
+
+
 class TestTextDXF12(TestTextDXF12):
     def setUp(self):
         tags = ClassifiedTags.fromtext(TEXT_DXF13)

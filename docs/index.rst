@@ -426,6 +426,18 @@ Text
 
     Text style name as *string*
 
+.. attribute:: Text.halign
+
+    Horizontal alignment as *int*.
+
+.. attribute:: Text.valign
+
+    Vertical alignment as *int*.
+
+.. attribute:: Text.alignpoint
+
+    Second alignment point as tuple or *None*.
+
 Attrib
 ------
 
@@ -809,7 +821,7 @@ To examine the Block content, get the block definition from the blocks section::
 
 and use the ``in`` operator (Iterator protocol)::
 
-    circles_in_block = [entity for entity in test_block if entity.dxftape == 'CIRCLE']
+    circles_in_block = [entity for entity in test_block if entity.dxftype == 'CIRCLE']
 
 Layers
 ------
