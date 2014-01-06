@@ -14,8 +14,15 @@ from .blockssection import BlocksSection
 
 class Sections(object):
     def __init__(self, tagreader, drawing):
-        self._sections = dict()
+        self._sections = {}
+        self._create_default_sections()
         self._setup_sections(tagreader, drawing)
+
+    def _create_default_sections(self):
+        self._sections['header'] = HeaderSection()
+        for cls in SECTIONMAP.values():
+            section = cls()
+            self._sections[section.name] = section
 
     def _setup_sections(self, tagreader, drawing):
         def name(section):
@@ -24,14 +31,14 @@ class Sections(object):
         bootstrap = True
         for section in iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
             if bootstrap:
-                new_section = HeaderSection(section)
+                new_section = HeaderSection.from_tags(section)
                 drawing.dxfversion = new_section.get('$ACADVER', 'AC1009')
                 codepage = new_section.get('$DWGCODEPAGE', 'ANSI_1252')
                 drawing.encoding = toencoding(codepage)
                 bootstrap = False
             else:
                 section_class = get_section_class(name(section))
-                new_section = section_class(section, drawing)
+                new_section = section_class.from_tags(section, drawing)
             self._sections[new_section.name] = new_section
 
     def __getattr__(self, key):

@@ -22,12 +22,17 @@ class Layer(object):
 
 class LayerTable(object):
     name = 'layers'
-    def __init__(self, tags, drawing):
-        dxfversion = drawing.dxfversion
+    def __init__(self):
         self._layers = dict()
-        for entrytags in self._classified_tags(tags):
+
+    @staticmethod
+    def from_tags(tags, drawing):
+        dxfversion = drawing.dxfversion
+        layers = LayerTable()
+        for entrytags in layers._classified_tags(tags):
             dxflayer = wrap(entrytags, dxfversion)
-            self._layers[dxflayer.dxf.name] = Layer(dxflayer)
+            layers._layers[dxflayer.dxf.name] = Layer(dxflayer)
+        return layers
 
     # start public interface
 

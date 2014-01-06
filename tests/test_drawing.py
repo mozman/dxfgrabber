@@ -84,6 +84,43 @@ class TestDrawingDXF13withoutBlocks(TestDrawingDXF13withBlocks):
     def test_blocks(self):
         self.assertEqual(len(self.dwg.blocks), 0)
 
+class TestMinimalisticDXF12Drawing(unittest.TestCase):
+    def setUp(self):
+        stream = StringIO(MINIMALISTIC_DXF12)
+        options = {
+            'grab_blocks': True
+        }
+        self.dwg = Drawing(stream, options)
+
+    def test_header_section(self):
+        self.assertTrue(hasattr(self.dwg, 'header'))
+        self.assertTrue(self.dwg.header['$ACADVER'], 'AC1009')
+        self.assertTrue(self.dwg.header['$DWGCODEPAGE'], 'ANSI_1252')
+
+    def test_layers_section(self):
+        self.assertTrue(hasattr(self.dwg, 'layers'))
+        self.assertEqual(len(self.dwg.layers), 0)
+
+    def test_blocks_section(self):
+        self.assertTrue(hasattr(self.dwg, 'blocks'))
+        self.assertEqual(len(self.dwg.blocks), 0)
+
+    def test_entity_section(self):
+        self.assertTrue(hasattr(self.dwg, 'entities'))
+        self.assertEqual(len(self.dwg.entities), 0)
+
+    #TODO: add linetype and style tables here, if implemented
+
+MINIMALISTIC_DXF12 = """  0
+SECTION
+  2
+ENTITIES
+  0
+ENDSEC
+  0
+EOF
+"""
+
 DXF12 = """  0
 SECTION
   2

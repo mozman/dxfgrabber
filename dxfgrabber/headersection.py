@@ -9,9 +9,20 @@ from .tags import TagGroups
 
 class HeaderSection(dict):
     name = "header"
-    def __init__(self, tags):
+    def __init__(self):
         super(HeaderSection, self).__init__()
-        self._build(tags)
+        self._create_default_vars()
+
+    @staticmethod
+    def from_tags(tags):
+        header = HeaderSection()
+        if tags[1] == (2, 'HEADER'): # DXF12 without a HEADER section is valid!
+            header._build(tags)
+        return header
+
+    def _create_default_vars(self):
+        self['$ACADVER'] =  'AC1009'
+        self['$DWGCODEPAGE'] = 'ANSI_1252'
 
     def _build(self, tags):
         assert tags[0] == (0, 'SECTION')

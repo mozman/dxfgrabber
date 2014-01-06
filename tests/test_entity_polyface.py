@@ -14,7 +14,7 @@ class DrawingProxy:
 class TestPolyfaceDXF12(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(POLYFACE_DXF12)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_entitysection(self):
         self.assertEqual(len(self.entities), 1, "VERTEX should be added to POLYLINE")

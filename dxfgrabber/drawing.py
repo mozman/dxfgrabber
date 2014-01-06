@@ -25,11 +25,9 @@ class Drawing(object):
         sections = Sections(tagreader, self)
         self.header = sections.header
         self.layers = sections.tables.layers
+        #TODO: add linetype and style tables here, if implemented
+        self.blocks = sections.blocks
         self.entities = sections.entities
-        try:
-            self.blocks = sections.blocks
-        except AttributeError: # no blocks section
-            self.blocks = {}
 
     def modelspace(self):
         return (entity for entity in self.entities if not entity.paperspace)

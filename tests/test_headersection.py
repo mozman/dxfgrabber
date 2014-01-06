@@ -10,7 +10,7 @@ from dxfgrabber.headersection import HeaderSection
 class TestHeaderSection(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(TESTHEADER)
-        self.header = HeaderSection(tags)
+        self.header = HeaderSection.from_tags(tags)
 
     def test_get_acadver(self):
         result = self.header['$ACADVER']

@@ -292,8 +292,8 @@ class Spline(Shape):
         self.knots = tuple(wrapper.knots())
         self.weights = tuple(wrapper.weights())
         self.tol_knot = wrapper.dxf.get('knot_tolernace', .0000001)
-        self.tol_controlpoint = wrapper.dxf.get('controlpoint_tolernace', .0000001)
-        self.tol_fitpoint = wrapper.dxf.get('fitpoint_tolernace', .0000000001)
+        self.tol_controlpoint = wrapper.dxf.get('controlpoint_tolerance', .0000001)
+        self.tol_fitpoint = wrapper.dxf.get('fitpoint_tolerance', .0000000001)
         self.controlpoints = tuple(wrapper.controlpoints())
         self.fitpoints = tuple(wrapper.fitpoints())
         if len(self.weights) == 0:

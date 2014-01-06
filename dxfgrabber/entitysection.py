@@ -14,9 +14,14 @@ from .entities import entity_factory
 class EntitySection(object):
     name = 'entities'
 
-    def __init__(self, tags, drawing):
+    def __init__(self):
         self._entities = list()
-        self._build(tags, drawing.dxfversion)
+
+    @staticmethod
+    def from_tags(tags, drawing):
+        entity_section = EntitySection()
+        entity_section._build(tags, drawing.dxfversion)
+        return entity_section
 
     def get_entities(self):
         return self._entities

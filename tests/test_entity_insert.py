@@ -14,7 +14,7 @@ class DrawingProxy:
 class TestInsertDXF12(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(INSERT_DXF12)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_section_setup(self):
         self.assertEqual(len(self.entities), 1, "ATTRIB should be appended to INSERT")
@@ -40,7 +40,7 @@ class TestInsertDXF12(unittest.TestCase):
 class TestInsertDXF13(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(INSERT_DXF13)
-        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
 
 INSERT_DXF12 = """  0
 SECTION

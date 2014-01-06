@@ -13,6 +13,10 @@ class DefaultChunk(object):
         self.tags = tags
         self._drawing = drawing
 
+    @staticmethod
+    def from_tags(tags, drawing):
+        return DefaultChunk(tags, drawing)
+
     @property
     def name(self):
         return self.tags[1].value.lower()

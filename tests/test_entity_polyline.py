@@ -14,7 +14,7 @@ class DrawingProxy:
 class TestPolylineDXF12(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(POLYLINE_DXF12)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_polyline(self):
         self.assertEqual(len(self.entities), 1)
@@ -31,7 +31,7 @@ class TestPolylineDXF12(unittest.TestCase):
 class TestPolylineDXF13(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(POLYLINE_DXF13)
-        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
 
 POLYLINE_DXF13 = """  0
 SECTION

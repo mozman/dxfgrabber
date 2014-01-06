@@ -13,10 +13,15 @@ from .entitysection import build_entities
 
 class BlocksSection(object):
     name = 'blocks'
-    def __init__(self, tags, drawing):
+    def __init__(self):
         self._blocks = dict()
+
+    @staticmethod
+    def from_tags(tags, drawing):
+        blocks_section = BlocksSection()
         if drawing.grab_blocks:
-            self._build(tags, drawing.dxfversion)
+            blocks_section._build(tags, drawing.dxfversion)
+        return blocks_section
 
     def _build(self, tags, dxfversion):
         assert tags[0] == (0, 'SECTION')

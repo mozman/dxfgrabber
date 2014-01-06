@@ -14,7 +14,7 @@ class DrawingProxy:
 class TestPolymeshDXF12(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(POLYMESH_DXF12)
-        self.entities = EntitySection(tags, DrawingProxy('AC1009'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_entitysection(self):
         self.assertEqual(len(self.entities), 1, "VERTEX should be added to POLYLINE")
@@ -44,7 +44,7 @@ class TestPolymeshDXF12(unittest.TestCase):
 class TestPolymeshDXF13(TestPolymeshDXF12):
     def setUp(self):
         tags = Tags.fromtext(POLYMESH_DXF13)
-        self.entities = EntitySection(tags, DrawingProxy('AC1024'))
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
 
 
 POLYMESH_DXF12 = """  0
