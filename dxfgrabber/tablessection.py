@@ -7,6 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from .defaultchunk import iterchunks, DefaultChunk
 from .layers import LayerTable
+from .styles import StyleTable
 
 TABLENAMES = {
     'layer': 'layers',
@@ -76,6 +77,7 @@ class TablesSection(object):
 # support for further tables types are possible
 TABLESMAP = {
     'LAYER': LayerTable,
+    'STYLES': StyleTable,
 }
 
 def table_factory(name):

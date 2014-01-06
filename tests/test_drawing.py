@@ -97,9 +97,15 @@ class TestMinimalisticDXF12Drawing(unittest.TestCase):
         self.assertTrue(self.dwg.header['$ACADVER'], 'AC1009')
         self.assertTrue(self.dwg.header['$DWGCODEPAGE'], 'ANSI_1252')
 
-    def test_layers_section(self):
+    def test_layers_table(self):
         self.assertTrue(hasattr(self.dwg, 'layers'))
         self.assertEqual(len(self.dwg.layers), 0)
+
+    def test_styles_table(self):
+        self.assertTrue(hasattr(self.dwg, 'styles'))
+        self.assertEqual(len(self.dwg.styles), 0)
+
+    #TODO: add linetype table here, if implemented
 
     def test_blocks_section(self):
         self.assertTrue(hasattr(self.dwg, 'blocks'))
@@ -109,7 +115,7 @@ class TestMinimalisticDXF12Drawing(unittest.TestCase):
         self.assertTrue(hasattr(self.dwg, 'entities'))
         self.assertEqual(len(self.dwg.entities), 0)
 
-    #TODO: add linetype and style tables here, if implemented
+
 
 MINIMALISTIC_DXF12 = """  0
 SECTION
