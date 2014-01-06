@@ -96,6 +96,14 @@ Drawing Content
 
     Contains all layer definitions in an object of type :class:`LayerTable`.
 
+.. attribute:: Drawing.styles
+
+    Contains all text style definitions in an object of type :class:`StyleTable`.
+
+.. attribute:: Drawing.linetypes
+
+    Contains all linetype definitions in an object of type :class:`LinetypeTable`.
+
 .. attribute:: Drawing.blocks
 
     Contains all block definitions in a *dict* like object of type :class:`BlocksSection`.
@@ -127,7 +135,7 @@ Layer Table
 
     Support for index operator: :code:`dwg.layers[name]`
 
-.. method:: LayerTable.layernames(name)
+.. method:: LayerTable.names(name)
 
     Returns a sorted list of all layer names.
 
@@ -168,6 +176,73 @@ Layer
 
     type is *bool*
 
+Style Table
+-----------
+
+.. class:: StyleTable
+
+    Contains all text style definitions as objects of type :class:`Style`.
+
+.. method:: StyleTable.get(name)
+
+    Return text style *name* as object of type :class:`Style`. Raises *KeyError*
+
+.. method:: StyleTable.__getitem__(name)
+
+    Support for index operator: :code:`dwg.styles[name]`
+
+.. method:: StyleTable.names(name)
+
+    Returns a sorted list of all text style names.
+
+.. method:: StyleTable.__iter__()
+
+    Iterate over all text styles, yields :class:`Style` objects.
+
+.. method:: StyleTable.__len__()
+
+    Returns count of text styles, support for standard :func:`len()` function.
+
+Style
+-----
+
+.. class:: Style
+
+**TODO**
+
+Linetype Table
+--------------
+
+.. class:: LinetypeTable
+
+    Contains all linetype definitions as objects of type :class:`Linetype`.
+
+.. method:: LinetypeTable.get(name)
+
+    Return linetype *name* as object of type :class:`Linetype`. Raises *KeyError*
+
+.. method:: LinetypeTable.__getitem__(name)
+
+    Support for index operator: :code:`dwg.linetypes[name]`
+
+.. method:: LinetypeTable.names(name)
+
+    Returns a sorted list of all linetype names.
+
+.. method:: LinetypeTable.__iter__()
+
+    Iterate over all linetypes, yields :class:`Linetype` objects.
+
+.. method:: LinetypeTable.__len__()
+
+    Returns count of linetypes, support for standard :func:`len()` function.
+
+Linetype
+--------
+
+.. class:: Linetype
+
+**TODO**
 
 Blocks Section
 --------------

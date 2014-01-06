@@ -5,11 +5,10 @@
 
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import TagGroups
-from .classifiedtags import ClassifiedTags
 from .genericwrapper import GenericWrapper
-
+from .layers import Table
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
+
 
 class Style(object):
     def __init__(self, wrapper):
@@ -22,51 +21,22 @@ class Style(object):
         self.font = wrapper.dxf.font
         self.bigfont = wrapper.dxf.bigfont
 
-class StyleTable(object):
+
+class StyleTable(Table):
     name = 'styles'
-    def __init__(self):
-        self._styles = dict()
 
     @staticmethod
     def from_tags(tags, drawing):
         dxfversion = drawing.dxfversion
         styles = StyleTable()
         for entrytags in styles._classified_tags(tags):
-            dxflayer = wrap(entrytags, dxfversion)
-            styles._styles[dxflayer.dxf.name] = Style(dxflayer)
+            dxfstyle = styles.wrap(entrytags, dxfversion)
+            styles._table_entries[dxfstyle.dxf.name] = Style(dxfstyle)
         return styles
-
-    # start public interface
-
-    def get(self, name):
-        return self._styles[name]
-
-    def __getitem__(self, item):
-        return self.get(item)
-
-    def __contains__(self, name):
-        return name in self._styles
-
-    def __iter__(self):
-        return iter(self._styles.values())
-
-    def __len__(self):
-        return len(self._styles)
-
-    def stylenames(self):
-        return sorted(self._styles.keys())
-
-    # end public interface
-
-    def _classified_tags(self, tags):
-        groups = TagGroups(tags)
-        assert groups.getname(0) == 'TABLE'
-        assert groups.getname(-1) == 'ENDTAB'
-        for entrytags in groups[1:-1]:
-            yield ClassifiedTags(entrytags)
-
-def wrap(tags, dxfversion):
-    return DXF12Style(tags) if dxfversion == "AC1009" else DXF13Style(tags)
+    
+    @staticmethod
+    def wrap(tags, dxfversion):
+        return DXF12Style(tags) if dxfversion == "AC1009" else DXF13Style(tags)
 
 
 class DXF12Style(GenericWrapper):
@@ -96,6 +66,7 @@ style_subclass = DefSubclass('AcDbTextStyleTableRecord', {
     'font': DXFAttr(3, None),  # primary font file name
     'bigfont': DXFAttr(4, None),  # big font name, blank if none
 })
+
 
 class DXF13Style(DXF12Style):
     DXFATTRIBS = DXFAttributes(none_subclass, symbol_subclass, style_subclass)

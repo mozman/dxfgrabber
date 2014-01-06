@@ -16,8 +16,10 @@ from . import tostr
 DXFTag = namedtuple('DXFTag', 'code value')
 NONETAG = DXFTag(999999, 'NONE')
 
+
 class DXFStructureError(Exception):
     pass
+
 
 class TagIterator(object):
     def __init__(self, textfile):
@@ -67,12 +69,15 @@ class TagIterator(object):
         else:
             raise(ValueError('No tag to undo'))
 
+
 class StringIterator(TagIterator):
     def __init__(self, dxfcontent):
         super(StringIterator, self).__init__(StringIO(dxfcontent))
 
+
 def text2tags(text):
     return Tags(StringIterator(text))
+
 
 class DXFInfo(object):
     def __init__(self):
@@ -91,6 +96,7 @@ class DXFInfo(object):
     def HANDSEED(self, value):
         self.handseed = value
 
+
 def dxfinfo(stream):
     info = DXFInfo()
     tag = (999999, '')
@@ -106,8 +112,11 @@ def dxfinfo(stream):
     return info
 
 TAG_STRING_FORMAT = '%3d\n%s\n'
+
+
 def strtag(tag):
     return TAG_STRING_FORMAT % tag
+
 
 class TagCaster:
     def __init__(self):
@@ -157,6 +166,7 @@ TYPES = [
 _TagCaster = TagCaster()
 tagcast = _TagCaster.cast
 casttagvalue = _TagCaster.castvalue
+
 
 class Tags(list):
     """ DXFTag() chunk as flat list. """
@@ -220,6 +230,7 @@ class Tags(list):
 
     def get_type(self):
         return self.__getitem__(0).value
+
 
 class TagGroups(list):
     """

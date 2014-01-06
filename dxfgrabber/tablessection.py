@@ -8,6 +8,7 @@ __author__ = "mozman <mozman@gmx.at>"
 from .defaultchunk import iterchunks, DefaultChunk
 from .layers import LayerTable
 from .styles import StyleTable
+from .linetypes import LinetypeTable
 
 TABLENAMES = {
     'layer': 'layers',
@@ -21,22 +22,27 @@ TABLENAMES = {
     'block_record': 'block_records',
     }
 
+
 def tablename(dxfname):
     """ Translate DXF-table-name to attribute-name. ('LAYER' -> 'layers') """
     name = dxfname.lower()
     return TABLENAMES.get(name, name+'s')
+
 
 class GenericTable(DefaultChunk):
     @property
     def name(self):
         return tablename(self.tags[1].value)
 
+
 class DefaultDrawing(object):
     dxfversion = 'AC1009'
     encoding = 'cp1252'
 
+
 class TablesSection(object):
     name = 'tables'
+
     def __init__(self, drawing=DefaultDrawing()):
         self._tables = dict()
         self._drawing = drawing
@@ -77,8 +83,10 @@ class TablesSection(object):
 # support for further tables types are possible
 TABLESMAP = {
     'LAYER': LayerTable,
-    'STYLES': StyleTable,
+    'STYLE': StyleTable,
+    'LTYPE': LinetypeTable,
 }
+
 
 def table_factory(name):
     return TABLESMAP.get(name, GenericTable)

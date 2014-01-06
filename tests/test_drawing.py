@@ -9,6 +9,7 @@ from io import StringIO
 
 from dxfgrabber.drawing import Drawing
 
+
 class TestDrawingDXF12withBlocks(unittest.TestCase):
     def setUp(self):
         stream = StringIO(DXF12)
@@ -25,6 +26,12 @@ class TestDrawingDXF12withBlocks(unittest.TestCase):
 
     def test_layers(self):
         self.assertEqual(len(self.dwg.layers), 5)
+
+    def test_styles(self):
+        self.assertEqual(len(self.dwg.styles), 5)
+
+    def test_linetypes(self):
+        self.assertEqual(len(self.dwg.linetypes), 5)
 
     def test_entities(self):
         self.assertEqual(len(self.dwg.entities), 1)
@@ -70,6 +77,12 @@ class TestDrawingDXF13withBlocks(unittest.TestCase):
     def test_layers(self):
         self.assertEqual(len(self.dwg.layers), 3)
 
+    def test_linetypes(self):
+        self.assertEqual(len(self.dwg.linetypes), 7)
+
+    def test_styles(self):
+        self.assertEqual(len(self.dwg.styles), 5)
+
     def test_entities(self):
         self.assertEqual(len(self.dwg.entities), 2)
 
@@ -105,7 +118,9 @@ class TestMinimalisticDXF12Drawing(unittest.TestCase):
         self.assertTrue(hasattr(self.dwg, 'styles'))
         self.assertEqual(len(self.dwg.styles), 0)
 
-    #TODO: add linetype table here, if implemented
+    def test_linetypes_table(self):
+        self.assertTrue(hasattr(self.dwg, 'linetypes'))
+        self.assertEqual(len(self.dwg.linetypes), 0)
 
     def test_blocks_section(self):
         self.assertTrue(hasattr(self.dwg, 'blocks'))

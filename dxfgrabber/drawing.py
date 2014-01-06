@@ -26,7 +26,7 @@ class Drawing(object):
         self.header = sections.header
         self.layers = sections.tables.layers
         self.styles = sections.tables.styles
-        #TODO: add linetype tables here, if implemented
+        self.linetypes = sections.tables.linetypes
         self.blocks = sections.blocks
         self.entities = sections.entities
 

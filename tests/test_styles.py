@@ -30,7 +30,7 @@ class TestDXF12Style(unittest.TestCase):
         self.assertEqual(1, len(styles))
 
     def test_style_names(self):
-        self.assertEqual(self.styles.stylenames(), ["STANDARD"])
+        self.assertEqual(self.styles.names(), ["STANDARD"])
 
     def test_style_attribs(self):
         style = self.styles.get("STANDARD")

@@ -11,6 +11,7 @@ from .genericwrapper import GenericWrapper
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
+
 class Layer(object):
     def __init__(self, wrapper):
         self.name = wrapper.dxf.name
@@ -20,39 +21,31 @@ class Layer(object):
         self.frozen = wrapper.is_frozen()
         self.on = wrapper.is_on()
 
-class LayerTable(object):
-    name = 'layers'
-    def __init__(self):
-        self._layers = dict()
 
-    @staticmethod
-    def from_tags(tags, drawing):
-        dxfversion = drawing.dxfversion
-        layers = LayerTable()
-        for entrytags in layers._classified_tags(tags):
-            dxflayer = wrap(entrytags, dxfversion)
-            layers._layers[dxflayer.dxf.name] = Layer(dxflayer)
-        return layers
+class Table(object):
+
+    def __init__(self):
+        self._table_entries = dict()
 
     # start public interface
 
     def get(self, name):
-        return self._layers[name]
+        return self._table_entries[name]
 
     def __getitem__(self, item):
         return self.get(item)
 
     def __contains__(self, name):
-        return name in self._layers
+        return name in self._table_entries
 
     def __iter__(self):
-        return iter(self._layers.values())
+        return iter(self._table_entries.values())
 
     def __len__(self):
-        return len(self._layers)
+        return len(self._table_entries)
 
-    def layernames(self):
-        return sorted(self._layers.keys())
+    def names(self):
+        return sorted(self._table_entries.keys())
 
     # end public interface
 
@@ -63,8 +56,22 @@ class LayerTable(object):
         for entrytags in groups[1:-1]:
             yield ClassifiedTags(entrytags)
 
-def wrap(tags, dxfversion):
-    return DXF12Layer(tags) if dxfversion == "AC1009" else DXF13Layer(tags)
+
+class LayerTable(Table):
+    name = 'layers'
+
+    @staticmethod
+    def from_tags(tags, drawing):
+        dxfversion = drawing.dxfversion
+        layers = LayerTable()
+        for entrytags in layers._classified_tags(tags):
+            dxflayer = layers.wrap(entrytags, dxfversion)
+            layers._table_entries[dxflayer.dxf.name] = Layer(dxflayer)
+        return layers
+
+    @staticmethod
+    def wrap(tags, dxfversion):
+        return DXF12Layer(tags) if dxfversion == "AC1009" else DXF13Layer(tags)
 
 
 class DXF12Layer(GenericWrapper):

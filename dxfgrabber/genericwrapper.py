@@ -7,6 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from .tags import DXFStructureError
 
+
 class DXFNamespace(object):
     """ Provides the dxf namespace for GenericWrapper.
 
@@ -26,6 +27,7 @@ class DXFNamespace(object):
     def __getattr__(self, key):
         """ GenericWrapper.dxf.DXF_ATTRIBUTE_NAME """
         return self.wrapper.get_dxf_attrib(key)
+
 
 class GenericWrapper:
     DXFATTRIBS = {}
@@ -54,7 +56,7 @@ class GenericWrapper:
 
         try:
             return self._get_dxf_attrib(dxfattr)
-        except ValueError: # attribute is defined but no value is present
+        except ValueError:  # attribute is defined but no value is present
             return get_default("DXFAttrib '%s': value is not present." % key)
 
     def _get_dxf_attrib(self, dxfattr):
@@ -72,6 +74,7 @@ class GenericWrapper:
 
     def paperspace(self):
         return self.dxf.get('paperspace', 0) == 1
+
 
 class ExtendedType:
     def __init__(self, tags):

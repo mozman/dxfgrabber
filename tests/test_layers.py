@@ -44,7 +44,7 @@ class TestDXF12Layer(unittest.TestCase):
             layer = self.layers.get("LAYER-DOES-NOT-EXIST")
 
     def test_layernames(self):
-        self.assertEqual(3, len(self.layers.layernames()))
+        self.assertEqual(3, len(self.layers.names()))
 
     def test_is_on(self):
         layer = self.layers.get("VIEW_PORT")
@@ -93,7 +93,7 @@ class TestDXF13Layer(unittest.TestCase):
             layer = self.layers.get("LAYER-DOES-NOT-EXIST")
 
     def test_layernames(self):
-        self.assertEqual(3, len(self.layers.layernames()))
+        self.assertEqual(3, len(self.layers.names()))
 
     def test_is_on(self):
         layer = self.layers.get("View Port")

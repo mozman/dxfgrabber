@@ -112,7 +112,7 @@ class ClassifiedTags:
         getpos = 0
         for subclass in self.subclasses:
             if subclass[0].value == name:
-                if getpos >= pos :
+                if getpos >= pos:
                     return subclass
                 else:
                     getpos += 1
