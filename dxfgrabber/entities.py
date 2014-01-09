@@ -142,6 +142,8 @@ class Polyline(Shape):
         self.flags = wrapper.flags
         self.mcount = wrapper.dxf.get("mcount", 0)
         self.ncount = wrapper.dxf.get("ncount", 0)
+        self.default_start_width = wrapper.dxf.get("defaultstartwidth", 0.)
+        self.default_end_width = wrapper.dxf.get("defaultendwidth", 0.)
         self.is_mclosed = wrapper.is_mclosed()
         self.is_nclosed = wrapper.is_nclosed()
         self.elevation = wrapper.dxf.get('elevation', (0., 0., 0.))
