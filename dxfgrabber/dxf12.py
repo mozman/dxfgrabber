@@ -14,10 +14,11 @@ from . import const
 def make_attribs(additional=None):
     dxfattribs = {
         'handle': DXFAttr(5, None),
-        'layer': DXFAttr(8, None), # layername as string, default is '0'
-        'linetype': DXFAttr(6, None), # linetype as string, special names BYLAYER/BYBLOCK, default is BYLAYER
-        'color': DXFAttr(62, None), # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
-        'paperspace': DXFAttr(67, None), # 0 .. modelspace, 1 .. paperspace, default is 0
+        'layer': DXFAttr(8, None),  # layername as string, default is '0'
+        'linetype': DXFAttr(6, None),  # linetype as string, special names BYLAYER/BYBLOCK, default is BYLAYER
+        'thickness': DXFAttr(39, None),
+        'color': DXFAttr(62, None),  # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
+        'paperspace': DXFAttr(67, None),  # 0 .. modelspace, 1 .. paperspace, default is 0
     }
     if additional:
         dxfattribs.update(additional)
@@ -55,10 +56,10 @@ class Arc(GenericWrapper):
 
 class Trace(GenericWrapper):
     DXFATTRIBS = make_attribs({
-        'vtx0' : DXFAttr(10, 'Point2D/3D'),
-        'vtx1' : DXFAttr(11, 'Point2D/3D'),
-        'vtx2' : DXFAttr(12, 'Point2D/3D'),
-        'vtx3' : DXFAttr(13, 'Point2D/3D'),
+        'vtx0': DXFAttr(10, 'Point2D/3D'),
+        'vtx1': DXFAttr(11, 'Point2D/3D'),
+        'vtx2': DXFAttr(12, 'Point2D/3D'),
+        'vtx3': DXFAttr(13, 'Point2D/3D'),
     })
 
 
@@ -67,10 +68,10 @@ Solid = Trace
 
 class Face(GenericWrapper):
     DXFATTRIBS = make_attribs({
-        'vtx0' : DXFAttr(10, 'Point2D/3D'),
-        'vtx1' : DXFAttr(11, 'Point2D/3D'),
-        'vtx2' : DXFAttr(12, 'Point2D/3D'),
-        'vtx3' : DXFAttr(13, 'Point2D/3D'),
+        'vtx0': DXFAttr(10, 'Point2D/3D'),
+        'vtx1': DXFAttr(11, 'Point2D/3D'),
+        'vtx2': DXFAttr(12, 'Point2D/3D'),
+        'vtx3': DXFAttr(13, 'Point2D/3D'),
         'invisible_edge': DXFAttr(70, None),
     })
 
@@ -80,13 +81,13 @@ class Text(GenericWrapper):
         'insert': DXFAttr(10, 'Point2D/3D'),
         'height': DXFAttr(40,  None),
         'text': DXFAttr(1,  None),
-        'rotation': DXFAttr(50, None), # in degrees (circle = 360deg)
-        'oblique': DXFAttr(51, None), # in degrees, vertical = 0deg
-        'style': DXFAttr(7, None), # text style
-        'width': DXFAttr(41, None), # width FACTOR!
-        'textgenerationflag': DXFAttr(71, None), # 2 = backward (mirr-x), 4 = upside down (mirr-y)
-        'halign': DXFAttr(72, None), # horizontal justification
-        'valign': DXFAttr(73,  None), # vertical justification
+        'rotation': DXFAttr(50, None),  # in degrees (circle = 360deg)
+        'oblique': DXFAttr(51, None),  # in degrees, vertical = 0deg
+        'style': DXFAttr(7, None),  # text style
+        'width': DXFAttr(41, None),  # width FACTOR!
+        'textgenerationflag': DXFAttr(71, None),  # 2 = backward (mirr-x), 4 = upside down (mirr-y)
+        'halign': DXFAttr(72, None),  # horizontal justification
+        'valign': DXFAttr(73,  None),  # vertical justification
         'alignpoint': DXFAttr(11, 'Point2D/3D'),
     })
 
@@ -108,28 +109,28 @@ class Insert(GenericWrapper):
 
 
 class SeqEnd(GenericWrapper):
-    DXFATTRIBS = DXFAttributes(DefSubclass(None, { 'handle': DXFAttr(5, None),
-                   'paperspace': DXFAttr(67, None),}))
+    DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5, None), 'paperspace': DXFAttr(67, None), }))
 
 
-class Attrib(GenericWrapper): # also ATTDEF
+class Attrib(GenericWrapper):  # also ATTDEF
     DXFATTRIBS = make_attribs({
         'insert': DXFAttr(10, 'Point2D/3D'),
         'height': DXFAttr(40, None),
         'text': DXFAttr(1, None),
-        'prompt': DXFAttr(3, None), # just in ATTDEF not ATTRIB
+        'prompt': DXFAttr(3, None),  # just in ATTDEF not ATTRIB
         'tag': DXFAttr(2, None),
         'flags': DXFAttr(70, None),
         'fieldlength': DXFAttr(73, None),
         'rotation': DXFAttr(50, None),
         'oblique': DXFAttr(51, None),
-        'width': DXFAttr(41, None), # width factor
+        'width': DXFAttr(41, None),  # width factor
         'style': DXFAttr(7, None),
-        'textgenerationflag': DXFAttr(71, None), # 2 = backward (mirr-x), 4 = upside down (mirr-y)
-        'halign': DXFAttr(72, None), # horizontal justification
-        'valign': DXFAttr(74, None), # vertical justification
+        'textgenerationflag': DXFAttr(71, None),  # 2 = backward (mirr-x), 4 = upside down (mirr-y)
+        'halign': DXFAttr(72, None),  # horizontal justification
+        'valign': DXFAttr(74, None),  # vertical justification
         'alignpoint': DXFAttr(11, 'Point2D/3D'),
     })
+
 
 class Polyline(GenericWrapper):
     DXFATTRIBS = make_attribs({
@@ -183,6 +184,7 @@ class Vertex(GenericWrapper):
         'vtx3': DXFAttr(74, None),
     })
 
+
 class Block(GenericWrapper):
     DXFATTRIBS = make_attribs({
         'name': DXFAttr(2, None),
@@ -190,7 +192,8 @@ class Block(GenericWrapper):
         'flags': DXFAttr(70, None),
         'basepoint': DXFAttr(10, 'Point2D/3D'),
         'xrefpath': DXFAttr(1, None),
-        })
+    })
+
 
 class EndBlk(SeqEnd):
-    DXFATTRIBS = DXFAttributes(DefSubclass(None, { 'handle': DXFAttr(5, None) }))
+    DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5, None)}))

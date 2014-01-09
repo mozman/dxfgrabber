@@ -9,24 +9,29 @@ from . import dxf12, dxf13
 from . import const
 import math
 
+
 class SeqEnd(object):
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
+
 
 class Entity(SeqEnd):
     def __init__(self, wrapper):
         super(Entity, self).__init__(wrapper)
         self.paperspace = bool(wrapper.paperspace())
 
+
 class Shape(Entity):
     def __init__(self, wrapper):
         super(Shape, self).__init__(wrapper)
         self.layer = wrapper.dxf.get('layer', '0')
-        self.linetype = wrapper.dxf.get('linetype', None) # None=BYLAYER
+        self.linetype = wrapper.dxf.get('linetype', None)  # None=BYLAYER
+        self.thickness = wrapper.dxf.get('thickness', 0.0)
         self.ltscale = wrapper.dxf.get('ltscale', 1.0)
-        self.invisible = wrapper.dxf.get('invisible', 0) # 0=visible
-        self.color = wrapper.dxf.get('color', const.BYLAYER) # 256=BYLAYER, 0=BYBLOCK
+        self.invisible = wrapper.dxf.get('invisible', 0)  # 0=visible
+        self.color = wrapper.dxf.get('color', const.BYLAYER)  # 256=BYLAYER, 0=BYBLOCK
         # if adding additional DXF attributes, do it also for PolyShape
+
 
 class PolyShape(object):
     """ Base class for Polyface and Polymesh, both are special cases of POLYLINE.
@@ -40,22 +45,26 @@ class PolyShape(object):
         self.invisible = polyline.invisible
         self.color = polyline.color
 
+
 class Line(Shape):
     def __init__(self, wrapper):
         super(Line, self).__init__(wrapper)
         self.start = wrapper.dxf.start
         self.end = wrapper.dxf.end
 
+
 class Point(Shape):
     def __init__(self, wrapper):
         super(Point, self).__init__(wrapper)
         self.point = wrapper.dxf.point
+
 
 class Circle(Shape):
     def __init__(self, wrapper):
         super(Circle, self).__init__(wrapper)
         self.center = wrapper.dxf.center
         self.radius = wrapper.dxf.radius
+
 
 class Arc(Shape):
     def __init__(self, wrapper):
@@ -64,6 +73,7 @@ class Arc(Shape):
         self.radius = wrapper.dxf.radius
         self.startangle = wrapper.dxf.startangle
         self.endangle = wrapper.dxf.endangle
+
 
 class Trace(Shape):
     def __init__(self, wrapper):
@@ -74,6 +84,7 @@ class Trace(Shape):
 
 Solid = Trace
 
+
 class Face(Trace):
     def __init__(self, wrapper):
         super(Face, self).__init__(wrapper)
@@ -82,6 +93,7 @@ class Face(Trace):
     def is_edge_invisible(self, edge):
         # edges 0 .. 3
         return bool(self.invisible_edge & (1 << edge))
+
 
 class Text(Shape):
     def __init__(self, wrapper):
@@ -94,6 +106,7 @@ class Text(Shape):
         self.halign = wrapper.dxf.get('halign', 0)
         self.valign = wrapper.dxf.get('valign', 0)
         self.alignpoint = wrapper.dxf.get('alignpoint', None)
+
 
 class Insert(Shape):
     def __init__(self, wrapper):
@@ -113,10 +126,12 @@ class Insert(Shape):
     def append_data(self, attribs):
         self.attribs = attribs
 
-class Attrib(Text): # also ATTDEF
+
+class Attrib(Text):  # also ATTDEF
     def __init__(self, wrapper):
         super(Attrib, self).__init__(wrapper)
         self.tag = wrapper.dxf.tag
+
 
 class Polyline(Shape):
     def __init__(self, wrapper):
@@ -157,6 +172,7 @@ class Polyline(Shape):
         else:
             return self
 
+
 class _Face(object):
     def __init__(self, face):
         self._vertices = []
@@ -170,6 +186,7 @@ class _Face(object):
 
     def __iter__(self):
         return (vertex.location for vertex in self._vertices)
+
 
 class Polyface(PolyShape):
     def __init__(self, polyline):
@@ -205,6 +222,7 @@ class Polyface(PolyShape):
             if isface(vertex):
                 yield getface(vertex)
 
+
 class Polymesh(PolyShape):
     def __init__(self, polyline):
         super(Polymesh, self).__init__(polyline, 'POLYMESH')
@@ -230,6 +248,7 @@ class Polymesh(PolyShape):
         else:
             raise IndexError(repr(pos))
 
+
 class Vertex(Shape):
     def __init__(self, wrapper):
         super(Vertex, self).__init__(wrapper)
@@ -248,6 +267,7 @@ class Vertex(Shape):
                 pass
         return tuple(vtx)
 
+
 class LWPolyline(Shape):
     def __init__(self, wrapper):
         super(LWPolyline, self).__init__(wrapper)
@@ -264,14 +284,16 @@ class LWPolyline(Shape):
     def __iter__(self):
         return iter(self.points)
 
+
 class Ellipse(Shape):
     def __init__(self, wrapper):
         super(Ellipse, self).__init__(wrapper)
         self.center = wrapper.dxf.center
         self.majoraxis = wrapper.dxf.majoraxis
-        self.ratio = wrapper.dxf.get('ratio', 1.0) # circle
+        self.ratio = wrapper.dxf.get('ratio', 1.0)  # circle
         self.startparam = wrapper.dxf.get('startparam', 0.)
-        self.endparam = wrapper.dxf.get('endparam', 6.283185307179586) # 2*pi
+        self.endparam = wrapper.dxf.get('endparam', 6.283185307179586)  # 2*pi
+
 
 class Ray(Shape):
     def __init__(self, wrapper):
@@ -280,6 +302,7 @@ class Ray(Shape):
         self.unitvector = wrapper.dxf.unitvector
 
 XLine = Ray
+
 
 class Spline(Shape):
     def __init__(self, wrapper):
@@ -319,14 +342,17 @@ class Spline(Shape):
     def is_linear(self):
         return bool(self.flags & const.SPLINE_LINEAR)
 
+
 def deg2vec(deg):
     rad = float(deg) * math.pi / 180.0
     return math.cos(rad), math.sin(rad), 0.
+
 
 def normalized(vector):
     x, y, z = vector
     m = (x**2 + y**2 + z**2)**0.5
     return x/m, y/m, z/m
+
 
 class MText(Shape):
     def __init__(self, wrapper):
@@ -347,6 +373,7 @@ class MText(Shape):
 
     def lines(self):
         return self.rawtext.split('\P')
+
 
 class Block(Shape):
     def __init__(self, wrapper):
@@ -381,11 +408,12 @@ class Block(Shape):
     def __len__(self):
         return len(self._entities)
 
+
 class BlockEnd(SeqEnd):
     pass
 
 EntityTable = {
-    'LINE':( Line, dxf12.Line, dxf13.Line),
+    'LINE': (Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
     'CIRCLE': (Circle, dxf12.Circle, dxf13.Arc),
     'ARC': (Arc, dxf12.Arc, dxf13.Arc),
@@ -408,6 +436,7 @@ EntityTable = {
     'SPLINE': (Spline, None, dxf13.Spline),
     'MTEXT': (MText, None, dxf13.MText),
 }
+
 
 def entity_factory(tags, dxfversion):
     dxftype = tags.get_type()
