@@ -3,8 +3,8 @@
 # Created: 21.07.2012
 # License: MIT License
 
-version = (0, 5, 3)
-VERSION = "%d.%d.%d"  % version
+version = (0, 6, 0)
+VERSION = "%d.%d.%d" % version
 
 __author__ = "mozman <mozman@gmx.at>"
 __doc__ = """A Python library to grab information from DXF drawings - all DXF versions supported."""
@@ -16,7 +16,7 @@ PYTHON3 = sys.version_info.major > 2
 
 if PYTHON3:
     tostr = str
-else: # PYTHON27
+else:  # PYTHON27
     tostr = unicode
 # end of Python 2/3 adaption
 # if tostr does not work, look at package 'dxfwrite' for escaping unicode chars
@@ -26,6 +26,7 @@ from .const import BYBLOCK, BYLAYER
 import io
 from .tags import dxfinfo
 
+
 def read(stream, options=None):
     if hasattr(stream, 'readline'):
         from .drawing import Drawing
@@ -33,14 +34,17 @@ def read(stream, options=None):
     else:
         raise AttributeError('stream object requires a readline() method.')
 
+
 def readfile(filename, options=None):
-    try: # is it ascii code-page encoded?
+    try:  # is it ascii code-page encoded?
         return readfile_as_asc(filename, options)
-    except UnicodeDecodeError: # try unicode and ignore errors
+    except UnicodeDecodeError:  # try unicode and ignore errors
         return readfile_as_utf8(filename, options, errors='ignore')
+
 
 def readfile_as_utf8(filename, options=None, errors='strict'):
     return _read_encoded_file(filename, options, encoding='utf-8', errors=errors)
+
 
 def readfile_as_asc(filename, options=None):
     def get_encoding():
@@ -49,6 +53,7 @@ def readfile_as_asc(filename, options=None):
         return info.encoding
 
     return _read_encoded_file(filename, options, encoding=get_encoding())
+
 
 def _read_encoded_file(filename, options=None, encoding='utf-8', errors='strict'):
     from .drawing import Drawing

@@ -68,7 +68,7 @@ class TablesSection(object):
                 next(tags)
             return tags
 
-        itertags = skiptags(iter(tags), 2) # (0, 'SECTION'), (2, 'TABLES')
+        itertags = skiptags(iter(tags), 2)  # (0, 'SECTION'), (2, 'TABLES')
         for table in iterchunks(itertags, stoptag='ENDSEC', endofchunk='ENDTAB'):
             table_class = table_factory(name(table))
             new_table = table_class.from_tags(table, self._drawing)

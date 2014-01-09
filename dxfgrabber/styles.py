@@ -19,7 +19,7 @@ class Style(object):
         self.backward = bool(wrapper.dxf.generation_flags and 2)
         self.mirror_y = bool(wrapper.dxf.generation_flags and 4)
         self.font = wrapper.dxf.font
-        self.bigfont = wrapper.dxf.bigfont
+        self.bigfont = wrapper.dxf.get('bigfont', "")
 
 
 class StyleTable(Table):
