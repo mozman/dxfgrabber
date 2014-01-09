@@ -8,6 +8,7 @@ import unittest
 from dxfgrabber.classifiedtags import ClassifiedTags
 from dxfgrabber.entities import entity_factory
 
+
 class TestLineDXF12(unittest.TestCase):
     def setUp(self):
         tags = ClassifiedTags.fromtext(LINE_DXF12)
@@ -21,12 +22,15 @@ class TestLineDXF12(unittest.TestCase):
         self.assertEqual(line.color, 256)
         self.assertEqual(line.layer, '0')
         self.assertEqual(line.linetype, None)
+        self.assertEqual(line.thickness, 0)
         self.assertFalse(line.paperspace)
+
 
 class TestLineDXF13(TestLineDXF12):
     def setUp(self):
         tags = ClassifiedTags.fromtext(LINE_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
+
 
 LINE_DXF13 = """  0
 LINE

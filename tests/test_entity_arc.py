@@ -23,6 +23,7 @@ class TestArcDXF12(unittest.TestCase):
         self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
         self.assertEqual(entity.linetype, None)
+        self.assertEqual(entity.thickness, 0)
         self.assertFalse(entity.paperspace)
 
 class TestArcDXF13(TestArcDXF12):

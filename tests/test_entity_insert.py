@@ -7,9 +7,11 @@ import unittest
 from dxfgrabber.tags import Tags
 from dxfgrabber.entitysection import EntitySection
 
+
 class DrawingProxy:
     def __init__(self, version):
         self.dxfversion = version
+
 
 class TestInsertDXF12(unittest.TestCase):
     def setUp(self):
@@ -26,6 +28,7 @@ class TestInsertDXF12(unittest.TestCase):
         self.assertEqual(insert.insert, (999.0, 999., 0.))
         self.assertEqual(insert.name, "TEST")
         self.assertEqual(insert.rotation, 0.)
+        self.assertEqual(insert.scale, (1.0, 1.0, 1.0))
         self.assertEqual(insert.color, 256)
         self.assertEqual(insert.layer, '0')
         self.assertEqual(insert.linetype, None)
@@ -37,10 +40,12 @@ class TestInsertDXF12(unittest.TestCase):
         attrib = insert.find_attrib('MYATTRIB')
         self.assertEqual(attrib.text, 'TestInput')
 
+
 class TestInsertDXF13(unittest.TestCase):
     def setUp(self):
         tags = Tags.fromtext(INSERT_DXF13)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
+
 
 INSERT_DXF12 = """  0
 SECTION

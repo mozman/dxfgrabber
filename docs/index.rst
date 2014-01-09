@@ -325,6 +325,10 @@ Base Class Shape
 
     Linetype as *string* or *None*, *None* means linetype by layer.
 
+.. attribute:: Shape.thickness
+
+    Element thickness as *float*.
+
 .. attribute:: Shape.ltscale
 
     Linetype scale as *float*
@@ -548,6 +552,9 @@ Insert
 
     Rotation angle in degrees as *float*. (full circle = 360 degrees)
 
+.. attribute:: Insert.scale
+
+    (x, y, z) block scaling as *tuple*, default is (1.0, 1.0, 1.0)
 
 .. attribute:: Insert.attribs
 

@@ -114,6 +114,7 @@ class Insert(Shape):
         self.name = wrapper.dxf.name
         self.insert = wrapper.dxf.insert
         self.rotation = wrapper.dxf.get('rotation', 0.)
+        self.scale = wrapper.dxf.get('xscale', 1.), wrapper.dxf.get('yscale', 1.), wrapper.dxf.get('zscale', 1.)
         self.attribsfollow = bool(wrapper.dxf.get('attribsfollow', 0))
         self.attribs = []
 
