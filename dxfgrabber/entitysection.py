@@ -49,12 +49,13 @@ class EntitySection(object):
         groups = TagGroups(islice(tags, 2, len(tags)-1))
         self._entities = build_entities(groups, dxfversion)
 
+
 def build_entities(tag_groups, dxfversion):
     def build_entity(group):
         try:
             entity = entity_factory(ClassifiedTags(group), dxfversion)
         except KeyError:
-            entity = None # ignore unsupported entities
+            entity = None  # ignore unsupported entities
         return entity
 
     entities = list()
@@ -76,6 +77,7 @@ def build_entities(tag_groups, dxfversion):
             else:
                 entities.append(entity)
     return entities
+
 
 class _Collector:
     def __init__(self, entity):

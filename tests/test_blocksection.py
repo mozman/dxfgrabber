@@ -8,10 +8,12 @@ import unittest
 from dxfgrabber.tags import Tags
 from dxfgrabber.blockssection import BlocksSection
 
+
 class DrawingProxy:
     def __init__(self, version):
         self.grab_blocks = True
         self.dxfversion = version
+
 
 class TestBlockSectionDXF12(unittest.TestCase):
     def setUp(self):
@@ -34,10 +36,12 @@ class TestBlockSectionDXF12(unittest.TestCase):
         blocks = list(self.blocks)
         self.assertEqual(2, len(blocks))
 
+
 class TestBlockSectionDXF13(TestBlockSectionDXF12):
     def setUp(self):
         tags = Tags.fromtext(BLOCKS_DXF13)
         self.blocks = BlocksSection.from_tags(tags, DrawingProxy('AC1024'))
+
 
 class TestBlockWithAttributeDXF12(unittest.TestCase):
     def setUp(self):

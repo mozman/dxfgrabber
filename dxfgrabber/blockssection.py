@@ -13,6 +13,7 @@ from .entitysection import build_entities
 
 class BlocksSection(object):
     name = 'blocks'
+
     def __init__(self):
         self._blocks = dict()
 

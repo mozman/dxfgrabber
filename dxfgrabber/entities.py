@@ -444,5 +444,7 @@ EntityTable = {
 def entity_factory(tags, dxfversion):
     dxftype = tags.get_type()
     cls, dxf12wrapper, dxf13wrapper = EntityTable[dxftype]
-    shape = cls(dxf12wrapper(tags) if dxfversion=="AC1009" else dxf13wrapper(tags))
+    wrapper = dxf12wrapper(tags) if dxfversion == "AC1009" else dxf13wrapper(tags)
+    wrapper.post_read_correction()
+    shape = cls(wrapper)
     return shape

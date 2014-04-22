@@ -75,6 +75,9 @@ class GenericWrapper:
     def paperspace(self):
         return self.dxf.get('paperspace', 0) == 1
 
+    def post_read_correction(self):
+        pass
+
 
 class ExtendedType:
     def __init__(self, tags):

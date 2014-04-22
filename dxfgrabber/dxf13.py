@@ -10,7 +10,7 @@ from . import dxf12
 from .genericwrapper import GenericWrapper
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 from . import const
-
+from .tags import Tags, DXFTag
 
 none_subclass = DefSubclass(None, {
     'handle': DXFAttr(5, None),
@@ -168,6 +168,11 @@ vertex_subclass = (
 class Vertex(dxf12.Vertex):
     VTX3D = const.VTX_3D_POLYFACE_MESH_VERTEX | const.VTX_3D_POLYGON_MESH_VERTEX | const.VTX_3D_POLYLINE_VERTEX
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *vertex_subclass)
+
+    def post_read_correction(self):
+        if self.tags.subclasses[2][0].value != 'AcDbVertex':
+            tags = Tags([DXFTag(100, 'AcDbVertex'), ])  # create empty AcDbVertex subclass
+            self.tags.subclasses.insert(2, tags)
 
 
 class SeqEnd(dxf12.SeqEnd):
