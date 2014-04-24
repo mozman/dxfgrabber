@@ -10,7 +10,7 @@ last updated |today|.
 
 *dxfgrabber* is a Python library to grab information from DXF drawings - all DXF versions supported.
 
-Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython3.3 and PyPy.
+Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython3.4 and PyPy.
 
 License: *dxfgrabber* is licensed under the MIT license.
 
@@ -593,7 +593,7 @@ Polyline
 
 .. method:: Polyline.points()
 
-    Returns a generator over all vertex locations (x, y, z) as *tuple*.
+    Returns a generator over all vertex locations as (x, y, z)-tuple.
 
 Vertex
 ------
@@ -602,7 +602,7 @@ Vertex
 
 .. attribute:: Vertex.location
 
-    Location (x, y, z) as *tuple*.
+    Location as (x, y, z)-tuple.
 
 .. attribute:: Vertex.bulge
 
@@ -623,10 +623,14 @@ Polyface
 
     Dxftype is *POLYFACE*, which is a *POLYLINE* DXF entity.
 
+.. attribute:: Polyface.vertices
+
+    List of all :class:`Polyface` vertices a Vertex object.
+
 .. method:: Polyface.__getitem__(index)
 
-    Returns face *index* as *SubFace*. support for standard operator
-    ``face = polyface[index]``. Raises *IndexError*
+    Returns face *index* as :class:`SubFace` object. support for standard operator
+    :code:`face = polyface[index]`. Raises *IndexError*
 
 .. method:: Polyface.__len__()
 
@@ -634,13 +638,40 @@ Polyface
 
 .. method:: Polyface.__iter__()
 
-    Iterate of all faces, as *SubFaces*.
+    Iterate of all faces, as :class:`SubFace` objects.
 
 SubFace
 ^^^^^^^
 
-A SubFace is a *list* of :class:`Vertex`, as part of a :class:`Polyface`, the
-location of a vertex of a SubFace is: ``subface[index].location``
+.. class:: SubFace
+
+    A SubFace describes a single face of a :class:`Polyface`.
+
+.. attribute:: SubFace.face_record
+
+    Face record vertex, the basic DXF structure of faces, where you can get the DXF attributes of the face
+    like color or linetype: :code:`subface.face_record.color`
+
+.. method:: SubFace.__len__()
+
+    Returns count of vertices 3 or 4.
+
+.. method:: SubFace.__getitem__(pos):
+
+    Returns vertex at index *pos* as :class:`Vertex` object
+
+.. method:: SubFace.__iter__():
+
+    Returns a list of the face vertices as (x, y, z)-tuples.
+
+.. method:: SubFace.indices():
+
+    Returns a list of vertex indices, get vertex by index from :code:`Polyface.vertices[index]`.
+
+.. method:: SubFace.is_edge_visible(pos):
+
+    Returns *True* if face edge *pos* is visible else *False*.
+
 
 Polymesh
 --------

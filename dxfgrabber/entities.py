@@ -176,7 +176,7 @@ class Polyline(Shape):
             return self
 
 
-class _Face(object):
+class SubFace(object):
     def __init__(self, face_record, vertices):
         self._vertices = vertices
         self.face_record = face_record
@@ -217,13 +217,13 @@ class Polyface(PolyShape):
         self._face_records = face_records
 
     def __getitem__(self, item):
-        return _Face(self._face_records[item], self.vertices)
+        return SubFace(self._face_records[item], self.vertices)
 
     def __len__(self):
         return len(self._face_records)
 
     def __iter__(self):
-        return (_Face(f, self.vertices) for f in self._face_records)
+        return (SubFace(f, self.vertices) for f in self._face_records)
 
 
 class Polymesh(PolyShape):
