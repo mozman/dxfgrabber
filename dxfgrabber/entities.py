@@ -177,53 +177,57 @@ class Polyline(Shape):
 
 
 class _Face(object):
-    def __init__(self, face):
-        self._vertices = []
-        self._face = face
+    def __init__(self, face_record, vertices):
+        self._vertices = vertices
+        self.face_record = face_record
 
-    def add(self, vertex):
-        self._vertices.append(vertex)
+    def __len__(self):
+        return len(self.face_record.vtx)
 
     def __getitem__(self, item):
-        return self._vertices[item]
+        return self._vertices[self._vertex_index(item)]
 
     def __iter__(self):
-        return (vertex.location for vertex in self._vertices)
+        return (self._vertices[index].location for index in self.indices())
+
+    def _vertex_index(self, pos):
+        return abs(self.face_record.vtx[pos]) - 1
+
+    def indices(self):
+        return tuple(abs(i)-1 for i in self.face_record.vtx if i != 0)
+
+    def is_edge_visible(self, pos):
+        return self.face_record.vtx[pos] > 0
 
 
 class Polyface(PolyShape):
     def __init__(self, polyline):
         super(Polyface, self).__init__(polyline, 'POLYFACE')
-        self._faces = list(self._iterfaces(polyline.vertices))
+        self.vertices = list(self._get_vertices(polyline.vertices))
+        self._face_records = list(self._get_faces(polyline.vertices))
 
     def __getitem__(self, item):
-        return self._faces[item]
+        return _Face(self._face_records[item], self.vertices)
 
     def __len__(self):
-        return len(self._faces)
+        return len(self._face_records)
 
     def __iter__(self):
-        return iter(self._faces)
+        return (_Face(f, self.vertices) for f in self._face_records)
 
-    def _iterfaces(self, vertices):
-        def isface(vertex):
-            flags = vertex.flags
+    @staticmethod
+    def _get_vertices(vertices):
+        def is_vertex(flags):
+            return flags & const.VTX_3D_POLYFACE_MESH_VERTEX and \
+                   flags & const.VTX_3D_POLYGON_MESH_VERTEX
+        return (v for v in vertices if is_vertex(v.flags))
+
+    @staticmethod
+    def _get_faces(vertices):
+        def is_face(flags):
             return flags & const.VTX_3D_POLYFACE_MESH_VERTEX and \
                    not flags & const.VTX_3D_POLYGON_MESH_VERTEX
-
-        def getface(vertex):
-            face = _Face(vertex)
-            for index in vertex.vtx:
-                if index != 0:
-                    index = abs(index) - 1
-                    face.add(vertices[index])
-                else:
-                    break
-            return face
-
-        for vertex in vertices:
-            if isface(vertex):
-                yield getface(vertex)
+        return (v for v in vertices if is_face(v.flags))
 
 
 class Polymesh(PolyShape):

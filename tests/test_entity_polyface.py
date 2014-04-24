@@ -45,6 +45,25 @@ class TestPolyfaceDXF12(unittest.TestCase):
         self.assertEqual(f2[0].location, (0., 0., 1.))
         self.assertEqual(f2[3].location, (1., 0., 1.))
 
+    def test_polymesh_face_indices_1(self):
+        polyface = self.entities[0]
+        face = polyface[0]
+        self.assertEqual((0, 1, 2, 3), face.indices())
+        self.assertTrue(face.is_edge_visible(0))
+
+    def test_polymesh_face_indices_2(self):
+        polyface = self.entities[0]
+        face = polyface[1]
+        self.assertEqual((4, 5, 6, 7), face.indices())
+        self.assertTrue(face.is_edge_visible(0))
+
+
+class TestPolyfaceDXF13(TestPolyfaceDXF12):
+    def setUp(self):
+        tags = Tags.fromtext(POLYFACE_DXF13)
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1015'))
+
+
 POLYFACE_DXF12 = """  0
 SECTION
   2
