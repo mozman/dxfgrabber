@@ -202,9 +202,19 @@ class _Face(object):
 
 class Polyface(PolyShape):
     def __init__(self, polyline):
+        VERTEX_FLAGS = const.VTX_3D_POLYFACE_MESH_VERTEX + const.VTX_3D_POLYGON_MESH_VERTEX
+
+        def is_vertex(flags):
+            return flags & VERTEX_FLAGS == VERTEX_FLAGS
+
         super(Polyface, self).__init__(polyline, 'POLYFACE')
-        self.vertices = list(self._get_vertices(polyline.vertices))
-        self._face_records = list(self._get_faces(polyline.vertices))
+        vertices = []
+        face_records = []
+        for vertex in polyline.vertices:
+            (vertices if is_vertex(vertex.flags) else face_records).append(vertex)
+
+        self.vertices = vertices
+        self._face_records = face_records
 
     def __getitem__(self, item):
         return _Face(self._face_records[item], self.vertices)
@@ -214,20 +224,6 @@ class Polyface(PolyShape):
 
     def __iter__(self):
         return (_Face(f, self.vertices) for f in self._face_records)
-
-    @staticmethod
-    def _get_vertices(vertices):
-        def is_vertex(flags):
-            return flags & const.VTX_3D_POLYFACE_MESH_VERTEX and \
-                   flags & const.VTX_3D_POLYGON_MESH_VERTEX
-        return (v for v in vertices if is_vertex(v.flags))
-
-    @staticmethod
-    def _get_faces(vertices):
-        def is_face(flags):
-            return flags & const.VTX_3D_POLYFACE_MESH_VERTEX and \
-                   not flags & const.VTX_3D_POLYGON_MESH_VERTEX
-        return (v for v in vertices if is_face(v.flags))
 
 
 class Polymesh(PolyShape):
