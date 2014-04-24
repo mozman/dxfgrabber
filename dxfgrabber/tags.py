@@ -48,7 +48,7 @@ class TagIterator(object):
                 except (EOFError, ValueError):
                     raise StopIteration()
 
-            self.lasttag = tagcast( (code, value) )
+            self.lasttag = tagcast((code, value))
             return self.lasttag
 
         if self.undo:

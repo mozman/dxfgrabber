@@ -7,9 +7,11 @@ import unittest
 from dxfgrabber.tags import Tags
 from dxfgrabber.entitysection import EntitySection
 
+
 class DrawingProxy:
     def __init__(self, version):
         self.dxfversion = version
+
 
 class TestPolyfaceDXF12(unittest.TestCase):
     def setUp(self):

@@ -5,7 +5,7 @@
 
 __author__ = "mozman <mozman@gmx.at>"
 
-from .genericwrapper import GenericWrapper
+from .dxfentity import DXFEntity
 from .layers import Table
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
@@ -35,7 +35,7 @@ class LinetypeTable(Table):
         return DXF12Linetype(tags) if dxfversion == "AC1009" else DXF13Linetype(tags)
 
 
-class DXF12Linetype(GenericWrapper):
+class DXF12Linetype(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {
         'handle': DXFAttr(5, None),
         'name': DXFAttr(2, None),

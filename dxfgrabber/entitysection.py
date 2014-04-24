@@ -11,6 +11,7 @@ from .tags import TagGroups
 from .classifiedtags import ClassifiedTags
 from .entities import entity_factory
 
+
 class EntitySection(object):
     name = 'entities'
 
@@ -44,7 +45,7 @@ class EntitySection(object):
         assert tags[1] == (2, self.name.upper())
         assert tags[-1] == (0, 'ENDSEC')
 
-        if len(tags) == 3: # empty entities section
+        if len(tags) == 3:  # empty entities section
             return
         groups = TagGroups(islice(tags, 2, len(tags)-1))
         self._entities = build_entities(groups, dxfversion)

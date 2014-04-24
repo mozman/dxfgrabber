@@ -7,6 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from .tags import TagGroups
 
+
 class HeaderSection(dict):
     name = "header"
     def __init__(self):
@@ -39,6 +40,7 @@ class HeaderSection(dict):
                 value = group[1]
             var = _HeaderVar(value)
             self[name] = var.get_point() if var.ispoint else var.value
+
 
 class _HeaderVar:
     def __init__(self, tag):

@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 
 from . import dxf12
-from .genericwrapper import GenericWrapper
+from .dxfentity import DXFEntity
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 from . import const
 from .tags import Tags, DXFTag
@@ -164,6 +164,8 @@ vertex_subclass = (
     })
 )
 
+EMPTY_SUBCLSS = Tags()
+
 
 class Vertex(dxf12.Vertex):
     VTX3D = const.VTX_3D_POLYFACE_MESH_VERTEX | const.VTX_3D_POLYGON_MESH_VERTEX | const.VTX_3D_POLYLINE_VERTEX
@@ -171,8 +173,7 @@ class Vertex(dxf12.Vertex):
 
     def post_read_correction(self):
         if self.tags.subclasses[2][0].value != 'AcDbVertex':
-            tags = Tags([DXFTag(100, 'AcDbVertex'), ])  # create empty AcDbVertex subclass
-            self.tags.subclasses.insert(2, tags)
+            self.tags.subclasses.insert(2, EMPTY_SUBCLSS)  # create empty AcDbVertex subclass
 
 
 class SeqEnd(dxf12.SeqEnd):
@@ -190,7 +191,7 @@ lwpolyline_subclass = DefSubclass('AcDbPolyline', {
 LWPOINTCODES = (10, 20, 40, 41, 42)
 
 
-class LWPolyline(GenericWrapper):
+class LWPolyline(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, lwpolyline_subclass)
 
     def __iter__(self):
@@ -305,7 +306,7 @@ ellipse_subclass = DefSubclass('AcDbEllipse', {
 })
 
 
-class Ellipse(GenericWrapper):
+class Ellipse(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, ellipse_subclass)
 
 
@@ -315,7 +316,7 @@ ray_subclass = DefSubclass('AcDbRay', {
 })
 
 
-class Ray(GenericWrapper):
+class Ray(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, ray_subclass)
 
 
@@ -325,7 +326,7 @@ xline_subclass = DefSubclass('AcDbXline', {
 })
 
 
-class XLine(GenericWrapper):
+class XLine(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, xline_subclass)
 
 
@@ -344,7 +345,7 @@ spline_subclass = DefSubclass('AcDbSpline', {
 })
 
 
-class Spline(GenericWrapper):
+class Spline(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, spline_subclass)
 
     def knots(self):
@@ -392,7 +393,7 @@ mtext_subclass = DefSubclass('AcDbMText', {
 })
 
 
-class MText(GenericWrapper):
+class MText(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, mtext_subclass)
 
     def rawtext(self):

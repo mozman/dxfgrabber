@@ -12,7 +12,7 @@ DXFAttr3 = namedtuple('DXFAttr3', 'code xtype subclass')
 DefSubclass = namedtuple('DefSubclass', 'name attribs')
 
 
-class DXFAttributes:
+class DXFAttributes(object):
     def __init__(self, *subclassdefs):
         self._subclasses = []
         self._attribs = {}

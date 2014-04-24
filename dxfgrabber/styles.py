@@ -5,7 +5,7 @@
 
 __author__ = "mozman <mozman@gmx.at>"
 
-from .genericwrapper import GenericWrapper
+from .dxfentity import DXFEntity
 from .layers import Table
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
@@ -39,7 +39,7 @@ class StyleTable(Table):
         return DXF12Style(tags) if dxfversion == "AC1009" else DXF13Style(tags)
 
 
-class DXF12Style(GenericWrapper):
+class DXF12Style(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {
         'handle': DXFAttr(5, None),
         'name': DXFAttr(2, None),

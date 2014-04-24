@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from .tags import TagGroups
 from .classifiedtags import ClassifiedTags
-from .genericwrapper import GenericWrapper
+from .dxfentity import DXFEntity
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
@@ -74,7 +74,7 @@ class LayerTable(Table):
         return DXF12Layer(tags) if dxfversion == "AC1009" else DXF13Layer(tags)
 
 
-class DXF12Layer(GenericWrapper):
+class DXF12Layer(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {
         'handle': DXFAttr(5, None),
         'name': DXFAttr(2, None),
@@ -108,6 +108,7 @@ layer_subclass = DefSubclass('AcDbLayerTableRecord', {
     'color': DXFAttr(62, None), # dxf color index
     'linetype': DXFAttr(6, None), # linetype name
 })
+
 
 class DXF13Layer(DXF12Layer):
     DXFATTRIBS = DXFAttributes(none_subclass, symbol_subclass, layer_subclass)

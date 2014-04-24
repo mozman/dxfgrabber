@@ -12,6 +12,7 @@ DEFAULT_OPTIONS = {
     "grab_blocks": True
 }
 
+
 class Drawing(object):
     def __init__(self, stream, options=None):
         tagreader = TagIterator(stream)

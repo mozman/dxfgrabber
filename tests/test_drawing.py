@@ -49,6 +49,7 @@ class TestDrawingDXF12withBlocks(unittest.TestCase):
     def test_paperspace(self):
         self.assertEqual(len(list(self.dwg.paperspace())), 0)
 
+
 class TestDrawingDXF12withoutBlocks(TestDrawingDXF12withBlocks):
     def setUp(self):
         stream = StringIO(DXF12)
@@ -59,6 +60,7 @@ class TestDrawingDXF12withoutBlocks(TestDrawingDXF12withBlocks):
 
     def test_blocks(self):
         self.assertEqual(len(self.dwg.blocks), 0)
+
 
 class TestDrawingDXF13withBlocks(unittest.TestCase):
     def setUp(self):
@@ -86,6 +88,7 @@ class TestDrawingDXF13withBlocks(unittest.TestCase):
     def test_entities(self):
         self.assertEqual(len(self.dwg.entities), 2)
 
+
 class TestDrawingDXF13withoutBlocks(TestDrawingDXF13withBlocks):
     def setUp(self):
         stream = StringIO(DXF13)
@@ -96,6 +99,7 @@ class TestDrawingDXF13withoutBlocks(TestDrawingDXF13withBlocks):
 
     def test_blocks(self):
         self.assertEqual(len(self.dwg.blocks), 0)
+
 
 class TestMinimalisticDXF12Drawing(unittest.TestCase):
     def setUp(self):

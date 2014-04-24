@@ -2,9 +2,9 @@
 News
 ====
 
-Version 0.6.1 - 2014
+Version 0.6.1 - 2014-04-..
 
-  * BUGFIX: support for undocumented VERTEX subclass - AcDbFaceRecord
+  * BUGFIX: support for undocumented VERTEX subclass 'AcDbFaceRecord' without preceding 'AcDbVertex'
 
 Version 0.6.0 - 2014-01-09
 

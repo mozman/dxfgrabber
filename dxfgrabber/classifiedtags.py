@@ -111,11 +111,9 @@ class ClassifiedTags:
     def get_subclass(self, name, pos=0):
         getpos = 0
         for subclass in self.subclasses:
-            if subclass[0].value == name:
-                if getpos >= pos:
-                    return subclass
-                else:
-                    getpos += 1
+            if len(subclass) and subclass[0].value == name and getpos >= pos:
+                return subclass
+            getpos += 1
         raise KeyError("Subclass '%s' does not exist." % name)
 
     def get_xdata(self, appid):

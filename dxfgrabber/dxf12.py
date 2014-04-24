@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
-from .genericwrapper import GenericWrapper
+from .dxfentity import DXFEntity
 from . import const
 
 
@@ -25,27 +25,27 @@ def make_attribs(additional=None):
     return DXFAttributes(DefSubclass(None, dxfattribs))
 
 
-class Line(GenericWrapper):
+class Line(DXFEntity):
     DXFATTRIBS = make_attribs({
         'start': DXFAttr(10, 'Point2D/3D'),
         'end': DXFAttr(11, 'Point2D/3D'),
     })
 
 
-class Point(GenericWrapper):
+class Point(DXFEntity):
     DXFATTRIBS = make_attribs({
         'point': DXFAttr(10, 'Point2D/3D'),
     })
 
 
-class Circle(GenericWrapper):
+class Circle(DXFEntity):
     DXFATTRIBS = make_attribs({
         'center': DXFAttr(10, 'Point2D/3D'),
         'radius': DXFAttr(40, None),
     })
 
 
-class Arc(GenericWrapper):
+class Arc(DXFEntity):
     DXFATTRIBS = make_attribs({
         'center': DXFAttr(10, 'Point2D/3D'),
         'radius': DXFAttr(40, None),
@@ -54,7 +54,7 @@ class Arc(GenericWrapper):
     })
 
 
-class Trace(GenericWrapper):
+class Trace(DXFEntity):
     DXFATTRIBS = make_attribs({
         'vtx0': DXFAttr(10, 'Point2D/3D'),
         'vtx1': DXFAttr(11, 'Point2D/3D'),
@@ -66,7 +66,7 @@ class Trace(GenericWrapper):
 Solid = Trace
 
 
-class Face(GenericWrapper):
+class Face(DXFEntity):
     DXFATTRIBS = make_attribs({
         'vtx0': DXFAttr(10, 'Point2D/3D'),
         'vtx1': DXFAttr(11, 'Point2D/3D'),
@@ -76,7 +76,7 @@ class Face(GenericWrapper):
     })
 
 
-class Text(GenericWrapper):
+class Text(DXFEntity):
     DXFATTRIBS = make_attribs({
         'insert': DXFAttr(10, 'Point2D/3D'),
         'height': DXFAttr(40,  None),
@@ -92,7 +92,7 @@ class Text(GenericWrapper):
     })
 
 
-class Insert(GenericWrapper):
+class Insert(DXFEntity):
     DXFATTRIBS = make_attribs({
         'attribsfollow': DXFAttr(66, None),
         'name': DXFAttr(2, None),
@@ -108,11 +108,11 @@ class Insert(GenericWrapper):
     })
 
 
-class SeqEnd(GenericWrapper):
+class SeqEnd(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5, None), 'paperspace': DXFAttr(67, None), }))
 
 
-class Attrib(GenericWrapper):  # also ATTDEF
+class Attrib(DXFEntity):  # also ATTDEF
     DXFATTRIBS = make_attribs({
         'insert': DXFAttr(10, 'Point2D/3D'),
         'height': DXFAttr(40, None),
@@ -132,7 +132,7 @@ class Attrib(GenericWrapper):  # also ATTDEF
     })
 
 
-class Polyline(GenericWrapper):
+class Polyline(DXFEntity):
     DXFATTRIBS = make_attribs({
         'elevation': DXFAttr(10, 'Point2D/3D'),
         'flags': DXFAttr(70, None),
@@ -170,7 +170,7 @@ class Polyline(GenericWrapper):
         return bool(self.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION)
 
 
-class Vertex(GenericWrapper):
+class Vertex(DXFEntity):
     DXFATTRIBS = make_attribs({
         'location': DXFAttr(10, 'Point2D/3D'),
         'startwidth': DXFAttr(40, None),
@@ -185,7 +185,7 @@ class Vertex(GenericWrapper):
     })
 
 
-class Block(GenericWrapper):
+class Block(DXFEntity):
     DXFATTRIBS = make_attribs({
         'name': DXFAttr(2, None),
         'name2': DXFAttr(3, None),

@@ -22,11 +22,13 @@ codepages = {
     '1258': 'cp1258', # Vietnam
 }
 
+
 def toencoding(dxfcodepage):
     for codepage, encoding in codepages.items():
         if dxfcodepage.endswith(codepage):
             return encoding
     return 'cp1252'
+
 
 def tocodepage(encoding):
     for codepage, enc in codepages.items():

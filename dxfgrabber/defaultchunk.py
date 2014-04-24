@@ -7,6 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from .tags import Tags
 
+
 class DefaultChunk(object):
     def __init__(self, tags, drawing):
         assert isinstance(tags, Tags)
@@ -20,6 +21,7 @@ class DefaultChunk(object):
     @property
     def name(self):
         return self.tags[1].value.lower()
+
 
 def iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
     while True:

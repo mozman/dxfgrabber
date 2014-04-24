@@ -13,6 +13,7 @@ class DXFNamespace(object):
 
     """
     __slots__ = ('wrapper', )
+
     def __init__(self, wrapper):
         self.wrapper = wrapper
 
@@ -29,7 +30,7 @@ class DXFNamespace(object):
         return self.wrapper.get_dxf_attrib(key)
 
 
-class GenericWrapper:
+class DXFEntity(object):
     DXFATTRIBS = {}
 
     def __init__(self, tags):
@@ -79,7 +80,7 @@ class GenericWrapper:
         pass
 
 
-class ExtendedType:
+class ExtendedType(object):
     def __init__(self, tags):
         self.tags = tags
 
