@@ -10,6 +10,7 @@ from .tags import TagGroups
 
 class HeaderSection(dict):
     name = "header"
+
     def __init__(self):
         super(HeaderSection, self).__init__()
         self._create_default_vars()
@@ -17,12 +18,12 @@ class HeaderSection(dict):
     @staticmethod
     def from_tags(tags):
         header = HeaderSection()
-        if tags[1] == (2, 'HEADER'): # DXF12 without a HEADER section is valid!
+        if tags[1] == (2, 'HEADER'):  # DXF12 without a HEADER section is valid!
             header._build(tags)
         return header
 
     def _create_default_vars(self):
-        self['$ACADVER'] =  'AC1009'
+        self['$ACADVER'] = 'AC1009'
         self['$DWGCODEPAGE'] = 'ANSI_1252'
 
     def _build(self, tags):
@@ -60,6 +61,6 @@ class _HeaderVar:
 
     def get_point(self):
         if self.ispoint:
-            return tuple( [tag[1] for tag in self.tag] )
+            return tuple([tag[1] for tag in self.tag])
         else:
             raise ValueError

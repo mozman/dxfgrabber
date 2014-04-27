@@ -884,6 +884,90 @@ MText
     Returns a *list* of lines. It is the :attr:`MText.rawtext` splitted into
     lines by the ``\P`` character.
 
+
+Sun
+---
+
+.. class:: Sun(Shape)
+
+    Sun representation.
+
+.. attribute:: Sun.version
+
+.. attribute:: Sun.status
+
+.. attribute:: Sun.sun_color
+
+   As color index  1 - 255; 256 = BYLAYER
+
+.. attribute:: Sun.intensity
+
+.. attribute:: Sun.shadows
+
+   Boolean value
+
+.. attribute:: Sun.date
+
+   A Python standard datetime.datetime object.
+
+.. attribute:: Sun.daylight_savings_time
+
+   Boolean value
+
+.. attribute:: Sun.shadow_type
+
+   0 = Ray traced shadows; 1 = Shadow maps
+
+.. attribute:: Sun.shadow_softness
+
+Mesh
+----
+
+.. class:: Mesh(Shape)
+
+   3D mesh entity similar to the :class:`Polyface` entity.
+
+.. attribute:: Mesh.version
+
+.. attribute:: Mesh.blend_crease
+
+   Boolean value (on/off)
+
+.. attribute:: Mesh.subdivision_levels
+
+.. attribute:: Mesh.vertices
+
+   List of 3D vertices (x, y, z).
+
+.. attribute:: Mesh.faces
+
+   List of mesh faces as tuples of vertex indices (v1, v2, v3, ...). Indices are 0-based and can
+   be used with the mesh.vertex list::
+
+      first_face = mesh.faces[0]
+      first_vertex = mesh.vertices[first_face[0]]
+
+.. attribute:: Mesh.edges
+
+   List of mesh edges as 2-tuple of vertex indices (v1, v2). Indices are 0-based and can
+   be used with the mesh.vertex list::
+
+      first_edge = mesh.edges[0]
+      first_vertex = mesh.vertices[first_edge[0]]
+
+.. attribute:: Mesh.edge_crease_list
+
+   List of float values, one for each edge.
+
+.. method:: Mesh.get_face(index):
+
+   Returns a tuple of 3D points :code:`((x1, y1, z1), (x2, y2, z2), ...)` for face at position *index*.
+
+.. method:: Mesh.get_edge(index):
+
+   Returns a 2-tuple of 3D points :code:`((x1, y1, z1), (x2, y2, z2))` for edge at position *index*.
+
+
 Howtos
 ======
 

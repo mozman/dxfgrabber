@@ -8,7 +8,7 @@
 import os
 from distutils.core import setup
 
-VERSION = "0.6.1"
+VERSION = "0.6.2"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
 
@@ -39,7 +39,6 @@ setup(name='dxfgrabber',
           "Operating System :: OS Independent",
           "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3",
-          "Programming Language :: Python :: 3.3",
           "Programming Language :: Python :: 3.4",
           "Programming Language :: Python :: Implementation :: CPython",
           "Programming Language :: Python :: Implementation :: PyPy",

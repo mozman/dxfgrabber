@@ -7,6 +7,9 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from . import dxf12, dxf13
 from . import const
+from .juliandate import calendar_date
+from datetime import datetime
+
 import math
 
 
@@ -415,6 +418,169 @@ class Block(Shape):
 class BlockEnd(SeqEnd):
     pass
 
+
+def unpack_seconds(seconds):
+    hours = int(seconds / 3600)
+    seconds = int(seconds % 3600)
+    minutes = int(seconds / 60)
+    seconds = int(seconds % 60)
+    return hours, minutes, seconds
+
+
+class Sun(Shape):
+    def __init__(self, wrapper):
+        super(Sun, self).__init__(wrapper)
+        self.version = wrapper.dxf.get('version', 1)
+        self.status = wrapper.dxf.get('status', 0)
+        self.sun_color = wrapper.dxf.get('sun_color', 0)
+        self.intensity = wrapper.dxf.get('intensity', 0)
+        self.shadows = bool(wrapper.dxf.get('shadows', 0))
+        julian_date = wrapper.dxf.get('date', 0.)
+        if julian_date > 0.:
+            date = calendar_date(julian_date)
+        else:
+            date = datetime.now()
+        hours, minutes, seconds = unpack_seconds(wrapper.dxf.get('time', 0))
+        self.date = datetime(date.year, date.month, date.day, hours, minutes, seconds)
+        self.daylight_savings_time = bool(wrapper.dxf.get('daylight_savings_time', 0))
+        self.shadow_type = wrapper.dxf.get('shadows_type', 0)
+        self.shadow_softness = wrapper.dxf.get('shadows_softness', 0)
+
+
+def iter_tags(tags, pos):
+    while pos < len(tags):
+        yield tags[pos]
+        pos += 1
+
+
+def write_tags(tags):
+    with open(r'd:\source\__logs__\meshtags.txt', 'wt') as fp:
+        for count, tag in enumerate(tags):
+            fp.write('{c:3d} code={code} value={value}\n'.format(
+                c=count, code=tag.code, value=tag.value))
+
+
+class Mesh(Shape):
+    def __init__(self, wrapper):
+        super(Mesh, self).__init__(wrapper)
+        self.version = wrapper.dxf.get('version', 2)
+        self.blend_crease = bool(wrapper.dxf.get('blend_crease', 0))
+        self.subdivision_levels = wrapper.dxf.get('subdivision_levels', 1)
+        # rest are mostly positional tags
+        self.vertices = []
+        self.faces = []
+        self.edges = []
+        self.edge_crease_list = []
+
+        subdmesh_tags = wrapper.tags.get_subclass('AcDbSubDMesh')
+        # for all blocks I ignore the count values, perhaps they are wrong,
+        # but I use the count tags as indicator for the begin of the list
+        try:
+            pos = subdmesh_tags.tagindex(92)
+        except ValueError:  # no vertices???
+            return
+        else:
+            self.vertices = Mesh.get_vertices(subdmesh_tags, pos+1)
+        try:
+            pos = subdmesh_tags.tagindex(93)
+        except ValueError:  # no faces???
+            pass
+        else:
+            self.faces = Mesh.get_faces(subdmesh_tags, pos+1)
+        try:
+            pos = subdmesh_tags.tagindex(94)
+        except ValueError:  # no edges
+            pass
+        else:
+            self.edges = Mesh.get_edges(subdmesh_tags, pos+1)
+        try:
+            pos = subdmesh_tags.tagindex(95)
+        except ValueError:  # no edges crease values
+            pass
+        else:
+            self.edge_crease_list = Mesh.get_edge_crease_list(subdmesh_tags, pos+1)
+
+    def get_face(self, index):
+        return tuple(self.vertices[vertex_index] for vertex_index in self.faces[index])
+
+    def get_edge(self, index):
+        return tuple(self.vertices[vertex_index] for vertex_index in self.edges[index])
+
+    @staticmethod
+    def get_vertices(tags, pos):
+        vertices = []
+        point = []
+        itags = iter_tags(tags, pos)
+        while True:
+            try:
+                tag = next(itags)
+            except StopIteration:  # premature end of tags, return what you got
+                break
+            if tag.code == 10:
+                if len(point):  # end of previous point
+                    vertices.append(tuple(point))
+                    del point[:]
+            if tag.code in (10, 20, 30):
+                point.append(tag.value)
+            else:  # end of vertex list
+                vertices.append(tuple(point))
+                break
+        return vertices
+
+    @staticmethod
+    def get_faces(tags, pos):
+        faces = []
+        face = []
+        itags = iter_tags(tags, pos)
+        try:
+            while True:
+                tag = next(itags)
+                # loop until first tag.code != 90
+                if tag.code != 90:
+                    break
+                count = tag.value  # count of vertex indices
+                while count > 0:
+                    tag = next(itags)
+                    face.append(tag.value)
+                    count -= 1
+                faces.append(tuple(face))
+                del face[:]
+        except StopIteration:  # premature end of tags, return what you got
+            pass
+        return faces
+
+    @staticmethod
+    def get_edges(tags, pos):
+        edges = []
+        start_index = None
+        for index in Mesh.get_raw_list(tags, pos, code=90):
+            if start_index is None:
+                start_index = index
+            else:
+                edges.append((start_index, index))
+                start_index = None
+        return edges
+
+    @staticmethod
+    def get_edge_crease_list(tags, pos):
+        return Mesh.get_raw_list(tags, pos, code=140)
+
+    @staticmethod
+    def get_raw_list(tags, pos, code):
+        raw_list = []
+        itags = iter_tags(tags, pos)
+        while True:
+            try:
+                tag = next(itags)
+            except StopIteration:
+                break
+            if tag.code == code:
+                raw_list.append(tag.value)
+            else:
+                break
+        return raw_list
+
+
 EntityTable = {
     'LINE': (Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
@@ -438,6 +604,8 @@ EntityTable = {
     'XLINE': (XLine, None, dxf13.XLine),
     'SPLINE': (Spline, None, dxf13.Spline),
     'MTEXT': (MText, None, dxf13.MText),
+    'SUN': (Sun, None, dxf13.Sun),
+    'MESH': (Mesh, None, dxf13.Mesh),
 }
 
 
@@ -448,3 +616,4 @@ def entity_factory(tags, dxfversion):
     wrapper.post_read_correction()
     shape = cls(wrapper)
     return shape
+

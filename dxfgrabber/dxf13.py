@@ -426,3 +426,30 @@ endblock_subclass = (
 
 class EndBlk(dxf12.EndBlk):
     DXFATTRIBS = DXFAttributes(none_subclass, *endblock_subclass)
+
+sun_subclass = DefSubclass('AcDbSun', {
+    'version': DXFAttr(90, None),
+    'status': DXFAttr(290, None),
+    'sun_color': DXFAttr(63, None),  # ??? DXF Color Index = (1 .. 255), 256 by layer
+    'intensity': DXFAttr(40, None),
+    'shadows': DXFAttr(291, None),
+    'date': DXFAttr(91, None),  # Julian day
+    'time': DXFAttr(92, None),  # Time (in seconds past midnight)
+    'daylight_savings_time': DXFAttr(292, None),
+    'shadow_type': DXFAttr(70, None),  # 0 = Ray traced shadows; 1 = Shadow maps
+    'shadow_softness': DXFAttr(280, None),
+})
+
+
+class Sun(DXFEntity):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, sun_subclass)
+
+mesh_subclass = DefSubclass('AcDbSubDMesh', {
+    'version': DXFAttr(71, None),
+    'blend_crease': DXFAttr(72, None),  # 0 = off, 1 = on
+    'subdivision_levels': DXFAttr(91, None),  # int >= 1
+})
+
+
+class Mesh(DXFEntity):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, mesh_subclass)

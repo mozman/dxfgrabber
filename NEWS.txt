@@ -2,6 +2,11 @@
 News
 ====
 
+Version 0.6.2 - 2014-04
+
+  * NEW: support for SUN entity
+  * NEW: support for MESH entity
+
 Version 0.6.1 - 2014-04-25
 
   * BUGFIX: support for undocumented VERTEX subclass 'AcDbFaceRecord' without preceding 'AcDbVertex'
