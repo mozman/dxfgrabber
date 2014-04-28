@@ -420,6 +420,7 @@ class BlockEnd(SeqEnd):
 
 
 def unpack_seconds(seconds):
+    seconds = int(seconds / 1000)  # remove 1/1000 part
     hours = int(seconds / 3600)
     seconds = int(seconds % 3600)
     minutes = int(seconds / 60)
@@ -427,12 +428,12 @@ def unpack_seconds(seconds):
     return hours, minutes, seconds
 
 
-class Sun(Shape):
+class Sun(Entity):
     def __init__(self, wrapper):
         super(Sun, self).__init__(wrapper)
         self.version = wrapper.dxf.get('version', 1)
         self.status = bool(wrapper.dxf.get('status', 0))  # on/off ?
-        self.sun_color = wrapper.dxf.get('sun_color', 0)
+        self.sun_color = wrapper.dxf.get('sun_color', None)  # None is unset
         self.intensity = wrapper.dxf.get('intensity', 0)
         self.shadows = bool(wrapper.dxf.get('shadows', 0))
         julian_date = wrapper.dxf.get('date', 0.)
@@ -444,7 +445,8 @@ class Sun(Shape):
         self.date = datetime(date.year, date.month, date.day, hours, minutes, seconds)
         self.daylight_savings_time = bool(wrapper.dxf.get('daylight_savings_time', 0))
         self.shadow_type = wrapper.dxf.get('shadows_type', 0)
-        self.shadow_softness = wrapper.dxf.get('shadows_softness', 0)
+        self.shadow_map_size = wrapper.dxf.get('shadow_map_size', 0)
+        self.shadow_softness = wrapper.dxf.get('shadow_softness', 0)
 
 
 def iter_tags(tags, pos):
@@ -588,6 +590,8 @@ class Light(Shape):
         self.name = wrapper.dxf.get('name', "")
         self.light_type = wrapper.dxf.get('light_type', 1)  # distant = 1; point = 2; spot = 3
         self.status = bool(wrapper.dxf.get('status', 0))  # on/off ?
+        self.light_color = wrapper.dxf.get('light_color', None)  # 0 is unset
+        self.true_color = wrapper.dxf.get('true_color', None)  # None is unset
         self.plot_glyph = bool(wrapper.dxf.get('plot_glyph', 0))
         self.intensity = wrapper.dxf.get('intensity', 0)
         self.position = wrapper.dxf.get('position', (0, 0, 1))
@@ -599,9 +603,9 @@ class Light(Shape):
         self.hotspot_angle = wrapper.dxf.get('hotspot_angle', 0)
         self.fall_off_angle = wrapper.dxf.get('fall_off_angle', 0)
         self.cast_shadows = bool(wrapper.dxf.get('cast_shadows', 0))
-        self.shadow_type = bool(wrapper.dxf.get('shadow_type', 0))  # 0 = Ray traced shadows; 1 = Shadow maps
-        self.shadow_map_size = bool(wrapper.dxf.get('shadow_map_size', 0))
-        self.shadow_softness = bool(wrapper.dxf.get('shadow_softness', 0))
+        self.shadow_type = wrapper.dxf.get('shadow_type', 0)  # 0 = Ray traced shadows; 1 = Shadow maps
+        self.shadow_map_size = wrapper.dxf.get('shadow_map_size', 0)
+        self.shadow_softness = wrapper.dxf.get('shadow_softness', 0)
 
 
 EntityTable = {

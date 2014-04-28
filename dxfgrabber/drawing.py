@@ -9,7 +9,7 @@ from .tags import TagIterator
 from .sections import Sections
 
 DEFAULT_OPTIONS = {
-    "grab_blocks": True
+    "grab_blocks": True,
 }
 
 
@@ -30,6 +30,7 @@ class Drawing(object):
         self.linetypes = sections.tables.linetypes
         self.blocks = sections.blocks
         self.entities = sections.entities
+        self.objects = sections.objects if ('objects' in sections) else []
 
     def modelspace(self):
         return (entity for entity in self.entities if not entity.paperspace)

@@ -9,7 +9,7 @@ from .codepage import toencoding
 from .defaultchunk import DefaultChunk, iterchunks
 from .headersection import HeaderSection
 from .tablessection import TablesSection
-from .entitysection import EntitySection
+from .entitysection import EntitySection, ObjectsSection
 from .blockssection import BlocksSection
 
 
@@ -18,6 +18,9 @@ class Sections(object):
         self._sections = {}
         self._create_default_sections()
         self._setup_sections(tagreader, drawing)
+
+    def __contains__(self, name):
+        return name in self._sections
 
     def _create_default_sections(self):
         self._sections['header'] = HeaderSection()
@@ -51,6 +54,7 @@ class Sections(object):
 SECTIONMAP = {
     'TABLES': TablesSection,
     'ENTITIES': EntitySection,
+    'OBJECTS': ObjectsSection,
     'BLOCKS': BlocksSection,
 }
 

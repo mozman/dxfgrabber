@@ -437,12 +437,14 @@ sun_subclass = DefSubclass('AcDbSun', {
     'time': DXFAttr(92, None),  # Time (in seconds past midnight)
     'daylight_savings_time': DXFAttr(292, None),
     'shadow_type': DXFAttr(70, None),  # 0 = Ray traced shadows; 1 = Shadow maps
+    'shadow_map_size': DXFAttr(71, None),  # 0 = Ray traced shadows; 1 = Shadow maps
     'shadow_softness': DXFAttr(280, None),
 })
 
 
+# SUN resides in the objects section and has no AcDbEntity subclass
 class Sun(DXFEntity):
-    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, sun_subclass)
+    DXFATTRIBS = DXFAttributes(none_subclass, sun_subclass)
 
 mesh_subclass = DefSubclass('AcDbSubDMesh', {
     'version': DXFAttr(71, None),
@@ -459,6 +461,8 @@ light_subclass = DefSubclass('AcDbLight', {
     'name': DXFAttr(1, None),
     'light_type': DXFAttr(70, None),  # distant = 1; point = 2; spot = 3
     'status': DXFAttr(290, None),
+    'light_color': DXFAttr(63, None),  # DXF Color Index = (1 .. 255), 256 by layer
+    'true_color': DXFAttr(421, None),  # 24-bit color 0x00RRGGBB
     'plot_glyph': DXFAttr(291, None),
     'intensity': DXFAttr(40, None),
     'position': DXFAttr(10, 'Point3D'),

@@ -112,6 +112,10 @@ Drawing Content
 
     Contains all drawing entities in a *list* like object of type :class:`EntitySection`.
 
+.. attribute:: Drawing.objects
+
+    Contains DXF objects from the objects section in a *list* like object of type :class:`EntitySection`.
+
 .. method:: Drawing.modelspace()
 
     Iterate over all DXF entities in *modelspace*.
@@ -830,8 +834,10 @@ Spline
 
 .. attribute:: Spline.is_linear
 
+
 MText
 -----
+
 
 .. class:: MText(Shape)
 
@@ -888,19 +894,19 @@ MText
 Sun
 ---
 
-.. class:: Sun(Shape)
+.. class:: Sun(Entity)
 
-    Sun representation.
+    Sun representation. SUN is not a graphical object and resides in the objects section :attr:`Drawing.objects`.
 
 .. attribute:: Sun.version
 
 .. attribute:: Sun.status
 
-   Boolean value: on/off?
+   Boolean value: on/off
 
 .. attribute:: Sun.sun_color
 
-   As color index  1 - 255; 256 = BYLAYER
+   Light color as ACI color index 1 - 255; 256 = BYLAYER; *None* if unset
 
 .. attribute:: Sun.intensity
 
@@ -919,6 +925,8 @@ Sun
 .. attribute:: Sun.shadow_type
 
    0 = Ray traced shadows; 1 = Shadow maps
+
+.. attribute:: Sun.shadow_map_size
 
 .. attribute:: Sun.shadow_softness
 
@@ -940,6 +948,14 @@ Light
 .. attribute:: Light.status
 
    Boolean value: on/off?
+
+.. attribute:: Light.light_color
+
+   Light color as ACI color index 1 - 255; 256 = BYLAYER; *None* if unset
+
+.. attribute:: Light.true_color
+
+   Light color as 24-bit RGB color 0x00RRGGBB, *None* if unset
 
 .. attribute:: Light.plot_glyph
 

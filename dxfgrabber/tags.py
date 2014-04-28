@@ -146,7 +146,7 @@ TYPES = [
     (int, range(170, 180)),
     (float, range(210, 240)),
     (int, range(270, 290)),
-    (int, range(290, 300)), # bool 1=True 0=False
+    (int, range(290, 300)),  # bool 1=True 0=False
     (tostr, range(300, 370)),
     (int, range(370, 390)),
     (tostr, range(390, 400)),

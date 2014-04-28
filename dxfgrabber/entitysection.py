@@ -18,9 +18,9 @@ class EntitySection(object):
     def __init__(self):
         self._entities = list()
 
-    @staticmethod
-    def from_tags(tags, drawing):
-        entity_section = EntitySection()
+    @classmethod
+    def from_tags(cls, tags, drawing):
+        entity_section = cls()
         entity_section._build(tags, drawing.dxfversion)
         return entity_section
 
@@ -49,6 +49,10 @@ class EntitySection(object):
             return
         groups = TagGroups(islice(tags, 2, len(tags)-1))
         self._entities = build_entities(groups, dxfversion)
+
+
+class ObjectsSection(EntitySection):
+    name = 'objects'
 
 
 def build_entities(tag_groups, dxfversion):
