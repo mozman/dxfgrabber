@@ -431,7 +431,7 @@ class Sun(Shape):
     def __init__(self, wrapper):
         super(Sun, self).__init__(wrapper)
         self.version = wrapper.dxf.get('version', 1)
-        self.status = wrapper.dxf.get('status', 0)
+        self.status = bool(wrapper.dxf.get('status', 0))  # on/off ?
         self.sun_color = wrapper.dxf.get('sun_color', 0)
         self.intensity = wrapper.dxf.get('intensity', 0)
         self.shadows = bool(wrapper.dxf.get('shadows', 0))
@@ -581,6 +581,29 @@ class Mesh(Shape):
         return raw_list
 
 
+class Light(Shape):
+    def __init__(self, wrapper):
+        super(Light, self).__init__(wrapper)
+        self.version = wrapper.dxf.get('version', 1)
+        self.name = wrapper.dxf.get('name', "")
+        self.light_type = wrapper.dxf.get('light_type', 1)  # distant = 1; point = 2; spot = 3
+        self.status = bool(wrapper.dxf.get('status', 0))  # on/off ?
+        self.plot_glyph = bool(wrapper.dxf.get('plot_glyph', 0))
+        self.intensity = wrapper.dxf.get('intensity', 0)
+        self.position = wrapper.dxf.get('position', (0, 0, 1))
+        self.target = wrapper.dxf.get('target', (0, 0, 0))
+        self.attenuation_type = wrapper.dxf.get('attenuation_type', 0)  # 0 = None; 1 = Inverse Linear; 2 = Inverse Square
+        self.use_attenuation_limits = bool(wrapper.dxf.get('use_attenuation_limits', 0))
+        self.attenuation_start_limit = wrapper.dxf.get('attenuation_start_limit', 0)
+        self.attenuation_end_limit = wrapper.dxf.get('attenuation_end_limit', 0)
+        self.hotspot_angle = wrapper.dxf.get('hotspot_angle', 0)
+        self.fall_off_angle = wrapper.dxf.get('fall_off_angle', 0)
+        self.cast_shadows = bool(wrapper.dxf.get('cast_shadows', 0))
+        self.shadow_type = bool(wrapper.dxf.get('shadow_type', 0))  # 0 = Ray traced shadows; 1 = Shadow maps
+        self.shadow_map_size = bool(wrapper.dxf.get('shadow_map_size', 0))
+        self.shadow_softness = bool(wrapper.dxf.get('shadow_softness', 0))
+
+
 EntityTable = {
     'LINE': (Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
@@ -606,6 +629,7 @@ EntityTable = {
     'MTEXT': (MText, None, dxf13.MText),
     'SUN': (Sun, None, dxf13.Sun),
     'MESH': (Mesh, None, dxf13.Mesh),
+    'LIGHT': (Light, None, dxf13.Light),
 }
 
 
@@ -616,4 +640,5 @@ def entity_factory(tags, dxfversion):
     wrapper.post_read_correction()
     shape = cls(wrapper)
     return shape
+
 

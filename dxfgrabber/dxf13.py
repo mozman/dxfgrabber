@@ -453,3 +453,28 @@ mesh_subclass = DefSubclass('AcDbSubDMesh', {
 
 class Mesh(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, mesh_subclass)
+
+light_subclass = DefSubclass('AcDbLight', {
+    'version': DXFAttr(90, None),
+    'name': DXFAttr(1, None),
+    'light_type': DXFAttr(70, None),  # distant = 1; point = 2; spot = 3
+    'status': DXFAttr(290, None),
+    'plot_glyph': DXFAttr(291, None),
+    'intensity': DXFAttr(40, None),
+    'position': DXFAttr(10, 'Point3D'),
+    'target': DXFAttr(11, 'Point3D'),
+    'attenuation_type': DXFAttr(72, None),  # 0 = None; 1 = Inverse Linear; 2 = Inverse Square
+    'use_attenuation_limits': DXFAttr(292, None),  # bool
+    'attenuation_start_limit': DXFAttr(41, None),
+    'attenuation_end_limit': DXFAttr(42, None),
+    'hotspot_angle': DXFAttr(50, None),
+    'fall_off_angle': DXFAttr(51, None),
+    'cast_shadows': DXFAttr(293, None),
+    'shadow_type': DXFAttr(73, None),  # 0 = Ray traced shadows; 1 = Shadow maps
+    'shadow_map_size': DXFAttr(91, None),
+    'shadow_softness': DXFAttr(280, None),
+})
+
+
+class Light(DXFEntity):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, light_subclass)

@@ -4,8 +4,9 @@ News
 
 Version 0.6.2 - 2014-04
 
-  * NEW: support for SUN entity
   * NEW: support for MESH entity
+  * NEW: support for LIGHT entity
+  * NEW: support for SUN entity
 
 Version 0.6.1 - 2014-04-25
 

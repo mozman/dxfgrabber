@@ -896,6 +896,8 @@ Sun
 
 .. attribute:: Sun.status
 
+   Boolean value: on/off?
+
 .. attribute:: Sun.sun_color
 
    As color index  1 - 255; 256 = BYLAYER
@@ -919,6 +921,67 @@ Sun
    0 = Ray traced shadows; 1 = Shadow maps
 
 .. attribute:: Sun.shadow_softness
+
+Light
+-----
+
+.. class:: Light(Shape)
+
+   Defines a light source.
+
+.. attribute:: Light.version
+
+.. attribute:: Light.name
+
+.. attribute:: Light.light_type
+
+   distant = 1; point = 2; spot = 3
+
+.. attribute:: Light.status
+
+   Boolean value: on/off?
+
+.. attribute:: Light.plot_glyph
+
+   Boolean value
+
+.. attribute:: Light.intensity
+
+.. attribute:: Light.position
+
+   3D position of the light source as (x, y, z) tuple.
+
+.. attribute:: Light.target
+
+   3D target location of the light, determines the light direction as (x, y, z) tuple.
+
+.. attribute:: Light.attenuation_type
+
+   0 = None; 1 = Inverse Linear; 2 = Inverse Square
+
+.. attribute:: Light.use_attenuation_limits
+
+   Boolean value
+
+.. attribute:: Light.attenuation_start_limit
+
+.. attribute:: Light.attenuation_end_limit
+
+.. attribute:: Light.hotspot_angle
+
+.. attribute:: Light.fall_off_angle
+
+.. attribute:: Light.cast_shadows
+
+   Boolean value
+
+.. attribute:: Light.shadow_type
+
+   0 = Ray traced shadows; 1 = Shadow maps
+
+.. attribute:: Light.shadow_map_size
+
+.. attribute:: Light.shadow_softness
 
 Mesh
 ----
@@ -959,11 +1022,11 @@ Mesh
 
    List of float values, one for each edge.
 
-.. method:: Mesh.get_face(index):
+.. method:: Mesh.get_face(index)
 
    Returns a tuple of 3D points :code:`((x1, y1, z1), (x2, y2, z2), ...)` for face at position *index*.
 
-.. method:: Mesh.get_edge(index):
+.. method:: Mesh.get_edge(index)
 
    Returns a 2-tuple of 3D points :code:`((x1, y1, z1), (x2, y2, z2))` for edge at position *index*.
 
