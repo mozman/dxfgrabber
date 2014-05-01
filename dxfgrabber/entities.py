@@ -674,6 +674,7 @@ EntityTable = {
     'REGION': (Body, None, dxf13.Body),
     '3DSOLID': (Solid3d, None, dxf13.Solid3d),
     'SURFACE': (Surface, None, dxf13.Surface),
+    'PLANESURFACE': (Surface, None, dxf13.Surface),
 }
 
 

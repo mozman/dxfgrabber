@@ -21,10 +21,10 @@ def decode(textlines):
             elif c == 0x5F:
                 s += '@'
             elif 0x41 <= c <= 0x5E:
-                s += chr(0x41 + (0x5e - c))
-                if c == 0x5e:
+                s += chr(0x41 + (0x5E - c))
+                if c == 0x5E:
                     skip = True
             else:
-                s += chr(c ^ 95)  # 0x5f
+                s += chr(c ^ 0x5F)
         return s
     return [_decode(line) for line in textlines]

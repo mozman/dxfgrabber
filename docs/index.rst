@@ -1100,6 +1100,48 @@ Mesh
 
    Returns a 2-tuple of 3D points :code:`((x1, y1, z1), (x2, y2, z2))` for edge at position *index*.
 
+Body
+----
+
+.. class:: Body(Shape)
+
+    ACIS based 3D solid geometry.
+
+.. attribute:: Body.acis
+
+    ACIS data as list of strings.
+
+Region
+------
+
+.. class:: Region(Body)
+
+    ACIS based 2D enclosed areas.
+
+
+3DSolid
+-------
+
+.. class:: 3DSolid(Body)
+
+    ACIS based 3D solid geometry.
+
+
+Surface
+-------
+
+.. class:: Surface(Body)
+
+    ACIS based 3D freeform surfaces.
+
+
+PlaneSurface
+------------
+
+.. class:: PlaneSurface(Surface)
+
+    ACIS based 3D plane surfaces.
+
 
 Howtos
 ======
