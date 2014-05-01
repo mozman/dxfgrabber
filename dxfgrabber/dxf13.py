@@ -11,6 +11,7 @@ from .dxfentity import DXFEntity
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 from . import const
 from .tags import Tags, DXFTag
+from .decode import decode
 
 none_subclass = DefSubclass(None, {
     'handle': DXFAttr(5, None),
@@ -499,3 +500,36 @@ light_subclass = DefSubclass('AcDbLight', {
 
 class Light(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, light_subclass)
+
+
+modeler_geometry_subclass = DefSubclass('AcDbModelerGeometry', {
+    'version': DXFAttr(70, None),
+})
+
+
+class Body(DXFEntity):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, modeler_geometry_subclass)
+
+    def get_acis_data(self):
+        geometry = self.tags.subclasses[2]  # AcDbModelerGeometry
+        return decode([tag.value for tag in geometry if tag.code in (1, 3)])
+
+solid3d_subclass = DefSubclass('AcDb3dSolid', {
+    'handle_to_history_object': DXFAttr(350, None),
+})
+
+# Region == Body
+
+
+class Solid3d(Body):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, modeler_geometry_subclass, solid3d_subclass)
+
+
+surface_subclass = DefSubclass('AcDbSurface', {
+    'u_isolines': DXFAttr(71, None),
+    'v_isolines': DXFAttr(72, None),
+})
+
+
+class Surface(Body):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, modeler_geometry_subclass, surface_subclass)

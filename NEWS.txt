@@ -8,6 +8,10 @@ Version 0.6.2 - 2014-04
   * NEW: support for LIGHT entity
   * NEW: support for SUN entity
   * NEW: support for HELIX entity
+  * NEW: support for BODY entity, you get ACIS code
+  * NEW: support for 3DSOLID entity, you get ACIS code
+  * NEW: support for REGION entity, you get ACIS code
+  * NEW: support for SURFACE entity, you get ACIS code
   * BUGFIX: accept floats as int (thanks to ProE)
 
 Version 0.6.1 - 2014-04-25

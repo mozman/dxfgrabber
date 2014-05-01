@@ -626,6 +626,23 @@ class Light(Shape):
         self.shadow_softness = wrapper.dxf.get('shadow_softness', 0)
 
 
+class Body(Shape):
+    def __init__(self, wrapper):
+        super(Body, self).__init__(wrapper)
+        self.version = wrapper.dxf.get('version', 1)
+        self.acis = wrapper.get_acis_data()
+
+Solid3d = Body
+# perhaps reading creation history is needed
+
+
+class Surface(Body):
+    def __init__(self, wrapper):
+        super(Surface, self).__init__(wrapper)
+        self.u_isolines = wrapper.dxf.get('u_isolines', 0)
+        self.v_isolines = wrapper.dxf.get('v_isolines', 0)
+
+
 EntityTable = {
     'LINE': (Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
@@ -653,6 +670,10 @@ EntityTable = {
     'SUN': (Sun, None, dxf13.Sun),
     'MESH': (Mesh, None, dxf13.Mesh),
     'LIGHT': (Light, None, dxf13.Light),
+    'BODY': (Body, None, dxf13.Body),
+    'REGION': (Body, None, dxf13.Body),
+    '3DSOLID': (Solid3d, None, dxf13.Solid3d),
+    'SURFACE': (Surface, None, dxf13.Surface),
 }
 
 
