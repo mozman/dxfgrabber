@@ -834,6 +834,46 @@ Spline
 
 .. attribute:: Spline.is_linear
 
+Helix
+------
+
+   3D spiral; Helix is also a :class:`Spline`.
+
+.. class:: Helix(Spline)
+
+.. attribute:: Helix.helix_version
+
+    Tuple (main version, maintainance version)
+
+.. attribute:: Helix.axis_base_point
+
+    Helix axis base point as (x, y, z) as *tuple*.
+
+.. attribute:: Helix.start_point
+
+    Helix start point as (x, y, z) as *tuple*.
+
+.. attribute:: Helix.axis_vector
+
+    Helix axis vector as (x, y, z) as *tuple*.
+
+.. attribute:: Helix.radius
+
+.. attribute:: Helix.turns
+
+    Count of turns.
+
+.. attribute:: Helix.turn_height
+
+    Height of one turn.
+
+.. attribute:: Helix.handedness
+
+    0 = left; 1 = right;
+
+.. attribute:: Helix.constrain
+
+    0 = Constrain turn height; 1 = Constrain turns; 2 = Constrain height
 
 MText
 -----

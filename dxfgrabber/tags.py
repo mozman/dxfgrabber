@@ -135,7 +135,13 @@ class TagCaster:
 
     def castvalue(self, code, value):
         typecaster = self._cast.get(code, tostr)
-        return typecaster(value)
+        try:
+            return typecaster(value)
+        except ValueError:
+            if typecaster is int:  # convert float to int
+                return int(float(value))
+            else:
+                raise
 
 TYPES = [
     (tostr, range(0, 10)),

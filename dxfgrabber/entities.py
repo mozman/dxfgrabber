@@ -349,6 +349,24 @@ class Spline(Shape):
         return bool(self.flags & const.SPLINE_LINEAR)
 
 
+class Helix(Spline):
+    def __init__(self, wrapper):
+        super(Helix, self).__init__(wrapper)
+        self.helix_version = (wrapper.dxf.get('helix_major_version', 1),
+                              wrapper.dxf.get('helix_maintainance_version', 1))
+        self.axis_base_point = wrapper.dxf.get('axis_base_point', None)
+        self.start_point = wrapper.dxf.get('start_point', None)
+        self.axis_vector = wrapper.dxf.get('axis_vector', None)
+        self.radius = wrapper.dxf.get('radius', 0)
+        self.turns = wrapper.dxf.get('turns', 0)
+        self.turn_height = wrapper.dxf.get('turn_height', 0)
+        self.handedness = wrapper.dxf.get('handedness', 0)  # 0 = left, 1 = right
+        self.constrain = wrapper.dxf.get('constrain', 0)
+        # 0 = Constrain turn height;
+        # 1 = Constrain turns;
+        # 2 = Constrain height
+
+
 def deg2vec(deg):
     rad = float(deg) * math.pi / 180.0
     return math.cos(rad), math.sin(rad), 0.
@@ -630,6 +648,7 @@ EntityTable = {
     'RAY': (Ray, None, dxf13.Ray),
     'XLINE': (XLine, None, dxf13.XLine),
     'SPLINE': (Spline, None, dxf13.Spline),
+    'HELIX': (Helix, None, dxf13.Helix),
     'MTEXT': (MText, None, dxf13.MText),
     'SUN': (Sun, None, dxf13.Sun),
     'MESH': (Mesh, None, dxf13.Mesh),

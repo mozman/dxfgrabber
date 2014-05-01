@@ -380,6 +380,23 @@ class Spline(DXFEntity):
                     yield tuple(point)
                     point = None
 
+helix_subclass = DefSubclass('AcDbHelix', {
+    'helix_major_version': DXFAttr(90, None),
+    'helix_maintainance_version': DXFAttr(91, None),
+    'axis_base_point': DXFAttr(10, 'Point3D'),
+    'start_point': DXFAttr(11, 'Point3D'),
+    'axis_vector': DXFAttr(12, 'Point3D'),
+    'radius': DXFAttr(40, None),
+    'turns': DXFAttr(41, None),
+    'turn_height': DXFAttr(42, None),
+    'handedness': DXFAttr(290, None),  # 0 = left, 1 = right
+    'constrain': DXFAttr(280, None),  # 0 = Constrain turn height; 1 = Constrain turns; 2 = Constrain height
+})
+
+
+class Helix(Spline):
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, spline_subclass, helix_subclass)
+
 mtext_subclass = DefSubclass('AcDbMText', {
     'insert': DXFAttr(10, 'Point3D'),
     'height': DXFAttr(40, None),
