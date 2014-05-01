@@ -792,6 +792,20 @@ Spline
 
 .. class:: Spline(Shape)
 
+.. attribute:: Spline.flags
+
+    Binary coded flags, constants stored in :mod:`dxfgrabber.const`.
+
+=============== =====
+Spline.flags    value
+=============== =====
+SPLINE_CLOSED   1
+SPLINE_PERIODIC 2
+SPLINE_RATIONAL 4
+SPLINE_PLANAR   8
+SPLINE_LINEAR   16 (a linear spline is also a planar spline)
+=============== =====
+
 .. attribute:: Spline.degree
 
     Degree of the spline curve as *int*
@@ -835,7 +849,7 @@ Spline
 .. attribute:: Spline.is_linear
 
 Helix
-------
+-----
 
    3D spiral; Helix is also a :class:`Spline`.
 
