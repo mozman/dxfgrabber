@@ -12,12 +12,14 @@ __doc__ = """A Python library to grab information from DXF drawings - all DXF ve
 
 # Python27/3x support should be done here
 import sys
+
 PYTHON3 = sys.version_info.major > 2
 
 if PYTHON3:
     tostr = str
 else:  # PYTHON27
     tostr = unicode
+
 # end of Python 2/3 adaption
 # if tostr does not work, look at package 'dxfwrite' for escaping unicode chars
 

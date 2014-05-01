@@ -5,12 +5,19 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
+from . import PYTHON3
+
 
 def decode(textlines):
     def _decode(text):
         s = ""
         skip = False
-        for c in bytes(text, 'ascii'):
+        if PYTHON3:
+            text = bytes(text, 'ascii')
+        else:
+            text = map(ord, bytes(text))
+
+        for c in text:
             if skip:
                 skip = False
                 continue
