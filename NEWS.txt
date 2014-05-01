@@ -2,7 +2,7 @@
 News
 ====
 
-Version 0.7.0 - 2014-04
+Version 0.7.0 - 2014-05-01
 
   * NEW: support for MESH entity
   * NEW: support for LIGHT entity
