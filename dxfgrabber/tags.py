@@ -131,6 +131,14 @@ class TagCaster:
 
     def cast(self, tag):
         typecaster = self._cast.get(tag[0], tostr)
+        try:
+            value = typecaster(tag[1])
+        except ValueError:
+            if typecaster is int:  # convert float to int
+                return int(float(tag[1]))
+            else:
+                raise
+
         return DXFTag(tag[0], typecaster(tag[1]))
 
     def castvalue(self, code, value):
