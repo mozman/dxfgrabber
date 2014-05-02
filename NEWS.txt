@@ -2,7 +2,7 @@
 News
 ====
 
-Version 0.7.1 - 2014-05-..
+Version 0.7.1 - 2014-05-02
 
   * BUGFIX: now really accept floats as int (thanks to ProE)
 
