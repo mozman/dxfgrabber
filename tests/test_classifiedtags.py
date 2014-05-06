@@ -200,7 +200,7 @@ class Test2xSubclass(unittest.TestCase):
     def test_read_tags_2(self):
         subclass2 = self.tags.get_subclass('AcDbText')
         self.assertEqual((100, 'AcDbText'), subclass2[0])
-        self.assertEqual((1, 'Title:'), subclass2[5])
+        self.assertEqual((1, 'Title:'), subclass2[3])
 
     def test_read_tags_3(self):
         subclass2 = self.tags.get_subclass('AcDbText', 3)

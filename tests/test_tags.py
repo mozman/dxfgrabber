@@ -162,12 +162,22 @@ TEST1
 TEST2
 """
 
-class HandlesMock:
-    calls = 0
-    @property
-    def next(self):
-        self.calls = self.calls + 1
-        return 'FF'
+POINT_2D_TAGS = """ 10
+100
+ 20
+200
+  9
+check mark 1
+ 10
+100
+ 20
+200
+ 30
+300
+  9
+check mark 2
+"""
+
 
 class TestTags(unittest.TestCase):
     def setUp(self):
@@ -191,22 +201,6 @@ class TestTags(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.tags.update(999, 'DOESNOTEXIST')
 
-    def test_setfirst(self):
-        self.tags.setfirst(999, 'NEWTAG')
-        self.assertEqual('NEWTAG', self.tags[-1].value)
-
-    def test_gethandle_5(self):
-        tags = Tags.fromtext(TESTHANDLE5)
-        self.assertEqual('F5', tags.gethandle())
-
-    def test_gethandle_105(self):
-        tags = Tags.fromtext(TESTHANDLE105)
-        self.assertEqual('F105', tags.gethandle())
-
-    def test_gethandle_create_new(self):
-        with self.assertRaises(ValueError):
-            self.tags.gethandle()
-
     def test_findall(self):
         tags = Tags.fromtext(TESTFINDALL)
         self.assertEqual(3, len(tags.findall(0)))
@@ -222,6 +216,19 @@ class TestTags(unittest.TestCase):
         tags = Tags.fromtext(TESTFINDALL)
         with self.assertRaises(ValueError):
             tags.tagindex(1)
+
+    def test_read_2D_points(self):
+        stri = StringIterator(POINT_2D_TAGS)
+        tags = list(stri)
+        self.assertEqual(15, stri.lineno)  # 14 lines
+        tag = tags[0]  # 2D point
+        self.assertEqual((100, 200), tag.value)
+        tag = tags[1]  # check mark
+        self.assertEqual('check mark 1', tag.value)
+        tag = tags[2]  # 3D point
+        self.assertEqual((100, 200, 300), tag.value)
+        tag = tags[3]  # check mark
+        self.assertEqual('check mark 2', tag.value)
 
 DUPLICATETAGS = """  0
 FIRST

@@ -28,6 +28,7 @@ class TestMesh(unittest.TestCase):
         self.assertEqual(0, mesh.blend_crease)
         self.assertEqual(3, mesh.subdivision_levels)
         self.assertEqual(56, len(mesh.vertices))
+        self.assertEqual(mesh.vertices[0], (284.7875769672455, 754.2780370501814, 64.23540699023241))
         self.assertEqual(54, len(mesh.faces))
         self.assertEqual(108, len(mesh.edges))
         self.assertEqual(108, len(mesh.edge_crease_list))

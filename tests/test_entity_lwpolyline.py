@@ -25,11 +25,11 @@ class TestLWPolyline(unittest.TestCase):
     def test_lwpolyline_first_point(self):
         polyline = self.entity
         self.assertEqual(len(polyline.points), 7)
-        self.assertEqual(polyline.points[0], (5.24, 1.40))
+        self.assertEqual(polyline.points[0], (5.24, 1.4, 0, 0, 0))
 
-    def test_lwpolyline_first_point(self):
+    def test_lwpolyline_last_point(self):
         polyline = self.entity
-        self.assertEqual(polyline.points[-1], (4.16, 0.29))
+        self.assertEqual(polyline.points[-1], (4.16, 0.29, 0, 0, 0))
 
 LWPOLYLINE = """  0
 LWPOLYLINE

@@ -15,19 +15,31 @@ from . import tostr
 from array import array
 
 DXFTag = namedtuple('DXFTag', 'code value')
-NONETAG = DXFTag(999999, 'NONE')
+NONE_TAG = DXFTag(999999, 'NONE')
 
 
 class DXFStructureError(Exception):
     pass
 
 
-class TagIterator(object):
+def point_tuple(value):
+    return tuple(float(f) for f in value)
+
+
+def is_point_code(code):
+    return (10 <= code <= 19) or code == 210 or (110 <= code <= 112) or (1010 <= code <= 1019)
+
+
+def is_point_tag(tag):
+    return is_point_code(tag[0])
+
+
+class OldTagIterator(object):
     def __init__(self, textfile):
         self.textfile = textfile
         self.lineno = 0
         self.undo = False
-        self.lasttag = NONETAG
+        self.lasttag = NONE_TAG
 
     def __iter__(self):
         return self
@@ -49,7 +61,7 @@ class TagIterator(object):
                 except (EOFError, ValueError):
                     raise StopIteration()
 
-            self.lasttag = tagcast((code, value))
+            self.lasttag = cast_tag((code, value))
             return self.lasttag
 
         if self.undo:
@@ -69,6 +81,99 @@ class TagIterator(object):
             self.lineno -= 2
         else:
             raise(ValueError('No tag to undo'))
+
+
+class TagIterator(object):
+    def __init__(self, textfile):
+        self.textfile = textfile
+        self.lineno = 0
+        self.undo = False
+        self.last_tag = NONE_TAG
+        self.undo_coord = None
+        self.eof = False
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        def undo_tag():
+            self.undo = False
+            tag = self.last_tag
+            if is_point_code(tag.code):
+                self.lineno += 2 * len(tag.value)
+            else:
+                self.lineno += 2
+            return tag
+
+        def read_next_tag():
+            try:
+                code = int(self.readline())
+                value = self.readline().rstrip('\n')
+            except UnicodeDecodeError:
+                raise  # because UnicodeDecodeError() is a subclass of ValueError()
+            except (EOFError, ValueError):
+                raise StopIteration()
+            return code, value
+
+        def read_point(code_x, value_x):
+            try:
+                code_y, value_y = read_next_tag()  # 2. coordinate is always necessary
+            except StopIteration:
+                code_y = 0  # -> DXF structure error in following if-statement
+
+            if code_y != code_x + 10:
+                raise DXFStructureError("invalid 2D/3D point at line %d" % self.lineno)
+
+            try:
+                code_z, value_z = read_next_tag()
+            except StopIteration:  # 2D point at end of file
+                self.eof = True  # store reaching end of file
+                value = (value_x, value_y)
+            else:
+                if code_z != code_x + 20:  # not a Z coordinate -> 2D point
+                    self.undo_coord = (code_z, value_z)
+                    self.lineno -= 2
+                    value = (value_x, value_y)
+                else:  # is a 3D point
+                    value = (value_x, value_y, value_z)
+            return value
+
+        def next_tag():
+            code = 999
+            while code == 999:  # skip comments
+                if self.undo_coord is not None:
+                    code, value = self.undo_coord
+                    self.lineno += 2
+                    self.undo_coord = None
+                else:
+                    code, value = read_next_tag()
+
+                if is_point_code(code):  # 2D or 3D point
+                    value = read_point(code, value)
+
+            self.last_tag = cast_tag((code, value))
+            return self.last_tag
+
+        if self.eof:  # stored end of file
+            raise StopIteration()
+
+        if self.undo:
+            return undo_tag()
+        else:
+            return next_tag()
+    # for Python 2.7
+    next = __next__
+
+    def readline(self):
+        self.lineno += 1
+        return self.textfile.readline()
+
+    def undotag(self):
+        if not self.undo and self.lineno > 0:
+            self.undo = True
+            self.lineno -= 2
+        else:
+            raise ValueError('No tag to undo')
 
 
 class StringIterator(TagIterator):
@@ -154,12 +259,15 @@ class TagCaster:
 
 TYPES = [
     (tostr, range(0, 10)),
-    (float, range(10, 60)),
+    (point_tuple, range(10, 20)),
+    (float, range(20, 60)),
     (int, range(60, 100)),
     (tostr, range(100, 106)),
-    (float, range(110, 150)),
+    (point_tuple, range(110, 113)),
+    (float, range(113, 150)),
     (int, range(170, 180)),
-    (float, range(210, 240)),
+    (point_tuple, [210]),
+    (float, range(211, 240)),
     (int, range(270, 290)),
     (int, range(290, 300)),  # bool 1=True 0=False
     (tostr, range(300, 370)),
@@ -174,13 +282,14 @@ TYPES = [
     (tostr, range(470, 480)),
     (tostr, range(480, 482)),
     (tostr, range(999, 1010)),
-    (float, range(1010, 1060)),
+    (point_tuple, range(1010, 1020)),
+    (float, range(1020, 1060)),
     (int, range(1060, 1072)),
 ]
 
 _TagCaster = TagCaster()
-tagcast = _TagCaster.cast
-casttagvalue = _TagCaster.castvalue
+cast_tag = _TagCaster.cast
+cast_tag_value = _TagCaster.castvalue
 
 
 class Tags(list):
@@ -189,23 +298,9 @@ class Tags(list):
         for tag in self:
             stream.write(strtag(tag))
 
-    def gethandle(self):
-        """ Search handle of a DXFTag() chunk. Raises ValueError if handle
-        not exists.
-
-        :returns: handle as hex-string like 'FF'
-        """
-        handle = ''
-        for tag in self:
-            if tag.code in (5, 105):
-                handle = tag.value
-                break
-        int(handle, 16)  # check for valid handle
-        return handle
-
     def findall(self, code):
         """ Returns a list of DXFTag(code, ...). """
-        return [ tag for tag in self if tag.code == code ]
+        return [tag for tag in self if tag.code == code]
 
     def tagindex(self, code, start=0, end=None):
         """ Return first index of DXFTag(code, ...). """
@@ -220,16 +315,6 @@ class Tags(list):
         """ Update first existing tag, raises ValueError if tag not exists. """
         index = self.tagindex(code)
         self[index] = DXFTag(code, value)
-
-    def _setfirst(self, code, value):
-        """ Update first existing DXFTag(code, ...) or append a new
-        DXFTag(code, value).
-
-        """
-        try:
-            self.update(code, value)
-        except ValueError:
-            self.append( DXFTag(code, value) )
 
     def getvalue(self, code):
         index = self.tagindex(code)

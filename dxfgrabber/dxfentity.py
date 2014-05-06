@@ -62,16 +62,11 @@ class DXFEntity(object):
 
     def _get_dxf_attrib(self, dxfattr):
         # no subclass is subclass index 0
-        subclasstags = self.tags.subclasses[dxfattr.subclass]
+        subclass_tags = self.tags.subclasses[dxfattr.subclass]
         if dxfattr.xtype is not None:
-            tags = ExtendedType(subclasstags)
-            return tags.get_value(dxfattr.code, dxfattr.xtype)
+            return self._get_extented_type(subclass_tags, dxfattr.code, dxfattr.xtype)
         else:
-            return subclasstags.getvalue(dxfattr.code)
-
-    def _get_extended_type(self, code, xtype):
-        tags = ExtendedType(self.tags)
-        return tags.get_value(code, xtype)
+            return subclass_tags.getvalue(dxfattr.code)
 
     def paperspace(self):
         return self.dxf.get('paperspace', 0) == 1
@@ -79,40 +74,24 @@ class DXFEntity(object):
     def post_read_correction(self):
         pass
 
+    @staticmethod
+    def _get_extented_type(tags, code, xtype):
+        def get_point():
+            index = tags.tagindex(code)
+            return tags[index].value
 
-class ExtendedType(object):
-    def __init__(self, tags):
-        self.tags = tags
-
-    def get_value(self, code, xtype):
-        if xtype == 'Point2D':
-            return self._get_fix_point(code, axis=2)
-        elif xtype == 'Point3D':
-            return self._get_fix_point(code, axis=3)
+        if xtype == 'Point3D':
+            value = get_point()
+            if len(value) == 2:
+                raise DXFStructureError("expected 3D point but found 2D point")
+            return value
+        elif xtype == 'Point2D':
+            value = get_point()
+            if len(value) == 3:
+                raise DXFStructureError("expected 2D point but found 3D point")
+            return value
         elif xtype == 'Point2D/3D':
-            return self._get_flexible_point(code)
+            return get_point()
         else:
             raise TypeError('Unknown extended type: %s' % xtype)
 
-    def _get_fix_point(self, code, axis):
-        point = self._get_point(code)
-        if len(point) != axis:
-            raise DXFStructureError('Invalid axis count for code: %d' % code)
-        return point
-
-    def _get_point(self, code):
-        index = self._point_index(code)
-        return tuple(
-            ( tag.value for x, tag in enumerate(self.tags[index:index+3])
-              if tag.code == code + x*10 )
-        )
-
-    def _point_index(self, code):
-        return self.tags.tagindex(code)
-
-    def _get_flexible_point(self, code):
-        point = self._get_point(code)
-        if len(point) in (2, 3):
-            return point
-        else:
-            raise DXFStructureError('Invalid axis count for code: %d' % code)

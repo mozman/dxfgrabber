@@ -197,16 +197,33 @@ class LWPolyline(DXFEntity):
 
     def __iter__(self):
         subclass = self.tags.subclasses[2]  # subclass AcDbPolyline
-        point = []
+
+        def get_vertex():
+            point.append(attribs.get(40, 0))
+            point.append(attribs.get(41, 0))
+            point.append(attribs.get(42, 0))
+            return tuple(point)
+
+        point = None
+        attribs = {}
         for tag in subclass:
             if tag.code in LWPOINTCODES:
                 if tag.code == 10:
-                    if point:
-                        yield tuple(point)
-                        point = []
-                point.append(tag.value)
-        if point:
-            yield tuple(point)
+                    if point is not None:
+                        yield get_vertex()
+                    point = list(tag.value)
+                    attribs = {}
+                else:
+                    attribs[tag.code] = tag.value
+        if point is not None:
+            yield get_vertex()  # last point
+
+    def get_rstrip_points(self):
+        last0 = 4
+        for point in self:
+            while point[last0] == 0 and last0 > 1:
+                last0 -= 1
+            yield tuple(point[:last0+1])
 
     @property
     def flags(self):
@@ -368,18 +385,8 @@ class Spline(DXFEntity):
         return self._get_points(11)
 
     def _get_points(self, code):
-        subclass = self.tags.subclasses[2]  # subclass AcDbSpline
-        point = None
-        zcode = code + 20
-        for tag in subclass:
-            if point is None:
-                if tag.code == code:
-                    point = [tag.value]
-            else:
-                point.append(tag.value)
-                if tag.code == zcode:
-                    yield tuple(point)
-                    point = None
+        return (tag.value for tag in self.tags.subclasses[2] if tag.code == code)
+
 
 helix_subclass = DefSubclass('AcDbHelix', {
     'helix_major_version': DXFAttr(90, None),

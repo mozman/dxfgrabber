@@ -290,6 +290,13 @@ class LWPolyline(Shape):
     def __iter__(self):
         return iter(self.points)
 
+    def get_rstrip_points(self):
+        last0 = 4
+        for point in self.points:
+            while point[last0] == 0 and last0 > 1:
+                last0 -= 1
+            yield tuple(point[:last0+1])
+
 
 class Ellipse(Shape):
     def __init__(self, wrapper):
@@ -516,7 +523,6 @@ class Mesh(Shape):
     @staticmethod
     def get_vertices(tags, pos):
         vertices = []
-        point = []
         itags = iter(tags[pos:])
         while True:
             try:
@@ -524,13 +530,8 @@ class Mesh(Shape):
             except StopIteration:  # premature end of tags, return what you got
                 break
             if tag.code == 10:
-                if len(point):  # end of previous point
-                    vertices.append(tuple(point))
-                    del point[:]
-            if tag.code in (10, 20, 30):
-                point.append(tag.value)
-            else:  # end of vertex list
-                vertices.append(tuple(point))
+                vertices.append(tag.value)
+            else:
                 break
         return vertices
 

@@ -7,6 +7,7 @@ import unittest
 from dxfgrabber.classifiedtags import ClassifiedTags
 from dxfgrabber.entities import entity_factory
 
+
 class TestPointDXF12(unittest.TestCase):
     def setUp(self):
         tags = ClassifiedTags.fromtext(POINT_DXF12)
@@ -21,10 +22,12 @@ class TestPointDXF12(unittest.TestCase):
         self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
+
 class TestPointDXF13(TestPointDXF12):
     def setUp(self):
         tags = ClassifiedTags.fromtext(POINT_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
+
 
 POINT_DXF12 = """  0
 POINT
