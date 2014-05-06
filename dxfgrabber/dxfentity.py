@@ -64,7 +64,7 @@ class DXFEntity(object):
             return subclass_tags.get_value(dxfattr.code)
 
     def paperspace(self):
-        return self.dxf.get('paperspace', 0) == 1
+        return self.get_dxf_attrib('paperspace', default=0) == 1
 
     def post_read_correction(self):
         pass

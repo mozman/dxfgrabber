@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from io import StringIO
 from collections import namedtuple
-
+from itertools import chain
 import sys
 from .codepage import toencoding
 from .const import acadrelease
@@ -26,12 +26,11 @@ def point_tuple(value):
     return tuple(float(f) for f in value)
 
 
-def is_point_code(code):
-    return (10 <= code <= 19) or code == 210 or (110 <= code <= 112) or (1010 <= code <= 1019)
+POINT_CODES = frozenset(chain(range(10, 20), (210, ), range(110, 113), range(1010, 1020)))
 
 
 def is_point_tag(tag):
-    return is_point_code(tag[0])
+    return tag[0] in POINT_CODES
 
 
 class TagIterator(object):
@@ -50,7 +49,7 @@ class TagIterator(object):
         def undo_tag():
             self.undo = False
             tag = self.last_tag
-            if is_point_code(tag.code):
+            if tag.code in POINT_CODES:
                 self.lineno += 2 * len(tag.value)
             else:
                 self.lineno += 2
@@ -99,7 +98,7 @@ class TagIterator(object):
                 else:
                     code, value = read_next_tag()
 
-                if is_point_code(code):  # 2D or 3D point
+                if code in POINT_CODES:  # 2D or 3D point
                     value = read_point(code, value)
 
             self.last_tag = cast_tag((code, value))

@@ -27,12 +27,13 @@ class Entity(SeqEnd):
 class Shape(Entity):
     def __init__(self, wrapper):
         super(Shape, self).__init__(wrapper)
-        self.layer = wrapper.dxf.get('layer', '0')
-        self.linetype = wrapper.dxf.get('linetype', None)  # None=BYLAYER
-        self.thickness = wrapper.dxf.get('thickness', 0.0)
-        self.ltscale = wrapper.dxf.get('ltscale', 1.0)
-        self.invisible = wrapper.dxf.get('invisible', 0)  # 0=visible
-        self.color = wrapper.dxf.get('color', const.BYLAYER)  # 256=BYLAYER, 0=BYBLOCK
+        get_dxf = wrapper.get_dxf_attrib
+        self.layer = get_dxf('layer', '0')
+        self.linetype = get_dxf('linetype', None)  # None=BYLAYER
+        self.thickness = get_dxf('thickness', 0.0)
+        self.ltscale = get_dxf('ltscale', 1.0)
+        self.invisible = get_dxf('invisible', 0)  # 0=visible
+        self.color = get_dxf('color', const.BYLAYER)  # 256=BYLAYER, 0=BYBLOCK
         # if adding additional DXF attributes, do it also for PolyShape
 
 
@@ -65,24 +66,26 @@ class Point(Shape):
 class Circle(Shape):
     def __init__(self, wrapper):
         super(Circle, self).__init__(wrapper)
-        self.center = wrapper.dxf.center
-        self.radius = wrapper.dxf.radius
+        self.center = wrapper.get_dxf_attrib('center')
+        self.radius = wrapper.get_dxf_attrib('radius')
 
 
 class Arc(Shape):
     def __init__(self, wrapper):
         super(Arc, self).__init__(wrapper)
-        self.center = wrapper.dxf.center
-        self.radius = wrapper.dxf.radius
-        self.startangle = wrapper.dxf.startangle
-        self.endangle = wrapper.dxf.endangle
+        get_dxf = wrapper.get_dxf_attrib
+        self.center = get_dxf('center')
+        self.radius = get_dxf('radius')
+        self.startangle = get_dxf('startangle')
+        self.endangle = get_dxf('endangle')
 
 
 class Trace(Shape):
     def __init__(self, wrapper):
         super(Trace, self).__init__(wrapper)
+        get_dxf = wrapper.get_dxf_attrib
         self.points = [
-        wrapper.dxf.get(vname) for vname in const.VERTEXNAMES
+            get_dxf(vname) for vname in const.VERTEXNAMES
         ]
 
 Solid = Trace
@@ -91,7 +94,7 @@ Solid = Trace
 class Face(Trace):
     def __init__(self, wrapper):
         super(Face, self).__init__(wrapper)
-        self.invisible_edge = wrapper.dxf.get('invisible_edge', 0)
+        self.invisible_edge = wrapper.get_dxf_attrib('invisible_edge', 0)
 
     def is_edge_invisible(self, edge):
         # edges 0 .. 3
@@ -101,24 +104,26 @@ class Face(Trace):
 class Text(Shape):
     def __init__(self, wrapper):
         super(Text, self).__init__(wrapper)
-        self.insert = wrapper.dxf.insert
-        self.text = wrapper.dxf.text
-        self.height = wrapper.dxf.get('height', 1.)
-        self.rotation = wrapper.dxf.get('rotation', 0.)
-        self.style = wrapper.dxf.get('style', "")
-        self.halign = wrapper.dxf.get('halign', 0)
-        self.valign = wrapper.dxf.get('valign', 0)
-        self.alignpoint = wrapper.dxf.get('alignpoint', None)
+        get_dxf = wrapper.get_dxf_attrib
+        self.insert = get_dxf('insert')
+        self.text = get_dxf('text')
+        self.height = get_dxf('height', 1.)
+        self.rotation = get_dxf('rotation', 0.)
+        self.style = get_dxf('style', "")
+        self.halign = get_dxf('halign', 0)
+        self.valign = get_dxf('valign', 0)
+        self.alignpoint = get_dxf('alignpoint', None)
 
 
 class Insert(Shape):
     def __init__(self, wrapper):
         super(Insert, self).__init__(wrapper)
-        self.name = wrapper.dxf.name
-        self.insert = wrapper.dxf.insert
-        self.rotation = wrapper.dxf.get('rotation', 0.)
-        self.scale = wrapper.dxf.get('xscale', 1.), wrapper.dxf.get('yscale', 1.), wrapper.dxf.get('zscale', 1.)
-        self.attribsfollow = bool(wrapper.dxf.get('attribsfollow', 0))
+        get_dxf = wrapper.get_dxf_attrib
+        self.name = get_dxf('name')
+        self.insert = get_dxf('insert')
+        self.rotation = get_dxf('rotation', 0.)
+        self.scale = get_dxf('xscale', 1.), get_dxf('yscale', 1.), get_dxf('zscale', 1.)
+        self.attribsfollow = bool(get_dxf('attribsfollow', 0))
         self.attribs = []
 
     def find_attrib(self, attrib_tag):
@@ -134,7 +139,7 @@ class Insert(Shape):
 class Attrib(Text):  # also ATTDEF
     def __init__(self, wrapper):
         super(Attrib, self).__init__(wrapper)
-        self.tag = wrapper.dxf.tag
+        self.tag = wrapper.get_dxf_attrib('tag')
 
 
 class Polyline(Shape):
@@ -143,13 +148,14 @@ class Polyline(Shape):
         self.vertices = None
         self.mode = wrapper.get_mode()
         self.flags = wrapper.flags
-        self.mcount = wrapper.dxf.get("mcount", 0)
-        self.ncount = wrapper.dxf.get("ncount", 0)
-        self.default_start_width = wrapper.dxf.get("defaultstartwidth", 0.)
-        self.default_end_width = wrapper.dxf.get("defaultendwidth", 0.)
+        get_dxf = wrapper.get_dxf_attrib
+        self.mcount = get_dxf("mcount", 0)
+        self.ncount = get_dxf("ncount", 0)
+        self.default_start_width = get_dxf("defaultstartwidth", 0.)
+        self.default_end_width = get_dxf("defaultendwidth", 0.)
         self.is_mclosed = wrapper.is_mclosed()
         self.is_nclosed = wrapper.is_nclosed()
-        self.elevation = wrapper.dxf.get('elevation', (0., 0., 0.))
+        self.elevation = get_dxf('elevation', (0., 0., 0.))
 
     def __len__(self):
         return len(self.vertices)
@@ -258,17 +264,19 @@ class Polymesh(PolyShape):
 class Vertex(Shape):
     def __init__(self, wrapper):
         super(Vertex, self).__init__(wrapper)
-        self.location = wrapper.dxf.location
-        self.flags = wrapper.dxf.get('flags', 0)
-        self.bulge = wrapper.dxf.get('bulge', 0)
-        self.tangent = wrapper.dxf.get('tangent', None)
+        get_dxf = wrapper.get_dxf_attrib
+        self.location = get_dxf('location')
+        self.flags = get_dxf('flags', 0)
+        self.bulge = get_dxf('bulge', 0)
+        self.tangent = get_dxf('tangent', None)
         self.vtx = self._get_vtx(wrapper)
 
     def _get_vtx(self, wrapper):
         vtx = []
+        get_dxf = wrapper.get_dxf_attrib
         for vname in const.VERTEXNAMES:
             try:
-                vtx.append(wrapper.dxf.get(vname))
+                vtx.append(get_dxf(vname))
             except ValueError:
                 pass
         return tuple(vtx)
@@ -279,7 +287,7 @@ class LWPolyline(Shape):
         super(LWPolyline, self).__init__(wrapper)
         self.points = tuple(wrapper)
         self.is_closed = wrapper.is_closed()
-        self.elevation = wrapper.dxf.get('elevation', (0., 0., 0.))
+        self.elevation = wrapper.get_dxf_attrib('elevation', (0., 0., 0.))
 
     def __len__(self):
         return len(self.points)
@@ -301,11 +309,12 @@ class LWPolyline(Shape):
 class Ellipse(Shape):
     def __init__(self, wrapper):
         super(Ellipse, self).__init__(wrapper)
-        self.center = wrapper.dxf.center
-        self.majoraxis = wrapper.dxf.majoraxis
-        self.ratio = wrapper.dxf.get('ratio', 1.0)  # circle
-        self.startparam = wrapper.dxf.get('startparam', 0.)
-        self.endparam = wrapper.dxf.get('endparam', 6.283185307179586)  # 2*pi
+        get_dxf = wrapper.get_dxf_attrib
+        self.center = get_dxf('center')
+        self.majoraxis = get_dxf('majoraxis')
+        self.ratio = get_dxf('ratio', 1.0)  # circle
+        self.startparam = get_dxf('startparam', 0.)
+        self.endparam = get_dxf('endparam', 6.283185307179586)  # 2*pi
 
 
 class Ray(Shape):
@@ -320,16 +329,17 @@ XLine = Ray
 class Spline(Shape):
     def __init__(self, wrapper):
         super(Spline, self).__init__(wrapper)
-        self.normalvector = wrapper.dxf.get('normalvector', None)
-        self.flags = wrapper.dxf.get('flags', 0)
-        self.degree = wrapper.dxf.get('degree', 3)
-        self.starttangent = wrapper.dxf.get('starttangent', None)
-        self.endtangent = wrapper.dxf.get('endtangent', None)
+        get_dxf = wrapper.get_dxf_attrib
+        self.normalvector = get_dxf('normalvector', None)
+        self.flags = get_dxf('flags', 0)
+        self.degree = get_dxf('degree', 3)
+        self.starttangent = get_dxf('starttangent', None)
+        self.endtangent = get_dxf('endtangent', None)
         self.knots = tuple(wrapper.knots())
         self.weights = tuple(wrapper.weights())
-        self.tol_knot = wrapper.dxf.get('knot_tolernace', .0000001)
-        self.tol_controlpoint = wrapper.dxf.get('controlpoint_tolerance', .0000001)
-        self.tol_fitpoint = wrapper.dxf.get('fitpoint_tolerance', .0000000001)
+        self.tol_knot = get_dxf('knot_tolernace', .0000001)
+        self.tol_controlpoint = get_dxf('controlpoint_tolerance', .0000001)
+        self.tol_fitpoint = get_dxf('fitpoint_tolerance', .0000000001)
         self.controlpoints = tuple(wrapper.controlpoints())
         self.fitpoints = tuple(wrapper.fitpoints())
         if len(self.weights) == 0:
@@ -359,16 +369,17 @@ class Spline(Shape):
 class Helix(Spline):
     def __init__(self, wrapper):
         super(Helix, self).__init__(wrapper)
-        self.helix_version = (wrapper.dxf.get('helix_major_version', 1),
-                              wrapper.dxf.get('helix_maintainance_version', 1))
-        self.axis_base_point = wrapper.dxf.get('axis_base_point', None)
-        self.start_point = wrapper.dxf.get('start_point', None)
-        self.axis_vector = wrapper.dxf.get('axis_vector', None)
-        self.radius = wrapper.dxf.get('radius', 0)
-        self.turns = wrapper.dxf.get('turns', 0)
-        self.turn_height = wrapper.dxf.get('turn_height', 0)
-        self.handedness = wrapper.dxf.get('handedness', 0)  # 0 = left, 1 = right
-        self.constrain = wrapper.dxf.get('constrain', 0)
+        get_dxf = wrapper.get_dxf_attrib
+        self.helix_version = (get_dxf('helix_major_version', 1),
+                              get_dxf('helix_maintainance_version', 1))
+        self.axis_base_point = get_dxf('axis_base_point', None)
+        self.start_point = get_dxf('start_point', None)
+        self.axis_vector = get_dxf('axis_vector', None)
+        self.radius = get_dxf('radius', 0)
+        self.turns = get_dxf('turns', 0)
+        self.turn_height = get_dxf('turn_height', 0)
+        self.handedness = get_dxf('handedness', 0)  # 0 = left, 1 = right
+        self.constrain = get_dxf('constrain', 0)
         # 0 = Constrain turn height;
         # 1 = Constrain turns;
         # 2 = Constrain height
@@ -391,15 +402,16 @@ class MText(Shape):
         super(MText, self).__init__(wrapper)
         self.insert = wrapper.dxf.insert
         self.rawtext = wrapper.rawtext()
-        self.height = wrapper.dxf.get('height', 1.0)
-        self.linespacing = wrapper.dxf.get('linespacing', 1.0)
-        self.attachmentpoint = wrapper.dxf.get('attachmentpoint', 1)
-        self.style = wrapper.dxf.get('style', 'STANDARD')
-        self.extrusion = wrapper.dxf.get('extrusion', (0., 0., 1.))
+        get_dxf = wrapper.get_dxf_attrib
+        self.height = get_dxf('height', 1.0)
+        self.linespacing = get_dxf('linespacing', 1.0)
+        self.attachmentpoint = get_dxf('attachmentpoint', 1)
+        self.style = get_dxf('style', 'STANDARD')
+        self.extrusion = get_dxf('extrusion', (0., 0., 1.))
         try:
             xdir = wrapper.dxf.xdirection
         except ValueError:
-            xdir = deg2vec(wrapper.dxf.get('rotation', 0.0))
+            xdir = deg2vec(get_dxf('rotation', 0.0))
         self.xdirection = normalized(xdir)
 
     def lines(self):
@@ -411,8 +423,8 @@ class Block(Shape):
         super(Block, self).__init__(wrapper)
         self.basepoint = wrapper.dxf.basepoint
         self.name = wrapper.dxf.name
-        self.flags = wrapper.dxf.get('flags', 0)
-        self.xrefpath = wrapper.dxf.get('xrefpath', "")
+        self.flags = wrapper.get_dxf_attrib('flags', 0)
+        self.xrefpath = wrapper.get_dxf_attrib('xrefpath', "")
         self._entities = list()
 
     @property
@@ -456,30 +468,32 @@ def unpack_seconds(seconds):
 class Sun(Entity):
     def __init__(self, wrapper):
         super(Sun, self).__init__(wrapper)
-        self.version = wrapper.dxf.get('version', 1)
-        self.status = bool(wrapper.dxf.get('status', 0))  # on/off ?
-        self.sun_color = wrapper.dxf.get('sun_color', None)  # None is unset
-        self.intensity = wrapper.dxf.get('intensity', 0)
-        self.shadows = bool(wrapper.dxf.get('shadows', 0))
-        julian_date = wrapper.dxf.get('date', 0.)
+        get_dxf = wrapper.get_dxf_attrib
+        self.version = get_dxf('version', 1)
+        self.status = bool(get_dxf('status', 0))  # on/off ?
+        self.sun_color = get_dxf('sun_color', None)  # None is unset
+        self.intensity = get_dxf('intensity', 0)
+        self.shadows = bool(get_dxf('shadows', 0))
+        julian_date = get_dxf('date', 0.)
         if julian_date > 0.:
             date = calendar_date(julian_date)
         else:
             date = datetime.now()
-        hours, minutes, seconds = unpack_seconds(wrapper.dxf.get('time', 0))
+        hours, minutes, seconds = unpack_seconds(get_dxf('time', 0))
         self.date = datetime(date.year, date.month, date.day, hours, minutes, seconds)
-        self.daylight_savings_time = bool(wrapper.dxf.get('daylight_savings_time', 0))
-        self.shadow_type = wrapper.dxf.get('shadows_type', 0)
-        self.shadow_map_size = wrapper.dxf.get('shadow_map_size', 0)
-        self.shadow_softness = wrapper.dxf.get('shadow_softness', 0)
+        self.daylight_savings_time = bool(get_dxf('daylight_savings_time', 0))
+        self.shadow_type = get_dxf('shadows_type', 0)
+        self.shadow_map_size = get_dxf('shadow_map_size', 0)
+        self.shadow_softness = get_dxf('shadow_softness', 0)
 
 
 class Mesh(Shape):
     def __init__(self, wrapper):
         super(Mesh, self).__init__(wrapper)
-        self.version = wrapper.dxf.get('version', 2)
-        self.blend_crease = bool(wrapper.dxf.get('blend_crease', 0))
-        self.subdivision_levels = wrapper.dxf.get('subdivision_levels', 1)
+        get_dxf = wrapper.get_dxf_attrib
+        self.version = get_dxf('version', 2)
+        self.blend_crease = bool(get_dxf('blend_crease', 0))
+        self.subdivision_levels = get_dxf('subdivision_levels', 1)
         # rest are mostly positional tags
         self.vertices = []
         self.faces = []
@@ -592,34 +606,35 @@ class Mesh(Shape):
 class Light(Shape):
     def __init__(self, wrapper):
         super(Light, self).__init__(wrapper)
-        self.version = wrapper.dxf.get('version', 1)
-        self.name = wrapper.dxf.get('name', "")
-        self.light_type = wrapper.dxf.get('light_type', 1)  # distant = 1; point = 2; spot = 3
-        self.status = bool(wrapper.dxf.get('status', 0))  # on/off ?
-        self.light_color = wrapper.dxf.get('light_color', None)  # 0 is unset
-        self.true_color = wrapper.dxf.get('true_color', None)  # None is unset
-        self.plot_glyph = bool(wrapper.dxf.get('plot_glyph', 0))
-        self.intensity = wrapper.dxf.get('intensity', 0)
-        self.position = wrapper.dxf.get('position', (0, 0, 1))
-        self.target = wrapper.dxf.get('target', (0, 0, 0))
-        self.attenuation_type = wrapper.dxf.get('attenuation_type', 0)  # 0 = None; 1 = Inverse Linear; 2 = Inverse Square
-        self.use_attenuation_limits = bool(wrapper.dxf.get('use_attenuation_limits', 0))
-        self.attenuation_start_limit = wrapper.dxf.get('attenuation_start_limit', 0)
-        self.attenuation_end_limit = wrapper.dxf.get('attenuation_end_limit', 0)
-        self.hotspot_angle = wrapper.dxf.get('hotspot_angle', 0)
-        self.fall_off_angle = wrapper.dxf.get('fall_off_angle', 0)
-        self.cast_shadows = bool(wrapper.dxf.get('cast_shadows', 0))
-        self.shadow_type = wrapper.dxf.get('shadow_type', 0)  # 0 = Ray traced shadows; 1 = Shadow maps
-        self.shadow_map_size = wrapper.dxf.get('shadow_map_size', 0)
-        self.shadow_softness = wrapper.dxf.get('shadow_softness', 0)
+        get_dxf = wrapper.get_dxf_attrib
+        self.version = get_dxf('version', 1)
+        self.name = get_dxf('name', "")
+        self.light_type = get_dxf('light_type', 1)  # distant = 1; point = 2; spot = 3
+        self.status = bool(get_dxf('status', 0))  # on/off ?
+        self.light_color = get_dxf('light_color', None)  # 0 is unset
+        self.true_color = get_dxf('true_color', None)  # None is unset
+        self.plot_glyph = bool(get_dxf('plot_glyph', 0))
+        self.intensity = get_dxf('intensity', 0)
+        self.position = get_dxf('position', (0, 0, 1))
+        self.target = get_dxf('target', (0, 0, 0))
+        self.attenuation_type = get_dxf('attenuation_type', 0)  # 0 = None; 1 = Inverse Linear; 2 = Inverse Square
+        self.use_attenuation_limits = bool(get_dxf('use_attenuation_limits', 0))
+        self.attenuation_start_limit = get_dxf('attenuation_start_limit', 0)
+        self.attenuation_end_limit = get_dxf('attenuation_end_limit', 0)
+        self.hotspot_angle = get_dxf('hotspot_angle', 0)
+        self.fall_off_angle = get_dxf('fall_off_angle', 0)
+        self.cast_shadows = bool(get_dxf('cast_shadows', 0))
+        self.shadow_type = get_dxf('shadow_type', 0)  # 0 = Ray traced shadows; 1 = Shadow maps
+        self.shadow_map_size = get_dxf('shadow_map_size', 0)
+        self.shadow_softness = get_dxf('shadow_softness', 0)
 
 
 class Body(Shape):
     def __init__(self, wrapper):
         super(Body, self).__init__(wrapper)
         # need handle to get SAB data in DXF version AC1027 and later
-        self.handle = wrapper.dxf.get('handle', None)
-        self.version = wrapper.dxf.get('version', 1)
+        self.handle = wrapper.get_dxf_attrib('handle', None)
+        self.version = wrapper.get_dxf_attrib('version', 1)
         self.acis = wrapper.get_acis_data()
 
     def set_sab_data(self, sab_data):
@@ -640,8 +655,8 @@ Solid3d = Body
 class Surface(Body):
     def __init__(self, wrapper):
         super(Surface, self).__init__(wrapper)
-        self.u_isolines = wrapper.dxf.get('u_isolines', 0)
-        self.v_isolines = wrapper.dxf.get('v_isolines', 0)
+        self.u_isolines = wrapper.get_dxf_attrib('u_isolines', 0)
+        self.v_isolines = wrapper.get_dxf_attrib('v_isolines', 0)
 
 
 EntityTable = {
