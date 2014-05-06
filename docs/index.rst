@@ -1109,7 +1109,19 @@ Body
 
 .. attribute:: Body.acis
 
-    ACIS data as list of strings.
+    SAT (Standard ACIS Text) data as list of strings. AutoCAD stores the ACIS data since DXF version AC1027 (R21013) as
+    SAB (Standard ACIS Binary) data in the undocumented (2014-05-06) section ACDSDATA and :attr:`~Body.acis` is a binary
+    string.
+
+.. attribute:: Body.is_sat
+
+   Is *True* if data is stored as SAT, no guarantee for presence of data, but :attr:`~Body.acis` is a list of strings
+   for sure.
+
+.. attribute:: Body.is_sab
+
+   Is *True* if data is stored as SAB and :attr:`~Body.acis` is a binary string.
+
 
 Region
 ------

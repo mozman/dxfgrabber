@@ -11,6 +11,7 @@ from .headersection import HeaderSection
 from .tablessection import TablesSection
 from .entitysection import EntitySection, ObjectsSection
 from .blockssection import BlocksSection
+from .acdsdata import AcDsDataSection
 
 
 class Sections(object):
@@ -56,6 +57,7 @@ SECTIONMAP = {
     'ENTITIES': EntitySection,
     'OBJECTS': ObjectsSection,
     'BLOCKS': BlocksSection,
+    'ACDSDATA': AcDsDataSection,
 }
 
 

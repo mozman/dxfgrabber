@@ -511,6 +511,7 @@ class Body(DXFEntity):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, modeler_geometry_subclass)
 
     def get_acis_data(self):
+        # for AC1027 and later - ACIS data is stored in the ACDSDATA section in Standard ACIS Binary format
         geometry = self.tags.subclasses[2]  # AcDbModelerGeometry
         return decode([tag.value for tag in geometry if tag.code in (1, 3)])
 

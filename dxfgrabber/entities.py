@@ -467,19 +467,6 @@ class Sun(Entity):
         self.shadow_softness = wrapper.dxf.get('shadow_softness', 0)
 
 
-def iter_tags(tags, pos):
-    while pos < len(tags):
-        yield tags[pos]
-        pos += 1
-
-
-def write_tags(tags):
-    with open(r'd:\source\__logs__\meshtags.txt', 'wt') as fp:
-        for count, tag in enumerate(tags):
-            fp.write('{c:3d} code={code} value={value}\n'.format(
-                c=count, code=tag.code, value=tag.value))
-
-
 class Mesh(Shape):
     def __init__(self, wrapper):
         super(Mesh, self).__init__(wrapper)
@@ -530,7 +517,7 @@ class Mesh(Shape):
     def get_vertices(tags, pos):
         vertices = []
         point = []
-        itags = iter_tags(tags, pos)
+        itags = iter(tags[pos:])
         while True:
             try:
                 tag = next(itags)
@@ -551,7 +538,7 @@ class Mesh(Shape):
     def get_faces(tags, pos):
         faces = []
         face = []
-        itags = iter_tags(tags, pos)
+        itags = iter(tags[pos:])
         try:
             while True:
                 tag = next(itags)
@@ -588,7 +575,7 @@ class Mesh(Shape):
     @staticmethod
     def get_raw_list(tags, pos, code):
         raw_list = []
-        itags = iter_tags(tags, pos)
+        itags = iter(tags[pos:])
         while True:
             try:
                 tag = next(itags)
@@ -629,8 +616,21 @@ class Light(Shape):
 class Body(Shape):
     def __init__(self, wrapper):
         super(Body, self).__init__(wrapper)
+        # need handle to get SAB data in DXF version AC1027 and later
+        self.handle = wrapper.dxf.get('handle', None)
         self.version = wrapper.dxf.get('version', 1)
         self.acis = wrapper.get_acis_data()
+
+    def set_sab_data(self, sab_data):
+        self.acis = sab_data
+
+    @property
+    def is_sat(self):
+        return isinstance(self.acis, list)  # but could be an empty list
+
+    @property
+    def is_sab(self):
+        return not self.is_sat  # has binary encoded ACIS data
 
 Solid3d = Body
 # perhaps reading creation history is needed

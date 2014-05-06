@@ -14,19 +14,19 @@ class TestMesh(unittest.TestCase):
         tags = ClassifiedTags.fromtext(MESH)
         self.entity = entity_factory(tags, 'AC1024')
 
-    def test_sun_properties(self):
-        mseh = self.entity
-        self.assertEqual(mseh.dxftype, 'MESH')
-        self.assertEqual(mseh.color, 256)
-        self.assertEqual(mseh.layer, '0')
-        self.assertEqual(mseh.linetype, None)
-        self.assertFalse(mseh.paperspace)
+    def test_mesh_properties(self):
+        mesh = self.entity
+        self.assertEqual('MESH', mesh.dxftype)
+        self.assertEqual(256, mesh.color)
+        self.assertEqual('0', mesh.layer)
+        self.assertEqual(None, mesh.linetype)
+        self.assertFalse(mesh.paperspace)
 
     def test_mesh_data(self):
         mesh = self.entity
-        self.assertEqual(mesh.version, 2)
-        self.assertEqual(mesh.blend_crease, 0)
-        self.assertEqual(mesh.subdivision_levels, 3)
+        self.assertEqual(2, mesh.version)
+        self.assertEqual(0, mesh.blend_crease)
+        self.assertEqual(3, mesh.subdivision_levels)
         self.assertEqual(56, len(mesh.vertices))
         self.assertEqual(54, len(mesh.faces))
         self.assertEqual(108, len(mesh.edges))

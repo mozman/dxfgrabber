@@ -8,10 +8,11 @@ __author__ = "mozman <mozman@gmx.at>"
 from io import StringIO
 from collections import namedtuple
 
-
+import sys
 from .codepage import toencoding
 from .const import acadrelease
 from . import tostr
+from array import array
 
 DXFTag = namedtuple('DXFTag', 'code value')
 NONETAG = DXFTag(999999, 'NONE')
@@ -287,3 +288,9 @@ class TagGroups(list):
     def fromtext(text, splitcode=0):
         return TagGroups(Tags.fromtext(text), splitcode)
 
+
+def binary_encoded_data_to_bytes(data):
+    byte_array = array('B' if sys.version_info[0] >= 3 else b'B')
+    for text in data:
+        byte_array.extend(int(text[index:index+2], 16) for index in range(0, len(text), 2))
+    return byte_array.tostring()

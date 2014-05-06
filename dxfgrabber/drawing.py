@@ -31,6 +31,11 @@ class Drawing(object):
         self.blocks = sections.blocks
         self.entities = sections.entities
         self.objects = sections.objects if ('objects' in sections) else []
+        if 'acdsdata' in sections:
+            self.acdsdata = sections.acdsdata
+            # sab data introduced with DXF version AC1027 (R2013)
+            if self.dxfversion >= 'AC1027':
+                self.collect_sab_data()
 
     def modelspace(self):
         return (entity for entity in self.entities if not entity.paperspace)
@@ -38,3 +43,8 @@ class Drawing(object):
     def paperspace(self):
         return (entity for entity in self.entities if entity.paperspace)
 
+    def collect_sab_data(self):
+        for entity in self.entities:
+            if hasattr(entity, 'set_sab_data'):
+                sab_data = self.acdsdata.sab_data[entity.handle]
+                entity.set_sab_data(sab_data)
