@@ -17,9 +17,9 @@ class ClassifiedTags:
     """ Manage Subclasses, AppData and Extended Data """
     __slots__ = ('subclasses', 'appdata', 'xdata')
     def __init__(self, iterable=None):
-        self.appdata = list() # code == 102, keys are "{<arbitrary name>", values are Tags()
-        self.subclasses = list() # code == 100, keys are "subclassname", values are Tags()
-        self.xdata = list() # code >= 1000, keys are "APPNAME", values are Tags()
+        self.appdata = list()  # code == 102, keys are "{<arbitrary name>", values are Tags()
+        self.subclasses = list()  # code == 100, keys are "subclassname", values are Tags()
+        self.xdata = list()  # code >= 1000, keys are "APPNAME", values are Tags()
         if iterable is not None:
             self._setup(iterable)
 

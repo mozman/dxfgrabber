@@ -40,12 +40,12 @@ class TagIterator(object):
 
         def next_tag():
             code = 999
-            while code == 999: # skip comments
+            while code == 999:  # skip comments
                 try:
                     code = int(self.readline())
                     value = self.readline().rstrip('\n')
                 except UnicodeDecodeError:
-                    raise # because UnicodeDecodeError() is a subclass of ValueError()
+                    raise  # because UnicodeDecodeError() is a subclass of ValueError()
                 except (EOFError, ValueError):
                     raise StopIteration()
 
@@ -200,7 +200,7 @@ class Tags(list):
             if tag.code in (5, 105):
                 handle = tag.value
                 break
-        int(handle, 16) # check for valid handle
+        int(handle, 16)  # check for valid handle
         return handle
 
     def findall(self, code):
@@ -221,7 +221,7 @@ class Tags(list):
         index = self.tagindex(code)
         self[index] = DXFTag(code, value)
 
-    def setfirst(self, code, value):
+    def _setfirst(self, code, value):
         """ Update first existing DXFTag(code, ...) or append a new
         DXFTag(code, value).
 
@@ -233,10 +233,6 @@ class Tags(list):
 
     def getvalue(self, code):
         index = self.tagindex(code)
-        return self[index].value
-
-    def getlastvalue(self, code):
-        index = self.lastindex(code)
         return self[index].value
 
     @staticmethod
@@ -256,30 +252,29 @@ class TagGroups(list):
     """
     def __init__(self, tags, splitcode=0):
         super(TagGroups, self).__init__()
-        self.splitcode = splitcode
-        self._buildgroups(tags)
+        self._buildgroups(tags, splitcode)
 
-    def _buildgroups(self, tags):
-        def pushgroup():
+    def _buildgroups(self, tags, split_code):
+        def push_group():
             if len(group) > 0:
                 self.append(group)
 
-        def starttag(itags):
+        def start_tag(itags):
             tag = next(itags)
-            while tag.code != self.splitcode:
+            while tag.code != split_code:
                 tag = next(itags)
             return tag
 
         itags = iter(tags)
-        group = Tags([starttag(itags)])
+        group = Tags([start_tag(itags)])
 
         for tag in itags:
-            if tag.code == self.splitcode:
-                pushgroup()
+            if tag.code == split_code:
+                push_group()
                 group = Tags([tag])
             else:
                 group.append(tag)
-        pushgroup()
+        push_group()
 
     def getname(self, index):
         return self[index][0].value
@@ -290,7 +285,8 @@ class TagGroups(list):
 
 
 def binary_encoded_data_to_bytes(data):
-    byte_array = array('B' if sys.version_info[0] >= 3 else b'B')
+    PY3 = sys.version_info[0] >= 3
+    byte_array = array('B' if PY3 else b'B')
     for text in data:
         byte_array.extend(int(text[index:index+2], 16) for index in range(0, len(text), 2))
-    return byte_array.tostring()
+    return byte_array.tobytes() if PY3 else byte_array.tostring()
