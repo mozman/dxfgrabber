@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from itertools import islice
 
-from .tags import TagGroups
+from .tags import TagGroups, DXFStructureError
 from .classifiedtags import ClassifiedTags
 from .entities import entity_factory
 
@@ -41,10 +41,8 @@ class EntitySection(object):
     # end of public interface
 
     def _build(self, tags, dxfversion):
-        assert tags[0] == (0, 'SECTION')
-        assert tags[1] == (2, self.name.upper())
-        assert tags[-1] == (0, 'ENDSEC')
-
+        if tags[0] != (0, 'SECTION') or tags[1] != (2, self.name.upper()) or tags[-1] != (0, 'ENDSEC'):
+            raise DXFStructureError("Entities section: missing sections markers")
         if len(tags) == 3:  # empty entities section
             return
         groups = TagGroups(islice(tags, 2, len(tags)-1))

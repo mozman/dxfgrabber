@@ -15,7 +15,7 @@ class DrawingProxy:
 
 class TestInsertDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(INSERT_DXF12)
+        tags = Tags.from_text(INSERT_DXF12)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_section_setup(self):
@@ -43,7 +43,7 @@ class TestInsertDXF12(unittest.TestCase):
 
 class TestInsertDXF13(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(INSERT_DXF13)
+        tags = Tags.from_text(INSERT_DXF13)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
 
 

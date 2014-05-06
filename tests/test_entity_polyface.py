@@ -15,7 +15,7 @@ class DrawingProxy:
 
 class TestPolyfaceDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(POLYFACE_DXF12)
+        tags = Tags.from_text(POLYFACE_DXF12)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_entitysection(self):
@@ -60,7 +60,7 @@ class TestPolyfaceDXF12(unittest.TestCase):
 
 class TestPolyfaceDXF13(TestPolyfaceDXF12):
     def setUp(self):
-        tags = Tags.fromtext(POLYFACE_DXF13)
+        tags = Tags.from_text(POLYFACE_DXF13)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1015'))
 
 

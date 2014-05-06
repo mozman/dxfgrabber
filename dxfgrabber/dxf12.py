@@ -13,12 +13,12 @@ from . import const
 
 def make_attribs(additional=None):
     dxfattribs = {
-        'handle': DXFAttr(5, None),
-        'layer': DXFAttr(8, None),  # layername as string, default is '0'
-        'linetype': DXFAttr(6, None),  # linetype as string, special names BYLAYER/BYBLOCK, default is BYLAYER
-        'thickness': DXFAttr(39, None),
-        'color': DXFAttr(62, None),  # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
-        'paperspace': DXFAttr(67, None),  # 0 .. modelspace, 1 .. paperspace, default is 0
+        'handle': DXFAttr(5),
+        'layer': DXFAttr(8),  # layername as string, default is '0'
+        'linetype': DXFAttr(6),  # linetype as string, special names BYLAYER/BYBLOCK, default is BYLAYER
+        'thickness': DXFAttr(39),
+        'color': DXFAttr(62),  # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
+        'paperspace': DXFAttr(67),  # 0 .. modelspace, 1 .. paperspace, default is 0
     }
     if additional:
         dxfattribs.update(additional)

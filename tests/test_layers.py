@@ -15,7 +15,7 @@ class DrawingProxy:
 
 class TestDXF12Layer(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(DXF12LAYERS)
+        tags = Tags.from_text(DXF12LAYERS)
         self.layers = LayerTable.from_tags(tags, DrawingProxy("AC1009"))
 
     def test_get_existing_layer(self):
@@ -64,7 +64,7 @@ class TestDXF12Layer(unittest.TestCase):
 
 class TestDXF13Layer(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(DXF13LAYERS)
+        tags = Tags.from_text(DXF13LAYERS)
         self.layers = LayerTable.from_tags(tags, DrawingProxy("AC1024"))
 
     def test_get_existing_layer(self):

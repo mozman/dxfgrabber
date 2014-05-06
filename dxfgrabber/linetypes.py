@@ -50,7 +50,7 @@ class DXF12Linetype(DXFEntity):
             return []
         else:
             tags = self.tags.noclass
-            return [pattern_tag.value for pattern_tag in tags.findall(49)]
+            return [pattern_tag.value for pattern_tag in tags.find_all(49)]
 
 none_subclass = DefSubclass(None, {'handle': DXFAttr(5, None)} )
 symbol_subclass = DefSubclass('AcDbSymbolTableRecord', {})
@@ -71,4 +71,4 @@ class DXF13Linetype(DXF12Linetype):
             return []
         else:
             tags = self.tags.get_subclass('AcDbLinetypeTableRecord')
-            return [pattern_tag.value for pattern_tag in tags.findall(49)]
+            return [pattern_tag.value for pattern_tag in tags.find_all(49)]

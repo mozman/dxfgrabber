@@ -17,7 +17,7 @@ class DrawingProxy:
 
 class TestBlockSectionDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(BLOCKS_DXF12)
+        tags = Tags.from_text(BLOCKS_DXF12)
         self.blocks = BlocksSection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_paperspace_block(self):
@@ -39,13 +39,13 @@ class TestBlockSectionDXF12(unittest.TestCase):
 
 class TestBlockSectionDXF13(TestBlockSectionDXF12):
     def setUp(self):
-        tags = Tags.fromtext(BLOCKS_DXF13)
+        tags = Tags.from_text(BLOCKS_DXF13)
         self.blocks = BlocksSection.from_tags(tags, DrawingProxy('AC1024'))
 
 
 class TestBlockWithAttributeDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(BLOCKS_WITH_ATTRIB_DXF12)
+        tags = Tags.from_text(BLOCKS_WITH_ATTRIB_DXF12)
         self.blocks = BlocksSection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_testblock(self):
@@ -67,7 +67,7 @@ class TestBlockWithAttributeDXF12(unittest.TestCase):
 
 class TestBlockWithAttributeDXF13(TestBlockWithAttributeDXF12):
     def setUp(self):
-        tags = Tags.fromtext(BLOCKS_WITH_ATTRIB_DXF13)
+        tags = Tags.from_text(BLOCKS_WITH_ATTRIB_DXF13)
         self.blocks = BlocksSection.from_tags(tags, DrawingProxy('AC1024'))
 
     def test_entity_polyline(self):

@@ -5,8 +5,7 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import TagGroups
-
+from .tags import TagGroups, DXFStructureError
 
 class HeaderSection(dict):
     name = "header"
@@ -27,40 +26,10 @@ class HeaderSection(dict):
         self['$DWGCODEPAGE'] = 'ANSI_1252'
 
     def _build(self, tags):
-        assert tags[0] == (0, 'SECTION')
-        assert tags[1] == (2, 'HEADER')
-        assert tags[-1] == (0, 'ENDSEC')
+        if tags[0] != (0, 'SECTION') or tags[1] != (2, 'HEADER') or tags[-1] != (0, 'ENDSEC'):
+            raise DXFStructureError("Header section: missing sections markers")
         if len(tags) == 3:  # empty header section!
             return
-        groups = TagGroups(tags[2:-1], splitcode=9)
+        groups = TagGroups(tags[2:-1], split_code=9)
         for group in groups:
-            name = group[0].value
-            if len(group) > 2:
-                value = tuple(group[1:])
-            else:
-                value = group[1]
-            var = _HeaderVar(value)
-            self[name] = var.get_point() if var.ispoint else var.value
-
-
-class _HeaderVar:
-    def __init__(self, tag):
-        self.tag = tag
-
-    @property
-    def code(self):
-        return self.tag[0]
-
-    @property
-    def value(self):
-        return self.tag[1]
-
-    @property
-    def ispoint(self):
-        return isinstance(self.tag[0], tuple)
-
-    def get_point(self):
-        if self.ispoint:
-            return tuple([tag[1] for tag in self.tag])
-        else:
-            raise ValueError
+            self[group[0].value] = group[1].value

@@ -15,7 +15,7 @@ class DrawingProxy:
 
 class TestDXF12Style(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(DXF12STYLES)
+        tags = Tags.from_text(DXF12STYLES)
         self.styles = StyleTable.from_tags(tags, DrawingProxy("AC1009"))
 
     def test_get_existing_style(self):
@@ -45,7 +45,7 @@ class TestDXF12Style(unittest.TestCase):
 
 class TestDXF13Style(TestDXF12Style):
     def setUp(self):
-        tags = Tags.fromtext(DXF13STYLES)
+        tags = Tags.from_text(DXF13STYLES)
         self.styles = StyleTable.from_tags(tags, DrawingProxy("AC1024"))
 
 DXF13STYLES = """  0

@@ -5,28 +5,23 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import DXFStructureError
-
 
 class DXFNamespace(object):
-    """ Provides the dxf namespace for GenericWrapper.
-
+    """ Provides the dxf namespace for DXFEntity.
     """
-    __slots__ = ('wrapper', )
-
     def __init__(self, wrapper):
         self.wrapper = wrapper
 
     def get(self, key, default=ValueError):
         """
-        GenericWrapper.dxf.get('DXF_ATTRIBUTE_NAME') - raises ValueError, if not exists
-        GenericWrapper.dxf.get('DXF_ATTRIBUTE_NAME', defaultvalue)
+        DXFEntity.dxf.get('DXF_ATTRIBUTE_NAME') - raises ValueError, if not exists
+        DXFEntity.dxf.get('DXF_ATTRIBUTE_NAME', defaultvalue)
 
         """
         return self.wrapper.get_dxf_attrib(key, default)
 
     def __getattr__(self, key):
-        """ GenericWrapper.dxf.DXF_ATTRIBUTE_NAME """
+        """ DXFEntity.dxf.DXF_ATTRIBUTE_NAME """
         return self.wrapper.get_dxf_attrib(key)
 
 
@@ -66,7 +61,7 @@ class DXFEntity(object):
         if dxfattr.xtype is not None:
             return self._get_extented_type(subclass_tags, dxfattr.code, dxfattr.xtype)
         else:
-            return subclass_tags.getvalue(dxfattr.code)
+            return subclass_tags.get_value(dxfattr.code)
 
     def paperspace(self):
         return self.dxf.get('paperspace', 0) == 1
@@ -76,22 +71,13 @@ class DXFEntity(object):
 
     @staticmethod
     def _get_extented_type(tags, code, xtype):
-        def get_point():
-            index = tags.tagindex(code)
-            return tags[index].value
-
-        if xtype == 'Point3D':
-            value = get_point()
-            if len(value) == 2:
-                raise DXFStructureError("expected 3D point but found 2D point")
-            return value
+        index = tags.tag_index(code)
+        value = tags[index].value
+        length = len(value)
+        if length == 2:
+            if xtype == 'Point3D':
+                return value[0], value[1], 0.
         elif xtype == 'Point2D':
-            value = get_point()
-            if len(value) == 3:
-                raise DXFStructureError("expected 2D point but found 3D point")
-            return value
-        elif xtype == 'Point2D/3D':
-            return get_point()
-        else:
-            raise TypeError('Unknown extended type: %s' % xtype)
+            return value[0], value[1]
+        return value
 

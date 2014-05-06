@@ -47,7 +47,7 @@ class TestAcDsDataSection(unittest.TestCase):
         self.assertTrue(handle in section.sab_data)
         self.assertEqual(1088, len(section.sab_data[handle]))
 
-ACDSSECTION = Tags.fromtext("""  0
+ACDSSECTION = Tags.from_text("""  0
 SECTION
   2
 ACDSDATA

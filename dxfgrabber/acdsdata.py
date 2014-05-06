@@ -80,7 +80,7 @@ class AcDsDataRecord(object):
         start_index = 2
         while tags[start_index].code != 2:
             start_index += 1
-        self.sections = [Section(tags) for tags in TagGroups(islice(tags, start_index, None), splitcode=2)]
+        self.sections = [Section(tags) for tags in TagGroups(islice(tags, start_index, None), split_code=2)]
 
     def has_section(self, name):
         return self.get_section(name, default=None) is not None

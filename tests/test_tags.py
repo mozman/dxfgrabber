@@ -74,18 +74,18 @@ class TestTagReader(unittest.TestCase):
 
     def test_undo_last(self):
         self.reader.__next__()
-        self.reader.undotag()
+        self.reader.undo_tag()
         self.assertEqual((0, 'SECTION'), next(self.reader))
 
     def test_error_on_multiple_undo_last(self):
         next(self.reader)
-        self.reader.undotag()
+        self.reader.undo_tag()
         with self.assertRaises(ValueError):
-            self.reader.undotag()
+            self.reader.undo_tag()
 
     def test_error_undo_last_before_first_read(self):
         with self.assertRaises(ValueError):
-            self.reader.undotag()
+            self.reader.undo_tag()
 
     def test_lineno(self):
         next(self.reader)
@@ -93,12 +93,12 @@ class TestTagReader(unittest.TestCase):
 
     def test_lineno_with_undo(self):
         next(self.reader)
-        self.reader.undotag()
+        self.reader.undo_tag()
         self.assertEqual(0, self.reader.lineno)
 
     def test_lineno_with_undo_next(self):
         next(self.reader)
-        self.reader.undotag()
+        self.reader.undo_tag()
         next(self.reader)
         self.assertEqual(2, self.reader.lineno)
 
@@ -109,7 +109,7 @@ class TestTagReader(unittest.TestCase):
     def test_undo_eof(self):
         for tag in self.reader:
             if tag == (0, 'EOF'):
-                self.reader.undotag()
+                self.reader.undo_tag()
                 break
         tag = next(self.reader)
         self.assertEqual((0, 'EOF'), tag)
@@ -181,41 +181,26 @@ check mark 2
 
 class TestTags(unittest.TestCase):
     def setUp(self):
-        self.tags = Tags.fromtext(TEST_TAGREADER)
+        self.tags = Tags.from_text(TEST_TAGREADER)
 
     def test_from_text(self):
         self.assertEqual(8, len(self.tags))
 
-    def test_write(self):
-        stream = StringIO()
-        self.tags.write(stream)
-        result = stream.getvalue()
-        stream.close()
-        self.assertEqual(TEST_TAGREADER, result)
-
-    def test_update(self):
-        self.tags.update(2, 'XHEADER')
-        self.assertEqual('XHEADER', self.tags[1].value)
-
-    def test_update_error(self):
-        with self.assertRaises(ValueError):
-            self.tags.update(999, 'DOESNOTEXIST')
-
     def test_findall(self):
-        tags = Tags.fromtext(TESTFINDALL)
-        self.assertEqual(3, len(tags.findall(0)))
+        tags = Tags.from_text(TESTFINDALL)
+        self.assertEqual(3, len(tags.find_all(0)))
 
     def test_tagindex(self):
-        tags = Tags.fromtext(TESTFINDALL)
-        index = tags.tagindex(0)
+        tags = Tags.from_text(TESTFINDALL)
+        index = tags.tag_index(0)
         self.assertEqual(0, index)
-        index = tags.tagindex(0, index+1)
+        index = tags.tag_index(0, index+1)
         self.assertEqual(1, index)
 
     def test_findfirst_value_error(self):
-        tags = Tags.fromtext(TESTFINDALL)
+        tags = Tags.from_text(TESTFINDALL)
         with self.assertRaises(ValueError):
-            tags.tagindex(1)
+            tags.tag_index(1)
 
     def test_read_2D_points(self):
         stri = StringIterator(POINT_2D_TAGS)

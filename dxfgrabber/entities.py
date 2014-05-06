@@ -490,25 +490,25 @@ class Mesh(Shape):
         # for all blocks I ignore the count values, perhaps they are wrong,
         # but I use the count tags as indicator for the begin of the list
         try:
-            pos = subdmesh_tags.tagindex(92)
+            pos = subdmesh_tags.tag_index(92)
         except ValueError:  # no vertices???
             return
         else:
             self.vertices = Mesh.get_vertices(subdmesh_tags, pos+1)
         try:
-            pos = subdmesh_tags.tagindex(93)
+            pos = subdmesh_tags.tag_index(93)
         except ValueError:  # no faces???
             pass
         else:
             self.faces = Mesh.get_faces(subdmesh_tags, pos+1)
         try:
-            pos = subdmesh_tags.tagindex(94)
+            pos = subdmesh_tags.tag_index(94)
         except ValueError:  # no edges
             pass
         else:
             self.edges = Mesh.get_edges(subdmesh_tags, pos+1)
         try:
-            pos = subdmesh_tags.tagindex(95)
+            pos = subdmesh_tags.tag_index(95)
         except ValueError:  # no edges crease values
             pass
         else:

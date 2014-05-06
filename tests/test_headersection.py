@@ -9,7 +9,7 @@ from dxfgrabber.headersection import HeaderSection
 
 class TestHeaderSection(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(TESTHEADER)
+        tags = Tags.from_text(TESTHEADER)
         self.header = HeaderSection.from_tags(tags)
 
     def test_get_acadver(self):
@@ -27,6 +27,10 @@ class TestHeaderSection(unittest.TestCase):
     def test_get(self):
         result = self.header.get('$TEST', 'TEST')
         self.assertEqual('TEST', result)
+
+    def test_get(self):
+        result = self.header.get('$INSBASE', (0, 0, 0))
+        self.assertEqual((0, 0, 0), result)
 
     def test_contains(self):
         self.assertTrue('$ACADVER' in self.header)

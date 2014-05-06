@@ -7,7 +7,11 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from collections import namedtuple
 
-DXFAttr = namedtuple('DXFAttr', 'code xtype')
+
+def DXFAttr(code, xtype=None):
+    return _DXFAttr(code, xtype)
+
+_DXFAttr = namedtuple('DXFAttr', 'code xtype')
 DXFAttr3 = namedtuple('DXFAttr3', 'code xtype subclass')
 DefSubclass = namedtuple('DefSubclass', 'name attribs')
 

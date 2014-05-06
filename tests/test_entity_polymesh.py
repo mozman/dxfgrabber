@@ -13,7 +13,7 @@ class DrawingProxy:
 
 class TestPolymeshDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(POLYMESH_DXF12)
+        tags = Tags.from_text(POLYMESH_DXF12)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_entitysection(self):
@@ -43,7 +43,7 @@ class TestPolymeshDXF12(unittest.TestCase):
 
 class TestPolymeshDXF13(TestPolymeshDXF12):
     def setUp(self):
-        tags = Tags.fromtext(POLYMESH_DXF13)
+        tags = Tags.from_text(POLYMESH_DXF13)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
 
 

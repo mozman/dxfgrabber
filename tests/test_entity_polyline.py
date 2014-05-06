@@ -15,7 +15,7 @@ class DrawingProxy:
 
 class TestPolylineDXF12(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(POLYLINE_DXF12)
+        tags = Tags.from_text(POLYLINE_DXF12)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
 
     def test_polyline(self):
@@ -38,7 +38,7 @@ class TestPolylineDXF12(unittest.TestCase):
 
 class TestPolylineDXF13(unittest.TestCase):
     def setUp(self):
-        tags = Tags.fromtext(POLYLINE_DXF13)
+        tags = Tags.from_text(POLYLINE_DXF13)
         self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1024'))
 
 POLYLINE_DXF13 = """  0

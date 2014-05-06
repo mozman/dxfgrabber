@@ -34,55 +34,6 @@ def is_point_tag(tag):
     return is_point_code(tag[0])
 
 
-class OldTagIterator(object):
-    def __init__(self, textfile):
-        self.textfile = textfile
-        self.lineno = 0
-        self.undo = False
-        self.lasttag = NONE_TAG
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        def undo_tag():
-            self.undo = False
-            self.lineno += 2
-            return self.lasttag
-
-        def next_tag():
-            code = 999
-            while code == 999:  # skip comments
-                try:
-                    code = int(self.readline())
-                    value = self.readline().rstrip('\n')
-                except UnicodeDecodeError:
-                    raise  # because UnicodeDecodeError() is a subclass of ValueError()
-                except (EOFError, ValueError):
-                    raise StopIteration()
-
-            self.lasttag = cast_tag((code, value))
-            return self.lasttag
-
-        if self.undo:
-            return undo_tag()
-        else:
-            return next_tag()
-    # for Python 2.7
-    next = __next__
-
-    def readline(self):
-        self.lineno += 1
-        return self.textfile.readline()
-
-    def undotag(self):
-        if not self.undo and self.lineno > 0:
-            self.undo = True
-            self.lineno -= 2
-        else:
-            raise(ValueError('No tag to undo'))
-
-
 class TagIterator(object):
     def __init__(self, textfile):
         self.textfile = textfile
@@ -168,7 +119,7 @@ class TagIterator(object):
         self.lineno += 1
         return self.textfile.readline()
 
-    def undotag(self):
+    def undo_tag(self):
         if not self.undo and self.lineno > 0:
             self.undo = True
             self.lineno -= 2
@@ -294,15 +245,11 @@ cast_tag_value = _TagCaster.castvalue
 
 class Tags(list):
     """ DXFTag() chunk as flat list. """
-    def write(self, stream):
-        for tag in self:
-            stream.write(strtag(tag))
-
-    def findall(self, code):
+    def find_all(self, code):
         """ Returns a list of DXFTag(code, ...). """
         return [tag for tag in self if tag.code == code]
 
-    def tagindex(self, code, start=0, end=None):
+    def tag_index(self, code, start=0, end=None):
         """ Return first index of DXFTag(code, ...). """
         if end is None:
             end = len(self)
@@ -311,17 +258,12 @@ class Tags(list):
                 return index
         raise ValueError(code)
 
-    def update(self, code, value):
-        """ Update first existing tag, raises ValueError if tag not exists. """
-        index = self.tagindex(code)
-        self[index] = DXFTag(code, value)
-
-    def getvalue(self, code):
-        index = self.tagindex(code)
+    def get_value(self, code):
+        index = self.tag_index(code)
         return self[index].value
 
     @staticmethod
-    def fromtext(text):
+    def from_text(text):
         return Tags(StringIterator(text))
 
     def get_type(self):
@@ -335,9 +277,9 @@ class TagGroups(list):
     A SplitTag is a tag with code == splitcode, like (0, 'SECTION') for splitcode=0.
 
     """
-    def __init__(self, tags, splitcode=0):
+    def __init__(self, tags, split_code=0):
         super(TagGroups, self).__init__()
-        self._buildgroups(tags, splitcode)
+        self._buildgroups(tags, split_code)
 
     def _buildgroups(self, tags, split_code):
         def push_group():
@@ -365,8 +307,8 @@ class TagGroups(list):
         return self[index][0].value
 
     @staticmethod
-    def fromtext(text, splitcode=0):
-        return TagGroups(Tags.fromtext(text), splitcode)
+    def fromtext(text, split_code=0):
+        return TagGroups(Tags.from_text(text), split_code)
 
 
 def binary_encoded_data_to_bytes(data):
