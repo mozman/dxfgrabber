@@ -25,12 +25,19 @@ entity_subclass = DefSubclass('AcDbEntity', {
     'ltscale': DXFAttr(48),  # linetype scale, default is 1.0
     'invisible': DXFAttr(60),  # invisible .. 1, visible .. 0, default is 0
     'color': DXFAttr(62),  # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
+    'true_color': DXFAttr(420),  # true color as 0x00RRGGBB 24-bit value (since AC1018)
+    'transparency': DXFAttr(440),  # transparency value 0x020000TT (since AC1018) 0 = fully transparent / 255 = opaque
+    'shadow_mode': DXFAttr(284),  # shadow_mode (since AC1021)
+    # 0 = Casts and receives shadows
+    # 1 = Casts shadows
+    # 2 = Receives shadows
+    # 3 = Ignores shadows
 })
 
 line_subclass = DefSubclass('AcDbLine', {
     'start': DXFAttr(10, 'Point2D/3D'),
     'end': DXFAttr(11, 'Point2D/3D'),
-    'thickness': DXFAttr(39, None),
+    'thickness': DXFAttr(39),
     'extrusion': DXFAttr(210, 'Point3D'),
 })
 
@@ -165,7 +172,7 @@ vertex_subclass = (
     })
 )
 
-EMPTY_SUBCLSS = Tags()
+EMPTY_SUBCLASS = Tags()
 
 
 class Vertex(dxf12.Vertex):
@@ -174,7 +181,7 @@ class Vertex(dxf12.Vertex):
 
     def post_read_correction(self):
         if self.tags.subclasses[2][0].value != 'AcDbVertex':
-            self.tags.subclasses.insert(2, EMPTY_SUBCLSS)  # create empty AcDbVertex subclass
+            self.tags.subclasses.insert(2, EMPTY_SUBCLASS)  # create empty AcDbVertex subclass
 
 
 class SeqEnd(dxf12.SeqEnd):

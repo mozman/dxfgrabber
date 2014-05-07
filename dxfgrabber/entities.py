@@ -13,6 +13,11 @@ from datetime import datetime
 import math
 
 
+class TrueColor(int):
+    def rgb(self):
+        return (self >> 16) & 0xFF, (self >> 8) & 0xFF, self & 0xFF
+
+
 class SeqEnd(object):
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
@@ -34,6 +39,19 @@ class Shape(Entity):
         self.ltscale = get_dxf('ltscale', 1.0)
         self.invisible = get_dxf('invisible', 0)  # 0=visible
         self.color = get_dxf('color', const.BYLAYER)  # 256=BYLAYER, 0=BYBLOCK
+        self.true_color = get_dxf('true_color', None)  # 0x00RRGGBB
+        if self.true_color is not None:
+            self.true_color = TrueColor(self.true_color)
+        self.transparency = get_dxf('transparency', None)  # 0x020000TT
+        if self.transparency is not None:
+            # 0.0 = opaque & 1.0 if fully transparent
+            self.transparency = 1. - float(self.transparency & 0xFF) / 255.
+        self.shadow_mode = get_dxf('shadow_mode', None)
+        # 0 = Casts and receives shadows
+        # 1 = Casts shadows
+        # 2 = Receives shadows
+        # 3 = Ignores shadows
+
         # if adding additional DXF attributes, do it also for PolyShape
 
 
@@ -48,6 +66,9 @@ class PolyShape(object):
         self.ltscale = polyline.ltscale
         self.invisible = polyline.invisible
         self.color = polyline.color
+        self.true_color = polyline.true_color
+        self.transparency = polyline.transparency
+        self.shadow_mode = polyline.shadow_mode
 
 
 class Line(Shape):

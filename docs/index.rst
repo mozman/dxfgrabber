@@ -346,6 +346,32 @@ Base Class Shape
     Entity color as *int*, where 256 means color by layer and 0 means color by
     block.
 
+.. attribute:: Shape.true_color
+
+    Entity color as 0x00RRGGBB 24-bit integer value, return a :class:`TrueColor`. Value is *None* if not set.
+
+.. attribute:: Shape.transparency
+
+    Entity transparency as float from 0.0 to 1.0, 0.0 is opaque and 1.0 is 100% transparent. Value is *None* if not set.
+
+.. attribute:: Shape.shadow_mode
+
+===== ===========
+Value Description
+===== ===========
+0     Casts and receives shadows
+1     Casts shadows
+2     Receives shadows
+3     Ignores shadows
+None  if not set
+===== ===========
+
+.. class:: TrueColor(int)
+
+.. method:: TrueColor.rgb()
+
+   Returns a tuple (red, green, blue) each value in range 0 to 255. (255, 255, 255) = white.
+
 Block
 -----
 

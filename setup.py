@@ -7,10 +7,20 @@
 
 import os
 from distutils.core import setup
+from distutils.extension import Extension
 
 VERSION = "0.7.2"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
+
+try:
+    from Cython.Distutils import build_ext
+    ext_modules = [Extension("dxfgrabber.ctags", ["dxfgrabber/ctags.pyx"]),
+                   ]
+    commands = {'build_ext': build_ext}
+except ImportError:
+    ext_modules = []
+    commands = {}
 
 
 def read(fname):
@@ -30,6 +40,8 @@ setup(name='dxfgrabber',
       packages=['dxfgrabber'],
       provides=['dxfgrabber'],
       keywords=['DXF', 'CAD'],
+      cmdclass=commands,
+      ext_modules=ext_modules,
       long_description=read('README.txt') + read('NEWS.txt'),
       platforms="OS Independent",
       license="MIT License",

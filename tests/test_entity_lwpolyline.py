@@ -7,6 +7,7 @@ import unittest
 from dxfgrabber.classifiedtags import ClassifiedTags
 from dxfgrabber.entities import entity_factory
 
+
 class TestLWPolyline(unittest.TestCase):
     def setUp(self):
         tags = ClassifiedTags.from_text(LWPOLYLINE)
@@ -30,6 +31,7 @@ class TestLWPolyline(unittest.TestCase):
     def test_lwpolyline_last_point(self):
         polyline = self.entity
         self.assertEqual(polyline.points[-1], (4.16, 0.29, 0, 0, 0))
+
 
 LWPOLYLINE = """  0
 LWPOLYLINE
