@@ -18,7 +18,7 @@ class ClassifiedTags:
     def __init__(self, iterable=None):
         self.appdata = list()  # code == 102, keys are "{<arbitrary name>", values are Tags()
         self.subclasses = list()  # code == 100, keys are "subclassname", values are Tags()
-        self.subclasses_d = dict()
+        self.subclasses_dict = dict()
         self.xdata = list()  # code >= 1000, keys are "APPNAME", values are Tags()
         if iterable is not None:
             self._setup(iterable)
@@ -46,14 +46,14 @@ class ClassifiedTags:
                         data.append(DXFTag(tag.code, appdatapos))
                         collect_appdata(tag)
                     elif tag.code in (SUBCLASS_MARKER, XDATA_MARKER):
-                        self.subclasses_d[None if start_tag is None else start_tag.value] = data
+                        self.subclasses_dict[None if start_tag is None else start_tag.value] = data
                         self.subclasses.append(data)
                         return tag
                     else:
                         data.append(tag)
             except StopIteration:
                 pass
-            self.subclasses_d[None if start_tag is None else start_tag.value] = data
+            self.subclasses_dict[None if start_tag is None else start_tag.value] = data
             self.subclasses.append(data)
             return NONE_TAG
 
@@ -111,7 +111,7 @@ class ClassifiedTags:
                 yield tag
 
     def get_subclass(self, name):
-        return self.subclasses_d[name]
+        return self.subclasses_dict[name]
 
     def get_xdata(self, appid):
         for xdata in self.xdata:

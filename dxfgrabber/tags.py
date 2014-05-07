@@ -15,9 +15,6 @@ from . import tostr
 from array import array
 
 DXFTag = namedtuple('DXFTag', 'code value')
-APP_DATA_CODE = 102
-XDATA_CODE = 1000
-END_OF_GROUP_TAG = DXFTag(102, '}')
 NONE_TAG = DXFTag(999999, 'NONE')
 
 
