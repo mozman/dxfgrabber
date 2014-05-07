@@ -172,18 +172,18 @@ class TagCaster:
         return table
 
     def cast(self, tag):
-        typecaster = self._cast.get(tag[0], tostr)
+        code, value = tag
+        typecaster = self._cast.get(code, tostr)
         try:
-            value = typecaster(tag[1])
+            value = typecaster(value)
         except ValueError:
             if typecaster is int:  # convert float to int
-                return int(float(tag[1]))
+                value = int(float(value))
             else:
                 raise
+        return DXFTag(code, value)
 
-        return DXFTag(tag[0], typecaster(tag[1]))
-
-    def castvalue(self, code, value):
+    def cast_value(self, code, value):
         typecaster = self._cast.get(code, tostr)
         try:
             return typecaster(value)
@@ -225,7 +225,7 @@ TYPES = [
 
 _TagCaster = TagCaster()
 cast_tag = _TagCaster.cast
-cast_tag_value = _TagCaster.castvalue
+cast_tag_value = _TagCaster.cast_value
 
 
 class Tags(list):
