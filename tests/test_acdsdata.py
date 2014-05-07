@@ -23,23 +23,7 @@ class TestAcDsDataSection(unittest.TestCase):
     def test_build(self):
         section = AcDsDataSection.from_tags(ACDSSECTION, DrawingProxy('AC1027'))
         self.assertEqual('ACDSDATA', section.name.upper())
-        self.assertTrue(len(section.entities) > 0)
-
-    def test_acdsrecord(self):
-        section = AcDsDataSection.from_tags(ACDSSECTION, DrawingProxy('AC1027'))
-        records = [entity for entity in section.entities if entity.dxftype == 'ACDSRECORD']
-        self.assertTrue(len(records) > 0)
-        record = records[0]
-        self.assertTrue(record.has_section('ASM_Data'))
-        self.assertTrue(record.has_section('AcDbDs::ID'))
-        self.assertFalse(record.has_section('mozman'))
-        with self.assertRaises(KeyError):
-            asm_data = record['mozman']
-
-        asm_data = record['ASM_Data']
-        binary_data = (tag for tag in asm_data if tag.code == 310)
-        length = sum(len(tag.value) for tag in binary_data) / 2
-        self.assertEqual(asm_data[2].value, length)
+        self.assertTrue(len(section.sab_data) > 0)
 
     def test_asm_database(self):
         section = AcDsDataSection.from_tags(ACDSSECTION, DrawingProxy('AC1027'))

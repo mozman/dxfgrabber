@@ -14,7 +14,6 @@ class AcDsDataSection(object):
     name = 'acdsdata'
 
     def __init__(self):
-        self.entities = []  # stores AcDsData objects
         # Standard_ACIS_Binary (SAB) data store, key = handle of DXF Entity in the ENTITIES section: BODY, 3DSOLID
         # SURFACE, PLANESURFACE, REGION
         self.sab_data = {}
@@ -25,29 +24,20 @@ class AcDsDataSection(object):
         data_section._build(tags, drawing.dxfversion)
         return data_section
 
-    def __iter__(self):
-        return iter(self.entities)
-
     def _build(self, tags, dxfversion):
-        if tags[0] != (0, 'SECTION') or tags[1] != (2, self.name.upper()) or tags[-1] != (0, 'ENDSEC'):
-            raise DXFStructureError("Critical structure error in {} section.".format(self.name.upper()))
-
         if len(tags) == 3:  # empty entities section
             return
 
-        start_index = 2
-        while tags[start_index].code != 0:
-            start_index += 1
-
-        for group in TagGroups(islice(tags, start_index, len(tags)-1)):
+        for group in TagGroups(islice(tags, 2, len(tags)-1)):
             data_record = AcDsDataRecord(Tags(group))
-            self.entities.append(data_record)  # tags have no subclasses
             if data_record.dxftype == 'ACDSRECORD':
                 asm_data = data_record.get_section('ASM_Data', None)
                 if asm_data is not None:
                     self.add_asm_data(data_record)
 
     def add_asm_data(self, acdsrecord):
+        """ Store SAB data as binary string in the sab_data dict, with handle to owner Entity as key.
+        """
         try:
             asm_data = acdsrecord.get_section('ASM_Data')
             entity_id = acdsrecord.get_section('AcDbDs::ID')

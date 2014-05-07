@@ -26,8 +26,6 @@ class HeaderSection(dict):
         self['$DWGCODEPAGE'] = 'ANSI_1252'
 
     def _build(self, tags):
-        if tags[0] != (0, 'SECTION') or tags[1] != (2, 'HEADER') or tags[-1] != (0, 'ENDSEC'):
-            raise DXFStructureError("Header section: missing sections markers")
         if len(tags) == 3:  # empty header section!
             return
         groups = TagGroups(tags[2:-1], split_code=9)

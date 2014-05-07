@@ -51,8 +51,8 @@ class Table(object):
 
     def _classified_tags(self, tags):
         groups = TagGroups(tags)
-        assert groups.getname(0) == 'TABLE'
-        assert groups.getname(-1) == 'ENDTAB'
+        assert groups.get_name(0) == 'TABLE'
+        assert groups.get_name(-1) == 'ENDTAB'
         for entrytags in groups[1:-1]:
             yield ClassifiedTags(entrytags)
 

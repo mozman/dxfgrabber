@@ -25,13 +25,8 @@ class BlocksSection(object):
         return blocks_section
 
     def _build(self, tags, dxfversion):
-        assert tags[0] == (0, 'SECTION')
-        assert tags[1] == (2, 'BLOCKS')
-        assert tags[-1] == (0, 'ENDSEC')
-
-        if len(tags) == 3: # empty block section
+        if len(tags) == 3:  # empty block section
             return
-
         groups = list()
         for group in TagGroups(islice(tags, 2, len(tags)-1)):
             groups.append(group)

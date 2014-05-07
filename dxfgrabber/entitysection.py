@@ -41,8 +41,6 @@ class EntitySection(object):
     # end of public interface
 
     def _build(self, tags, dxfversion):
-        if tags[0] != (0, 'SECTION') or tags[1] != (2, self.name.upper()) or tags[-1] != (0, 'ENDSEC'):
-            raise DXFStructureError("Entities section: missing sections markers")
         if len(tags) == 3:  # empty entities section
             return
         groups = TagGroups(islice(tags, 2, len(tags)-1))

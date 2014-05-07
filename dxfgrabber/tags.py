@@ -302,11 +302,11 @@ class TagGroups(list):
                 group.append(tag)
         push_group()
 
-    def getname(self, index):
+    def get_name(self, index):
         return self[index][0].value
 
     @staticmethod
-    def fromtext(text, split_code=0):
+    def from_text(text, split_code=0):
         return TagGroups(Tags.from_text(text), split_code)
 
 
