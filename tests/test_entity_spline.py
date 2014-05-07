@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestSpline(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(SPLINE)
+        tags = ClassifiedTags.from_text(SPLINE)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_spline_properties(self):

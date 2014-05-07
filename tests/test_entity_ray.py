@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestRay(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(RAY)
+        tags = ClassifiedTags.from_text(RAY)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_ray_properties(self):

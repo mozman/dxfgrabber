@@ -150,7 +150,7 @@ class Polyline(DXFEntity):
 
     @property
     def flags(self):
-        return self.dxf.get('flags', 0)
+        return self.get_dxf_attrib('flags', 0)
 
     def get_mode(self):
         flags = self.flags

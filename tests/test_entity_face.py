@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestFaceDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(FACE_DXF12)
+        tags = ClassifiedTags.from_text(FACE_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_face_data(self):
@@ -26,7 +26,7 @@ class TestFaceDXF12(unittest.TestCase):
 
 class TestFaceDXF13(TestFaceDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(FACE_DXF13)
+        tags = ClassifiedTags.from_text(FACE_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 FACE_DXF12 = """  0

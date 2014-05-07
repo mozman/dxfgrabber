@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestEllipse(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(ELLIPSE)
+        tags = ClassifiedTags.from_text(ELLIPSE)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_ellipse_data(self):

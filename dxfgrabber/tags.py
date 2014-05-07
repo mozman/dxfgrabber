@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 from io import StringIO
 from collections import namedtuple
-from itertools import chain
+from itertools import chain, islice
 import sys
 from .codepage import toencoding
 from .const import acadrelease
@@ -15,6 +15,9 @@ from . import tostr
 from array import array
 
 DXFTag = namedtuple('DXFTag', 'code value')
+APP_DATA_CODE = 102
+XDATA_CODE = 1000
+END_OF_GROUP_TAG = DXFTag(102, '}')
 NONE_TAG = DXFTag(999999, 'NONE')
 
 
@@ -36,7 +39,7 @@ def is_point_tag(tag):
 class TagIterator(object):
     def __init__(self, textfile):
         self.textfile = textfile
-        self.lineno = 0
+        self.readline = textfile.readline
         self.undo = False
         self.last_tag = NONE_TAG
         self.undo_coord = None
@@ -49,10 +52,6 @@ class TagIterator(object):
         def undo_tag():
             self.undo = False
             tag = self.last_tag
-            if tag.code in POINT_CODES:
-                self.lineno += 2 * len(tag.value)
-            else:
-                self.lineno += 2
             return tag
 
         def read_next_tag():
@@ -82,7 +81,6 @@ class TagIterator(object):
             else:
                 if code_z != code_x + 20:  # not a Z coordinate -> 2D point
                     self.undo_coord = (code_z, value_z)
-                    self.lineno -= 2
                     value = (value_x, value_y)
                 else:  # is a 3D point
                     value = (value_x, value_y, value_z)
@@ -93,7 +91,6 @@ class TagIterator(object):
             while code == 999:  # skip comments
                 if self.undo_coord is not None:
                     code, value = self.undo_coord
-                    self.lineno += 2
                     self.undo_coord = None
                 else:
                     code, value = read_next_tag()
@@ -114,14 +111,9 @@ class TagIterator(object):
     # for Python 2.7
     next = __next__
 
-    def readline(self):
-        self.lineno += 1
-        return self.textfile.readline()
-
     def undo_tag(self):
-        if not self.undo and self.lineno > 0:
+        if not self.undo:
             self.undo = True
-            self.lineno -= 2
         else:
             raise ValueError('No tag to undo')
 
@@ -166,12 +158,6 @@ def dxfinfo(stream):
         if method is not None:
             method(next(tagreader).value)
     return info
-
-TAG_STRING_FORMAT = '%3d\n%s\n'
-
-
-def strtag(tag):
-    return TAG_STRING_FORMAT % tag
 
 
 class TagCaster:
@@ -252,14 +238,16 @@ class Tags(list):
         """ Return first index of DXFTag(code, ...). """
         if end is None:
             end = len(self)
-        for index in range(start, end):
-            if self[index].code == code:
-                return index
+        for index, tag in enumerate(islice(self, start, end)):
+            if tag.code == code:
+                return start+index
         raise ValueError(code)
 
     def get_value(self, code):
-        index = self.tag_index(code)
-        return self[index].value
+        for tag in self:
+            if tag.code == code:
+                return tag.value
+        raise ValueError(code)
 
     @staticmethod
     def from_text(text):

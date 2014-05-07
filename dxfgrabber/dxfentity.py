@@ -6,31 +6,11 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 
-class DXFNamespace(object):
-    """ Provides the dxf namespace for DXFEntity.
-    """
-    def __init__(self, wrapper):
-        self.wrapper = wrapper
-
-    def get(self, key, default=ValueError):
-        """
-        DXFEntity.dxf.get('DXF_ATTRIBUTE_NAME') - raises ValueError, if not exists
-        DXFEntity.dxf.get('DXF_ATTRIBUTE_NAME', defaultvalue)
-
-        """
-        return self.wrapper.get_dxf_attrib(key, default)
-
-    def __getattr__(self, key):
-        """ DXFEntity.dxf.DXF_ATTRIBUTE_NAME """
-        return self.wrapper.get_dxf_attrib(key)
-
-
 class DXFEntity(object):
     DXFATTRIBS = {}
 
     def __init__(self, tags):
         self.tags = tags
-        self.dxf = DXFNamespace(self)
 
     def dxftype(self):
         return self.tags.noclass[0].value

@@ -11,7 +11,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestMesh(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(SOLID3D)
+        tags = ClassifiedTags.from_text(SOLID3D)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_acis(self):

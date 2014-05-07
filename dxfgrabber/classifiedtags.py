@@ -5,20 +5,20 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import Tags, StringIterator, DXFStructureError, DXFTag, strtag
+from .tags import Tags, StringIterator, DXFStructureError, DXFTag, NONE_TAG
 
 APP_DATA_MARKER = 102
 SUBCLASS_MARKER = 100
 XDATA_MARKER = 1001
 
-NoneTag = DXFTag(None, None)
 
 class ClassifiedTags:
     """ Manage Subclasses, AppData and Extended Data """
-    __slots__ = ('subclasses', 'appdata', 'xdata')
+
     def __init__(self, iterable=None):
         self.appdata = list()  # code == 102, keys are "{<arbitrary name>", values are Tags()
         self.subclasses = list()  # code == 100, keys are "subclassname", values are Tags()
+        self.subclasses_d = dict()
         self.xdata = list()  # code >= 1000, keys are "APPNAME", values are Tags()
         if iterable is not None:
             self._setup(iterable)
@@ -33,11 +33,11 @@ class ClassifiedTags:
         def isappdata(tag):
             return tag.code == APP_DATA_MARKER and tag.value.startswith('{')
 
-        def collect_subclass(starttag):
+        def collect_subclass(start_tag):
             """ a subclass can contain appdata, but not xdata, ends with
             SUBCLASSMARKER or XDATACODE.
             """
-            data = Tags() if starttag is None else Tags([starttag])
+            data = Tags() if start_tag is None else Tags([start_tag])
             try:
                 while True:
                     tag = next(tagstream)
@@ -46,17 +46,19 @@ class ClassifiedTags:
                         data.append(DXFTag(tag.code, appdatapos))
                         collect_appdata(tag)
                     elif tag.code in (SUBCLASS_MARKER, XDATA_MARKER):
+                        self.subclasses_d[None if start_tag is None else start_tag.value] = data
                         self.subclasses.append(data)
                         return tag
                     else:
                         data.append(tag)
             except StopIteration:
                 pass
+            self.subclasses_d[None if start_tag is None else start_tag.value] = data
             self.subclasses.append(data)
-            return NoneTag
+            return NONE_TAG
 
         def collect_appdata(starttag):
-            """ appdata, cannot contain xdata or subclasses """
+            """ appdata, can not contain xdata or subclasses """
             data = Tags([starttag])
             while True:
                 try:
@@ -84,15 +86,15 @@ class ClassifiedTags:
             except StopIteration:
                 pass
             self.xdata.append(data)
-            return NoneTag
+            return NONE_TAG
 
-        tag = collect_subclass(None) # preceding tags without a subclass
+        tag = collect_subclass(None)  # preceding tags without a subclass
         while tag.code == SUBCLASS_MARKER:
             tag = collect_subclass(tag)
         while tag.code == XDATA_MARKER:
             tag = collect_xdata(tag)
 
-        if tag is not NoneTag:
+        if tag is not NONE_TAG:
             raise DXFStructureError("Unexpected tag '%r' at end of entity." % tag)
 
     def __iter__(self):
@@ -108,13 +110,8 @@ class ClassifiedTags:
             for tag in xdata:
                 yield tag
 
-    def get_subclass(self, name, pos=0):
-        getpos = 0
-        for subclass in self.subclasses:
-            if len(subclass) and subclass[0].value == name and getpos >= pos:
-                return subclass
-            getpos += 1
-        raise KeyError("Subclass '%s' does not exist." % name)
+    def get_subclass(self, name):
+        return self.subclasses_d[name]
 
     def get_xdata(self, appid):
         for xdata in self.xdata:
@@ -128,16 +125,9 @@ class ClassifiedTags:
                 return appdata
         raise ValueError("Application defined group '%s' does not exist." % name)
 
-    def write(self, stream):
-        for tag in self:
-            stream.write(strtag(tag))
-
     def get_type(self):
         return self.noclass[0].value
 
-    def gethandle(self):
-        return self.noclass.gethandle()
-
     @staticmethod
-    def fromtext(text):
+    def from_text(text):
         return ClassifiedTags(StringIterator(text))

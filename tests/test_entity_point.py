@@ -10,7 +10,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestPointDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(POINT_DXF12)
+        tags = ClassifiedTags.from_text(POINT_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_point_data(self):
@@ -25,7 +25,7 @@ class TestPointDXF12(unittest.TestCase):
 
 class TestPointDXF13(TestPointDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(POINT_DXF13)
+        tags = ClassifiedTags.from_text(POINT_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 

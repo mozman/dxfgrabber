@@ -53,14 +53,14 @@ class PolyShape(object):
 class Line(Shape):
     def __init__(self, wrapper):
         super(Line, self).__init__(wrapper)
-        self.start = wrapper.dxf.start
-        self.end = wrapper.dxf.end
+        self.start = wrapper.get_dxf_attrib('start')
+        self.end = wrapper.get_dxf_attrib('end')
 
 
 class Point(Shape):
     def __init__(self, wrapper):
         super(Point, self).__init__(wrapper)
-        self.point = wrapper.dxf.point
+        self.point = wrapper.get_dxf_attrib('point')
 
 
 class Circle(Shape):
@@ -320,8 +320,8 @@ class Ellipse(Shape):
 class Ray(Shape):
     def __init__(self, wrapper):
         super(Ray, self).__init__(wrapper)
-        self.start = wrapper.dxf.start
-        self.unitvector = wrapper.dxf.unitvector
+        self.start = wrapper.get_dxf_attrib('start')
+        self.unitvector = wrapper.get_dxf_attrib('unitvector')
 
 XLine = Ray
 
@@ -400,7 +400,7 @@ class MText(Shape):
     def __init__(self, wrapper):
 
         super(MText, self).__init__(wrapper)
-        self.insert = wrapper.dxf.insert
+        self.insert = wrapper.get_dxf_attrib('insert')
         self.rawtext = wrapper.rawtext()
         get_dxf = wrapper.get_dxf_attrib
         self.height = get_dxf('height', 1.0)
@@ -409,7 +409,7 @@ class MText(Shape):
         self.style = get_dxf('style', 'STANDARD')
         self.extrusion = get_dxf('extrusion', (0., 0., 1.))
         try:
-            xdir = wrapper.dxf.xdirection
+            xdir = wrapper.get_dxf_attrib('xdirection')
         except ValueError:
             xdir = deg2vec(get_dxf('rotation', 0.0))
         self.xdirection = normalized(xdir)
@@ -421,8 +421,8 @@ class MText(Shape):
 class Block(Shape):
     def __init__(self, wrapper):
         super(Block, self).__init__(wrapper)
-        self.basepoint = wrapper.dxf.basepoint
-        self.name = wrapper.dxf.name
+        self.basepoint = wrapper.get_dxf_attrib('basepoint')
+        self.name = wrapper.get_dxf_attrib('name')
         self.flags = wrapper.get_dxf_attrib('flags', 0)
         self.xrefpath = wrapper.get_dxf_attrib('xrefpath', "")
         self._entities = list()

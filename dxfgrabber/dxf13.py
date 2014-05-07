@@ -227,7 +227,7 @@ class LWPolyline(DXFEntity):
 
     @property
     def flags(self):
-        return self.dxf.get('flags', 0)
+        return self.get_dxf_attrib('flags', 0)
 
     def is_closed(self):
         return bool(self.flags & const.LWPOLYLINE_CLOSED)
@@ -424,7 +424,7 @@ class MText(DXFEntity):
     def rawtext(self):
         subclass = self.tags.subclasses[2]
         lines = [tag.value for tag in subclass.find_all(3)]
-        lines.append(self.dxf.text)
+        lines.append(self.get_dxf_attrib('text'))
         return ''.join(lines)
 
 block_subclass = (

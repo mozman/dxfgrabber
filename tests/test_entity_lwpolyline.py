@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestLWPolyline(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(LWPOLYLINE)
+        tags = ClassifiedTags.from_text(LWPOLYLINE)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_lwpolyline_properties(self):

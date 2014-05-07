@@ -11,7 +11,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestLineDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(LINE_DXF12)
+        tags = ClassifiedTags.from_text(LINE_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_lines_data(self):
@@ -28,7 +28,7 @@ class TestLineDXF12(unittest.TestCase):
 
 class TestLineDXF13(TestLineDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(LINE_DXF13)
+        tags = ClassifiedTags.from_text(LINE_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 

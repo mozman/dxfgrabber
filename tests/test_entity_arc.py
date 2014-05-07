@@ -10,7 +10,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestArcDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(ARC_DXF12)
+        tags = ClassifiedTags.from_text(ARC_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_arc_data(self):
@@ -28,7 +28,7 @@ class TestArcDXF12(unittest.TestCase):
 
 class TestArcDXF13(TestArcDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(ARC_DXF13)
+        tags = ClassifiedTags.from_text(ARC_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 ARC_DXF12 = """  0

@@ -11,7 +11,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestLight(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(LIGHT)
+        tags = ClassifiedTags.from_text(LIGHT)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_sun_properties(self):

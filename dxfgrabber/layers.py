@@ -14,9 +14,9 @@ from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
 class Layer(object):
     def __init__(self, wrapper):
-        self.name = wrapper.dxf.name
+        self.name = wrapper.get_dxf_attrib('name')
         self.color = wrapper.get_color()
-        self.linetype = wrapper.dxf.linetype
+        self.linetype = wrapper.get_dxf_attrib('linetype')
         self.locked = wrapper.is_locked()
         self.frozen = wrapper.is_frozen()
         self.on = wrapper.is_on()
@@ -66,7 +66,7 @@ class LayerTable(Table):
         layers = LayerTable()
         for entrytags in layers._classified_tags(tags):
             dxflayer = layers.wrap(entrytags, dxfversion)
-            layers._table_entries[dxflayer.dxf.name] = Layer(dxflayer)
+            layers._table_entries[dxflayer.get_dxf_attrib('name')] = Layer(dxflayer)
         return layers
 
     @staticmethod
@@ -76,37 +76,37 @@ class LayerTable(Table):
 
 class DXF12Layer(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {
-        'handle': DXFAttr(5, None),
-        'name': DXFAttr(2, None),
-        'flags': DXFAttr(70, None),
-        'color': DXFAttr(62,  None), # dxf color index, if < 0 layer is off
-        'linetype': DXFAttr(6, None),
+        'handle': DXFAttr(5),
+        'name': DXFAttr(2),
+        'flags': DXFAttr(70),
+        'color': DXFAttr(62),  # dxf color index, if < 0 layer is off
+        'linetype': DXFAttr(6),
         }))
     LOCK = 0b00000100
     FROZEN = 0b00000001
 
     def is_frozen(self):
-        return self.dxf.flags & DXF12Layer.FROZEN > 0
+        return self.get_dxf_attrib('flags') & DXF12Layer.FROZEN > 0
 
     def is_locked(self):
-        return self.dxf.flags & DXF12Layer.LOCK > 0
+        return self.get_dxf_attrib('flags') & DXF12Layer.LOCK > 0
 
     def is_off(self):
-        return self.dxf.color < 0
+        return self.get_dxf_attrib('color') < 0
 
     def is_on(self):
         return not self.is_off()
 
     def get_color(self):
-        return abs(self.dxf.color)
+        return abs(self.get_dxf_attrib('color'))
 
-none_subclass = DefSubclass(None, {'handle': DXFAttr(5, None)} )
+none_subclass = DefSubclass(None, {'handle': DXFAttr(5)})
 symbol_subclass = DefSubclass('AcDbSymbolTableRecord', {})
 layer_subclass = DefSubclass('AcDbLayerTableRecord', {
-    'name': DXFAttr(2, None), # layer name
-    'flags': DXFAttr(70, None),
-    'color': DXFAttr(62, None), # dxf color index
-    'linetype': DXFAttr(6, None), # linetype name
+    'name': DXFAttr(2),  # layer name
+    'flags': DXFAttr(70),
+    'color': DXFAttr(62),  # dxf color index
+    'linetype': DXFAttr(6),  # linetype name
 })
 
 

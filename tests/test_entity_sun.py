@@ -15,7 +15,7 @@ import os
 
 class TestSun(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(SUN)
+        tags = ClassifiedTags.from_text(SUN)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_sun_properties(self):

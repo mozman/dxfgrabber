@@ -11,7 +11,7 @@ from dxfgrabber.classifiedtags import ClassifiedTags
 
 class TestClassifiedTags(unittest.TestCase):
     def setUp(self):
-        self.xtags = ClassifiedTags.fromtext(XTAGS1)
+        self.xtags = ClassifiedTags.from_text(XTAGS1)
 
     def test_init_appdata(self):
         self.assertIsNotNone(self.xtags.get_appdata('{ACAD_XDICTIONARY'))
@@ -44,12 +44,6 @@ class TestClassifiedTags(unittest.TestCase):
     def test_tags_skips_xdata_content(self):
         with self.assertRaises(ValueError):
             self.xtags.noclass.get_value(1000)
-
-    def test_copy(self):
-        stream = StringIO()
-        self.xtags.write(stream)
-        self.assertEqual(XTAGS1, stream.getvalue())
-        stream.close()
 
     def test_getitem_layer(self):
         self.assertEqual(self.xtags.noclass[0], (0, 'LAYER'))
@@ -142,7 +136,7 @@ CONTINUOUS
 """
 class TestXDATA(unittest.TestCase):
     def setUp(self):
-        self.tags = ClassifiedTags.fromtext(XTAGS2)
+        self.tags = ClassifiedTags.from_text(XTAGS2)
 
     def test_xdata_count(self):
         self.assertEqual(3, len(self.tags.xdata))
@@ -191,25 +185,15 @@ TEXT-XDATA3
 
 class Test2xSubclass(unittest.TestCase):
     def setUp(self):
-        self.tags = ClassifiedTags.fromtext(SPECIALCASE_TEXT)
+        self.tags = ClassifiedTags.from_text(SPECIALCASE_TEXT)
 
     def test_read_tags(self):
         subclass2 = self.tags.get_subclass('AcDbText')
         self.assertEqual((100, 'AcDbText'), subclass2[0])
 
-    def test_read_tags_2(self):
-        subclass2 = self.tags.get_subclass('AcDbText')
-        self.assertEqual((100, 'AcDbText'), subclass2[0])
-        self.assertEqual((1, 'Title:'), subclass2[3])
-
-    def test_read_tags_3(self):
-        subclass2 = self.tags.get_subclass('AcDbText', 3)
-        self.assertEqual((100, 'AcDbText'), subclass2[0])
-        self.assertEqual((73, 2), subclass2[1])
-
     def test_key_error(self):
         with self.assertRaises(KeyError):
-            self.tags.get_subclass('AcDbText', pos=4)
+            self.tags.get_subclass('AcDbMozman')
 
     def test_skip_empty_subclass(self):
         self.tags.subclasses[1] = Tags()
@@ -242,8 +226,4 @@ Title:
 0.85
   7
 ARIALNARROW
-100
-AcDbText
- 73
-2
 """

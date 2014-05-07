@@ -10,7 +10,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestHelix(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(HELIX)
+        tags = ClassifiedTags.from_text(HELIX)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_helix_properties(self):

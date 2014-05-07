@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestXLine(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(XLINE)
+        tags = ClassifiedTags.from_text(XLINE)
         self.entity = entity_factory(tags, 'AC1024')
 
     def test_xline_properties(self):

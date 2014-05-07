@@ -1,0 +1,126 @@
+Wed May  7 07:44:24 2014    profile_cnc_machine.txt
+
+         46429241 function calls (46429081 primitive calls) in 35.937 seconds
+
+   Ordered by: internal time
+   List reduced from 407 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2132505    4.435    0.000    4.579    0.000 tags.py:251(tag_index)
+  2284708    3.967    0.000   12.411    0.000 dxfentity.py:37(get_dxf_attrib)
+  1601397    2.368    0.000    5.223    0.000 tags.py:188(cast)
+  1601397    2.310    0.000   11.183    0.000 tags.py:97(next_tag)
+   534819    2.294    0.000    3.058    0.000 classifiedtags.py:36(collect_subclass)
+  1906151    2.113    0.000    3.506    0.000 tags.py:59(read_next_tag)
+  2132505    2.019    0.000    7.720    0.000 dxfentity.py:57(_get_dxf_attrib)
+  1601397    1.729    0.000   12.911    0.000 tags.py:53(__next__)
+  3354322    1.487    0.000   14.398    0.000 {built-in method next}
+  3812302    0.968    0.000    1.028    0.000 {method 'readline' of '_io.TextIOWrapper' objects}
+
+
+with skip_app_data = True, skip_xdata=True
+
+Wed May  7 07:54:12 2014    profile_cnc_machine.txt
+
+         46406245 function calls (46406085 primitive calls) in 35.822 seconds
+
+   Ordered by: internal time
+   List reduced from 405 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2132505    4.521    0.000    4.665    0.000 tags.py:251(tag_index)
+  2284708    3.972    0.000   12.504    0.000 dxfentity.py:18(get_dxf_attrib)
+  1600077    2.335    0.000   11.043    0.000 tags.py:97(next_tag)
+   534605    2.331    0.000    3.090    0.000 classifiedtags.py:36(collect_subclass)
+  1600076    2.300    0.000    5.138    0.000 tags.py:188(cast)
+  1906152    2.043    0.000    3.425    0.000 tags.py:59(read_next_tag)
+  2132505    2.021    0.000    7.803    0.000 dxfentity.py:38(_get_dxf_attrib)
+  1600077    1.710    0.000   12.753    0.000 tags.py:53(__next__)
+  3349942    1.484    0.000   14.238    0.000 {built-in method next}
+  3812303    0.960    0.000    1.020    0.000 {method 'readline' of '_io.TextIOWrapper' objects}
+
+removed skip section in TagReader
+
+Wed May  7 07:57:23 2014    profile_cnc_machine.txt
+
+         46429219 function calls (46429059 primitive calls) in 35.028 seconds
+
+   Ordered by: internal time
+   List reduced from 406 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2132505    4.486    0.000    4.631    0.000 tags.py:237(tag_index)
+  2284708    3.997    0.000   12.506    0.000 dxfentity.py:18(get_dxf_attrib)
+  1601397    2.327    0.000    5.189    0.000 tags.py:174(cast)
+   534819    2.126    0.000    2.887    0.000 classifiedtags.py:36(collect_subclass)
+  1906151    2.022    0.000    3.394    0.000 tags.py:57(read_next_tag)
+  2132505    2.019    0.000    7.776    0.000 dxfentity.py:38(_get_dxf_attrib)
+  1601397    1.904    0.000   10.628    0.000 tags.py:89(next_tag)
+  1601397    1.529    0.000   12.157    0.000 tags.py:51(__next__)
+  3354322    1.380    0.000   13.536    0.000 {built-in method next}
+  3812302    0.951    0.000    1.011    0.000 {method 'readline' of '_io.TextIOWrapper' objects}
+
+
+Tags.tag_index() mit iterator
+
+Wed May  7 08:03:18 2014    profile_cnc_machine.txt
+
+         46429237 function calls (46429077 primitive calls) in 34.547 seconds
+
+   Ordered by: internal time
+   List reduced from 406 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2132505    4.169    0.000    4.309    0.000 tags.py:246(tag_index)
+  2284708    3.986    0.000   12.186    0.000 dxfentity.py:18(get_dxf_attrib)
+  1601397    2.332    0.000    5.181    0.000 tags.py:174(cast)
+   534819    2.046    0.000    2.803    0.000 classifiedtags.py:36(collect_subclass)
+  1906151    2.039    0.000    3.418    0.000 tags.py:57(read_next_tag)
+  2132505    2.028    0.000    7.456    0.000 dxfentity.py:38(_get_dxf_attrib)
+  1601397    1.906    0.000   10.647    0.000 tags.py:89(next_tag)
+  1601397    1.509    0.000   12.156    0.000 tags.py:51(__next__)
+  3354322    1.366    0.000   13.522    0.000 {built-in method next}
+  3812302    0.956    0.000    1.017    0.000 {method 'readline' of '_io.TextIOWrapper' objects}
+
+Tags.tag_index() mit islice
+
+Wed May  7 08:06:12 2014    profile_cnc_machine.txt
+
+         46429235 function calls (46429075 primitive calls) in 34.215 seconds
+
+   Ordered by: internal time
+   List reduced from 406 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2284708    3.945    0.000   11.772    0.000 dxfentity.py:18(get_dxf_attrib)
+  2132505    3.783    0.000    3.922    0.000 tags.py:246(tag_index)
+  1601397    2.321    0.000    5.187    0.000 tags.py:174(cast)
+   534819    2.080    0.000    2.859    0.000 classifiedtags.py:36(collect_subclass)
+  1906151    2.012    0.000    3.389    0.000 tags.py:57(read_next_tag)
+  2132505    2.009    0.000    7.097    0.000 dxfentity.py:38(_get_dxf_attrib)
+  1601397    1.927    0.000   10.645    0.000 tags.py:89(next_tag)
+  1601397    1.501    0.000   12.146    0.000 tags.py:51(__next__)
+  3354322    1.375    0.000   13.521    0.000 {built-in method next}
+  1980209    0.966    0.000    4.661    0.000 tags.py:255(get_value)
+
+optimized Tags.get_value()
+
+C:\Python34\python.exe D:/Source/dxfgrabber-dev/playground/profile_big_3d_file.py
+Wed May  7 08:13:16 2014    profile_cnc_machine.txt
+
+         42468805 function calls (42468645 primitive calls) in 30.799 seconds
+
+   Ordered by: internal time
+   List reduced from 406 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2284708    3.731    0.000    8.661    0.000 dxfentity.py:18(get_dxf_attrib)
+  1601397    2.331    0.000    5.201    0.000 tags.py:174(cast)
+  1906151    2.032    0.000    3.410    0.000 tags.py:57(read_next_tag)
+   534819    2.023    0.000    2.769    0.000 classifiedtags.py:36(collect_subclass)
+  1601397    1.906    0.000   10.658    0.000 tags.py:89(next_tag)
+  2132505    1.902    0.000    4.225    0.000 dxfentity.py:38(_get_dxf_attrib)
+  1980209    1.842    0.000    1.842    0.000 tags.py:246(get_value)
+  1601397    1.500    0.000   12.158    0.000 tags.py:51(__next__)
+  3354322    1.378    0.000   13.536    0.000 {built-in method next}
+  3812302    0.954    0.000    1.015    0.000 {method 'readline' of '_io.TextIOWrapper' objects}

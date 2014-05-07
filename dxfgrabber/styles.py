@@ -12,14 +12,14 @@ from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 
 class Style(object):
     def __init__(self, wrapper):
-        self.name = wrapper.dxf.name
-        self.height = wrapper.dxf.height
-        self.width = wrapper.dxf.width
-        self.oblique = wrapper.dxf.oblique
-        self.backward = bool(wrapper.dxf.generation_flags and 2)
-        self.mirror_y = bool(wrapper.dxf.generation_flags and 4)
-        self.font = wrapper.dxf.font
-        self.bigfont = wrapper.dxf.get('bigfont', "")
+        self.name = wrapper.get_dxf_attrib('name')
+        self.height = wrapper.get_dxf_attrib('height')
+        self.width = wrapper.get_dxf_attrib('width')
+        self.oblique = wrapper.get_dxf_attrib('oblique')
+        self.backward = bool(wrapper.get_dxf_attrib('generation_flags') and 2)
+        self.mirror_y = bool(wrapper.get_dxf_attrib('generation_flags') and 4)
+        self.font = wrapper.get_dxf_attrib('font')
+        self.bigfont = wrapper.get_dxf_attrib('bigfont', "")
 
 
 class StyleTable(Table):
@@ -31,7 +31,7 @@ class StyleTable(Table):
         styles = StyleTable()
         for entrytags in styles._classified_tags(tags):
             dxfstyle = styles.wrap(entrytags, dxfversion)
-            styles._table_entries[dxfstyle.dxf.name] = Style(dxfstyle)
+            styles._table_entries[dxfstyle.get_dxf_attrib('name')] = Style(dxfstyle)
         return styles
     
     @staticmethod
@@ -41,30 +41,30 @@ class StyleTable(Table):
 
 class DXF12Style(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {
-        'handle': DXFAttr(5, None),
-        'name': DXFAttr(2, None),
-        'flags': DXFAttr(70, None),
-        'height': DXFAttr(40, None),  # fixed height, 0 if not fixed
-        'width': DXFAttr(41, None),  # width factor
-        'oblique': DXFAttr(50, None),  # oblique angle in degree, 0 = vertical
-        'generation_flags': DXFAttr(71, None),  # 2 = backward, 4 = mirrored in Y
-        'last_height': DXFAttr(42, None),  # last height used
-        'font': DXFAttr(3, None),  # primary font file name
-        'bigfont': DXFAttr(4, None),  # big font name, blank if none
+        'handle': DXFAttr(5),
+        'name': DXFAttr(2),
+        'flags': DXFAttr(70),
+        'height': DXFAttr(40),  # fixed height, 0 if not fixed
+        'width': DXFAttr(41),  # width factor
+        'oblique': DXFAttr(50),  # oblique angle in degree, 0 = vertical
+        'generation_flags': DXFAttr(71),  # 2 = backward, 4 = mirrored in Y
+        'last_height': DXFAttr(42),  # last height used
+        'font': DXFAttr(3),  # primary font file name
+        'bigfont': DXFAttr(4),  # big font name, blank if none
     }))
 
-none_subclass = DefSubclass(None, {'handle': DXFAttr(5, None)} )
+none_subclass = DefSubclass(None, {'handle': DXFAttr(5)})
 symbol_subclass = DefSubclass('AcDbSymbolTableRecord', {})
 style_subclass = DefSubclass('AcDbTextStyleTableRecord', {
-    'name': DXFAttr(2, None),
-    'flags': DXFAttr(70, None),
-    'height': DXFAttr(40, None),  # fixed height, 0 if not fixed
-    'width': DXFAttr(41, None),  # width factor
-    'oblique': DXFAttr(50, None),  # oblique angle in degree, 0 = vertical
-    'generation_flags': DXFAttr(71, None),  # 2 = backward, 4 = mirrored in Y
-    'last_height': DXFAttr(42, None),  # last height used
-    'font': DXFAttr(3, None),  # primary font file name
-    'bigfont': DXFAttr(4, None),  # big font name, blank if none
+    'name': DXFAttr(2),
+    'flags': DXFAttr(70),
+    'height': DXFAttr(40),  # fixed height, 0 if not fixed
+    'width': DXFAttr(41),  # width factor
+    'oblique': DXFAttr(50),  # oblique angle in degree, 0 = vertical
+    'generation_flags': DXFAttr(71),  # 2 = backward, 4 = mirrored in Y
+    'last_height': DXFAttr(42),  # last height used
+    'font': DXFAttr(3),  # primary font file name
+    'bigfont': DXFAttr(4),  # big font name, blank if none
 })
 
 

@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestTraceDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(TRACE_DXF12)
+        tags = ClassifiedTags.from_text(TRACE_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_trace_data(self):
@@ -26,7 +26,7 @@ class TestTraceDXF12(unittest.TestCase):
 
 class TestTraceDXF13(TestTraceDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(TRACE_DXF13)
+        tags = ClassifiedTags.from_text(TRACE_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 TRACE_DXF12 = """  0

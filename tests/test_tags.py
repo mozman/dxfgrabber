@@ -6,7 +6,7 @@ import unittest
 from io import StringIO
 
 from dxfgrabber.tags import StringIterator, Tags
-from dxfgrabber.tags import dxfinfo, strtag
+from dxfgrabber.tags import dxfinfo
 
 TEST_TAGREADER = """  0
 SECTION
@@ -83,25 +83,6 @@ class TestTagReader(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.reader.undo_tag()
 
-    def test_error_undo_last_before_first_read(self):
-        with self.assertRaises(ValueError):
-            self.reader.undo_tag()
-
-    def test_lineno(self):
-        next(self.reader)
-        self.assertEqual(2, self.reader.lineno)
-
-    def test_lineno_with_undo(self):
-        next(self.reader)
-        self.reader.undo_tag()
-        self.assertEqual(0, self.reader.lineno)
-
-    def test_lineno_with_undo_next(self):
-        next(self.reader)
-        self.reader.undo_tag()
-        next(self.reader)
-        self.assertEqual(2, self.reader.lineno)
-
     def test_to_list(self):
         tags = list(self.reader)
         self.assertEqual(8, len(tags))
@@ -120,15 +101,6 @@ class TestTagReader(unittest.TestCase):
         tags = list(StringIterator(TEST_NO_EOF))
         self.assertEqual(7, len(tags))
         self.assertEqual((0, 'ENDSEC'), tags[-1])
-
-    def test_strtag_int(self):
-        self.assertEqual('  1\n1\n', strtag( (1,1) ))
-
-    def test_strtag_float(self):
-        self.assertEqual(' 10\n3.1415\n', strtag( (10, 3.1415) ))
-
-    def test_strtag_str(self):
-        self.assertEqual('  0\nSECTION\n', strtag( (0, 'SECTION') ))
 
     def test_skip_comments(self):
         tags1 = list(StringIterator(TEST_TAGREADER))
@@ -205,7 +177,6 @@ class TestTags(unittest.TestCase):
     def test_read_2D_points(self):
         stri = StringIterator(POINT_2D_TAGS)
         tags = list(stri)
-        self.assertEqual(15, stri.lineno)  # 14 lines
         tag = tags[0]  # 2D point
         self.assertEqual((100, 200), tag.value)
         tag = tags[1]  # check mark

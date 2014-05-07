@@ -9,7 +9,7 @@ from dxfgrabber.entities import entity_factory
 
 class TestBlockDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(BLOCK_DXF12)
+        tags = ClassifiedTags.from_text(BLOCK_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_block_properties(self):
@@ -29,7 +29,7 @@ class TestBlockDXF12(unittest.TestCase):
 
 class TestBlockEndDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(ENDBLK_DXF12)
+        tags = ClassifiedTags.from_text(ENDBLK_DXF12)
         self.entity = entity_factory(tags, 'AC1009')
 
     def test_existence(self):
@@ -37,12 +37,12 @@ class TestBlockEndDXF12(unittest.TestCase):
 
 class TestBlockDXF13(TestBlockDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(BLOCK_DXF13)
+        tags = ClassifiedTags.from_text(BLOCK_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 class TestBlockEndDXF13(TestBlockEndDXF12):
     def setUp(self):
-        tags = ClassifiedTags.fromtext(ENDBLK_DXF13)
+        tags = ClassifiedTags.from_text(ENDBLK_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
 
 BLOCK_DXF12 = """  0
