@@ -98,7 +98,7 @@ class TagIterator(object):
                 if code in POINT_CODES:  # 2D or 3D point
                     value = read_point(code, value)
 
-            self.last_tag = cast_tag((code, value))
+            self.last_tag = DXFTag(code, cast_tag_value(code, value))
             return self.last_tag
 
         if self.eof:  # stored end of file

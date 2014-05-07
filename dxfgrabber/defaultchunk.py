@@ -28,8 +28,11 @@ def iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
         tag = next(tagreader)
         if tag == (0, stoptag):
             return
+
         tags = Tags([tag])
-        while tag != (0, endofchunk):
+        append = tags.append
+        end_tag = (0, endofchunk)
+        while tag != end_tag:
             tag = next(tagreader)
-            tags.append(tag)
+            append(tag)
         yield tags

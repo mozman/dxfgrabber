@@ -42,9 +42,14 @@ class Sections(object):
                 drawing.encoding = toencoding(codepage)
                 bootstrap = False
             else:
-                section_class = get_section_class(name(section))
-                new_section = section_class.from_tags(section, drawing)
-            self._sections[new_section.name] = new_section
+                section_name = name(section)
+                if section_name in SECTIONMAP:
+                    section_class = get_section_class(section_name)
+                    new_section = section_class.from_tags(section, drawing)
+                else:
+                    new_section = None
+            if new_section is not None:
+                self._sections[new_section.name] = new_section
 
     def __getattr__(self, key):
         try:
