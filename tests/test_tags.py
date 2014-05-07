@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import unittest
 from io import StringIO
 
-from dxfgrabber.tags import StringIterator, Tags
+from dxfgrabber.tags import StringIterator, Tags, DXFTag
 from dxfgrabber.tags import dxfinfo
 
 TEST_TAGREADER = """  0
@@ -70,12 +70,12 @@ class TestTagReader(unittest.TestCase):
         self.reader = StringIterator(TEST_TAGREADER)
 
     def test_next(self):
-        self.assertEqual((0, 'SECTION'), next(self.reader))
+        self.assertEqual(DXFTag(0, 'SECTION'), next(self.reader))
 
     def test_undo_last(self):
         self.reader.__next__()
         self.reader.undo_tag()
-        self.assertEqual((0, 'SECTION'), next(self.reader))
+        self.assertEqual(DXFTag(0, 'SECTION'), next(self.reader))
 
     def test_error_on_multiple_undo_last(self):
         next(self.reader)
@@ -89,18 +89,18 @@ class TestTagReader(unittest.TestCase):
 
     def test_undo_eof(self):
         for tag in self.reader:
-            if tag == (0, 'EOF'):
+            if tag == DXFTag(0, 'EOF'):
                 self.reader.undo_tag()
                 break
         tag = next(self.reader)
-        self.assertEqual((0, 'EOF'), tag)
+        self.assertEqual(DXFTag(0, 'EOF'), tag)
         with self.assertRaises(StopIteration):
             self.reader.__next__()
 
     def test_no_eof(self):
         tags = list(StringIterator(TEST_NO_EOF))
         self.assertEqual(7, len(tags))
-        self.assertEqual((0, 'ENDSEC'), tags[-1])
+        self.assertEqual(DXFTag(0, 'ENDSEC'), tags[-1])
 
     def test_skip_comments(self):
         tags1 = list(StringIterator(TEST_TAGREADER))

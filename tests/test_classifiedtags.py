@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import unittest
 
 from io import StringIO
-from dxfgrabber.tags import Tags
+from dxfgrabber.tags import Tags, DXFTag
 from dxfgrabber.classifiedtags import ClassifiedTags
 
 class TestClassifiedTags(unittest.TestCase):
@@ -46,16 +46,16 @@ class TestClassifiedTags(unittest.TestCase):
             self.xtags.noclass.get_value(1000)
 
     def test_getitem_layer(self):
-        self.assertEqual(self.xtags.noclass[0], (0, 'LAYER'))
+        self.assertEqual(self.xtags.noclass[0], DXFTag(0, 'LAYER'))
 
     def test_getitem_xdict(self):
-        self.assertEqual(self.xtags.noclass[2], (102, 0))
+        self.assertEqual(self.xtags.noclass[2], DXFTag(102, 0))
 
     def test_getitem_parent(self):
-        self.assertEqual(self.xtags.noclass[3], (330, '18'))
+        self.assertEqual(self.xtags.noclass[3], DXFTag(330, '18'))
 
     def test_get_last_item(self):
-        self.assertEqual(self.xtags.noclass[-1], (330, '18'))
+        self.assertEqual(self.xtags.noclass[-1], DXFTag(330, '18'))
 
     def test_tagscount(self):
         """ apdata counts as one tag and xdata counts as one tag. """
@@ -147,10 +147,10 @@ class TestXDATA(unittest.TestCase):
 
     def test_xdata3_tags(self):
         xdata = self.tags.get_xdata('XDATA3')
-        self.assertEqual(xdata[0], (1001, 'XDATA3'))
-        self.assertEqual(xdata[1], (1000, 'TEXT-XDATA3'))
-        self.assertEqual(xdata[2], (1070, 2))
-        self.assertEqual(xdata[3], (1070, 3))
+        self.assertEqual(xdata[0], DXFTag(1001, 'XDATA3'))
+        self.assertEqual(xdata[1], DXFTag(1000, 'TEXT-XDATA3'))
+        self.assertEqual(xdata[2], DXFTag(1070, 2))
+        self.assertEqual(xdata[3], DXFTag(1070, 3))
 
 XTAGS2 = """  0
 LAYER
@@ -189,7 +189,7 @@ class Test2xSubclass(unittest.TestCase):
 
     def test_read_tags(self):
         subclass2 = self.tags.get_subclass('AcDbText')
-        self.assertEqual((100, 'AcDbText'), subclass2[0])
+        self.assertEqual(DXFTag(100, 'AcDbText'), subclass2[0])
 
     def test_key_error(self):
         with self.assertRaises(KeyError):
@@ -198,7 +198,7 @@ class Test2xSubclass(unittest.TestCase):
     def test_skip_empty_subclass(self):
         self.tags.subclasses[1] = Tags()
         subclass2 = self.tags.get_subclass('AcDbText')
-        self.assertEqual((100, 'AcDbText'), subclass2[0])
+        self.assertEqual(DXFTag(100, 'AcDbText'), subclass2[0])
 
 SPECIALCASE_TEXT = """  0
 TEXT

@@ -15,7 +15,6 @@ from . import tostr
 DXFTag = namedtuple('DXFTag', 'code value')
 NONE_TAG = DXFTag(999999, 'NONE')
 
-
 class DXFStructureError(Exception):
     pass
 
@@ -55,8 +54,6 @@ cdef class TagIterator:
             return self.last_tag
         else:
             return self.next_tag()
-    # for Python 2.7
-    next = __next__
 
     def undo_tag(self):
         if not self.undo:

@@ -42,9 +42,9 @@ class DXFInfo(object):
 
 def dxfinfo(stream):
     info = DXFInfo()
-    tag = (999999, '')
+    tag = DXFTag(999999, '')
     tagreader = TagIterator(stream)
-    while tag != (0, 'ENDSEC'):
+    while tag != DXFTag(0, 'ENDSEC'):
         tag = next(tagreader)
         if tag.code != 9:
             continue

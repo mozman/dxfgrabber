@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import Tags
+from .tags import Tags, DXFTag
 
 
 class DefaultChunk(object):
@@ -26,12 +26,12 @@ class DefaultChunk(object):
 def iterchunks(tagreader, stoptag='EOF', endofchunk='ENDSEC'):
     while True:
         tag = next(tagreader)
-        if tag == (0, stoptag):
+        if tag == DXFTag(0, stoptag):
             return
 
         tags = Tags([tag])
         append = tags.append
-        end_tag = (0, endofchunk)
+        end_tag = DXFTag(0, endofchunk)
         while tag != end_tag:
             tag = next(tagreader)
             append(tag)

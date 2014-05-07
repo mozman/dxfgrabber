@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import TagGroups, DXFStructureError
+from .tags import TagGroups, DXFStructureError, DXFTag
 
 class HeaderSection(dict):
     name = "header"
@@ -17,7 +17,7 @@ class HeaderSection(dict):
     @staticmethod
     def from_tags(tags):
         header = HeaderSection()
-        if tags[1] == (2, 'HEADER'):  # DXF12 without a HEADER section is valid!
+        if tags[1] == DXFTag(2, 'HEADER'):  # DXF12 without a HEADER section is valid!
             header._build(tags)
         return header
 

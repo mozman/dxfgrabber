@@ -348,7 +348,7 @@ Base Class Shape
 
 .. attribute:: Shape.true_color
 
-    Entity color as 0x00RRGGBB 24-bit integer value, return a :class:`TrueColor`. Value is *None* if not set.
+    Entity color as 0x00RRGGBB 24-bit integer value, returns a :class:`TrueColor` object. Value is *None* if not set.
 
 .. attribute:: Shape.transparency
 
