@@ -6,8 +6,8 @@
 # License: MIT License
 
 import os
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup
+from setuptools import Extension
 
 VERSION = "0.7.2"
 AUTHOR_NAME = 'Manfred Moitzi'

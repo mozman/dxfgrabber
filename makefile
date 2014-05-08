@@ -21,7 +21,7 @@ test2:
 
 test3:
 	$(PYTHON3) $(RUNTESTS)
-	
+
 testpypy:
 	$(PYPY) $(RUNTESTS)
 
@@ -37,5 +37,5 @@ packages:
 
 release:
 	$(PYTHON2) setup.py sdist --formats=zip,gztar upload
-	$(PYTHON2) setup.py bdist --formats=msi,wininst upload
-	$(PYTHON3) setup.py bdist --formats=msi,wininst upload
+	$(PYTHON2) setup.py bdist --formats=wininst upload
+	$(PYTHON3) setup.py bdist --formats=wininst upload
