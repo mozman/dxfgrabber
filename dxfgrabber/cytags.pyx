@@ -1,4 +1,4 @@
-# cython: profile=False
+# cython: profile=True
 # Purpose: tag reader
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
@@ -11,8 +11,11 @@ from io import StringIO
 from . import tostr
 
 from .pytags import DXFTag, NONE_TAG, DXFStructureError, point_tuple, POINT_CODES
-from .pytags import APP_DATA_MARKER, XDATA_MARKER, SUBCLASS_MARKER
 
+cdef enum:
+    APP_DATA_MARKER = 102
+    SUBCLASS_MARKER = 100
+    XDATA_MARKER = 1001
 
 cdef class TagIterator:
     cdef object textfile
@@ -268,15 +271,17 @@ class ClassifiedTags:
             """ a subclass can contain appdata, but not xdata, ends with
             SUBCLASSMARKER or XDATACODE.
             """
+            cdef int code
             data = Tags() if start_tag is None else Tags([start_tag])
             try:
                 while True:
                     tag = next(tagstream)
-                    if tag.code == APP_DATA_MARKER and tag.value[0] == '{':
+                    code = <int> tag.code
+                    if code == APP_DATA_MARKER and tag.value[0] == '{':
                         app_data_pos = len(self.appdata)
-                        data.append(DXFTag(tag.code, app_data_pos))
+                        data.append(DXFTag(code, app_data_pos))
                         collect_appdata(tag)
-                    elif tag.code in (SUBCLASS_MARKER, XDATA_MARKER):
+                    elif code == SUBCLASS_MARKER or code == XDATA_MARKER:
                         self.subclasses.append(data)
                         return tag
                     else:
@@ -295,7 +300,7 @@ class ClassifiedTags:
                 except StopIteration:
                     raise DXFStructureError("Missing closing DXFTag(102, '}') for appdata structure.")
                 data.append(tag)
-                if tag.code == APP_DATA_MARKER:
+                if <int> tag.code == APP_DATA_MARKER:
                     break
             self.appdata.append(data)
 
@@ -307,7 +312,7 @@ class ClassifiedTags:
             try:
                 while True:
                     tag = next(tagstream)
-                    if tag.code == XDATA_MARKER:
+                    if <int> tag.code == XDATA_MARKER:
                         self.xdata.append(data)
                         return tag
                     else:
@@ -318,9 +323,9 @@ class ClassifiedTags:
             return NONE_TAG
 
         tag = collect_subclass(None)  # preceding tags without a subclass
-        while tag.code == SUBCLASS_MARKER:
+        while <int> tag.code == SUBCLASS_MARKER:
             tag = collect_subclass(tag)
-        while tag.code == XDATA_MARKER:
+        while <int> tag.code == XDATA_MARKER:
             tag = collect_xdata(tag)
 
         if tag is not NONE_TAG:
@@ -329,7 +334,7 @@ class ClassifiedTags:
     def __iter__(self):
         for subclass in self.subclasses:
             for tag in subclass:
-                if tag.code == APP_DATA_MARKER and isinstance(tag.value, int):
+                if <int> tag.code == APP_DATA_MARKER and isinstance(tag.value, int):
                     for subtag in self.appdata[tag.value]:
                         yield subtag
                 else:

@@ -1,3 +1,4 @@
+# cython: profile=True
 # Purpose: generic tag wrapper
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
@@ -5,25 +6,8 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-import os
 
-from .const import ENV_CYTHON
-
-cyDXFEntity = None
-OPTIMIZE = True
-if ENV_CYTHON in os.environ:
-    if os.environ[ENV_CYTHON].upper() in ('1', 'ON', 'TRUE'):
-        OPTIMIZE = True
-    else:
-        OPTIMIZE = False
-try:
-    if OPTIMIZE:
-        from.cydxfentity import cyDXFEntity
-except ImportError:
-    pass
-
-
-class pyDXFEntity(object):
+class cyDXFEntity:
     DXFATTRIBS = {}
 
     def __init__(self, tags):
@@ -57,9 +41,9 @@ class pyDXFEntity(object):
         # no subclass is subclass index 0
         subclass_tags = self.tags.subclasses[dxfattr.subclass]
         if dxfattr.xtype is not None:
-            return self._get_extented_type(subclass_tags, dxfattr.code, dxfattr.xtype)
+            return self._get_extented_type(subclass_tags, <int> dxfattr.code, <str> dxfattr.xtype)
         else:
-            return subclass_tags.get_value(dxfattr.code)
+            return subclass_tags.get_value(<int> dxfattr.code)
 
     def paperspace(self):
         return self.get_dxf_attrib('paperspace', default=0) == 1
@@ -68,18 +52,13 @@ class pyDXFEntity(object):
         pass
 
     @staticmethod
-    def _get_extented_type(tags, code, xtype):
-        index = tags.tag_index(code)
+    def _get_extented_type(tags, int code, str xtype):
+        cdef int index = tags.tag_index(code)
         value = tags[index].value
-        length = len(value)
-        if length == 2:
+        if <int> len(value) == 2:
             if xtype == 'Point3D':
                 return value[0], value[1], 0.
         elif xtype == 'Point2D':
             return value[0], value[1]
         return value
 
-if cyDXFEntity is not None:
-    DXFEntity = cyDXFEntity
-else:
-    DXFEntity = pyDXFEntity

@@ -5,6 +5,8 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
+ENV_CYTHON = 'DXFGRABBER_CYTHON'
+
 BYBLOCK = 0
 BYLAYER = 256
 

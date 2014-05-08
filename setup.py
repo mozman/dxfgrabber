@@ -15,8 +15,10 @@ AUTHOR_EMAIL = 'mozman@gmx.at'
 
 try:
     from Cython.Distutils import build_ext
-    ext_modules = [Extension("dxfgrabber.cytags", ["dxfgrabber/cytags.pyx"]),
-                   ]
+    ext_modules = [
+        Extension("dxfgrabber.cytags", ["dxfgrabber/cytags.pyx", ]),
+        Extension("dxfgrabber.cydxfentity", ["dxfgrabber/cydxfentity.pyx", ])
+    ]
     commands = {'build_ext': build_ext}
 except ImportError:
     print("Install Cython to get the speed optimized version of dxfgrabber.")

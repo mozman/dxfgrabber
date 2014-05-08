@@ -6,10 +6,9 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import os
+from .const import ENV_CYTHON
 
 OPTIMIZE = True
-ENV_CYTHON = 'DXFGRABBER_CYTHON'
-
 if ENV_CYTHON in os.environ:
     if os.environ[ENV_CYTHON].upper() in ('1', 'ON', 'TRUE'):
         OPTIMIZE = True
