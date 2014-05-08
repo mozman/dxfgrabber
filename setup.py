@@ -15,7 +15,7 @@ AUTHOR_EMAIL = 'mozman@gmx.at'
 
 try:
     from Cython.Distutils import build_ext
-    ext_modules = [Extension("dxfgrabber.ctags", ["dxfgrabber/ctags.pyx"]),
+    ext_modules = [Extension("dxfgrabber.cytags", ["dxfgrabber/cytags.pyx"]),
                    ]
     commands = {'build_ext': build_ext}
 except ImportError:

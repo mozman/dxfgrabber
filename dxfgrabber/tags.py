@@ -19,12 +19,12 @@ try:
     if not OPTIMIZE:
         raise ImportError
     CYTHON_EXT = True
-    from.ctags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
-    from.ctags import DXFStructureError, StringIterator, ClassifiedTags
+    from.cytags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
+    from.cytags import DXFStructureError, StringIterator, ClassifiedTags
 except ImportError:
     CYTHON_EXT = False
-    from.ptags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
-    from.ptags import DXFStructureError, StringIterator, ClassifiedTags
+    from.pytags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
+    from.pytags import DXFStructureError, StringIterator, ClassifiedTags
 
 
 import sys

@@ -1,4 +1,4 @@
-# cython: profile=True
+# cython: profile=False
 # Purpose: tag reader
 # Created: 21.07.2012, taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
@@ -10,8 +10,8 @@ __author__ = "mozman <mozman@gmx.at>"
 from io import StringIO
 from . import tostr
 
-from .ptags import DXFTag, NONE_TAG, DXFStructureError, point_tuple, POINT_CODES
-from .ptags import APP_DATA_MARKER, XDATA_MARKER, SUBCLASS_MARKER
+from .pytags import DXFTag, NONE_TAG, DXFStructureError, point_tuple, POINT_CODES
+from .pytags import APP_DATA_MARKER, XDATA_MARKER, SUBCLASS_MARKER
 
 
 cdef class TagIterator:
