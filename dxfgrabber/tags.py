@@ -5,13 +5,23 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
+import os
+
 OPTIMIZE = True
+ENV_CYTHON = 'DXFGRABBER_CYTHON'
+if ENV_CYTHON in os.environ:
+    if os.environ[ENV_CYTHON].upper() in ('1', 'ON', 'TRUE'):
+        OPTIMIZE = True
+    else:
+        OPTIMIZE = False
 try:
     if not OPTIMIZE:
         raise ImportError
+    CYTHON_EXT = True
     from.ctags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
     from.ctags import DXFStructureError, StringIterator
 except ImportError:
+    CYTHON_EXT = False
     from.ptags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
     from.ptags import DXFStructureError, StringIterator
 

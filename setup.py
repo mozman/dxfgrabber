@@ -19,6 +19,7 @@ try:
                    ]
     commands = {'build_ext': build_ext}
 except ImportError:
+    print("Install Cython to get the speed optimized version of dxfgrabber.")
     ext_modules = []
     commands = {}
 
