@@ -8,8 +8,7 @@ Version 0.7.2 - 2014-05-09
   * NEW: support for dxf attributes: true_color (AC1018), transparency (AC1018), shadow_mode (AC1021)
     in prior DXF versions this attributes are set to None.
   * NEW: using Cython for some speed optimizations, but Cython is not a installation requirement; control the Cython
-    extension by environment variable DXFGRABBER_CYTHON = ON|OFF (TRUE|FALSE or 1|0), by default the Cython extension is
-    activated.
+    extension by environment variable DXFGRABBER_CYTHON = ON|OFF, by default the Cython extension is activated.
   * CHANGED: LWPolyline.points are always 5-tuples (x, y, start_width, end_width, bulge)
 
 Version 0.7.1 - 2014-05-02

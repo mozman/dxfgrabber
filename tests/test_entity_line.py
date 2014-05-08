@@ -5,7 +5,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
 
-from dxfgrabber.classifiedtags import ClassifiedTags
+from dxfgrabber.tags import ClassifiedTags
 from dxfgrabber.entities import entity_factory
 
 

@@ -7,7 +7,7 @@ import unittest
 
 from io import StringIO
 from dxfgrabber.tags import Tags, DXFTag
-from dxfgrabber.classifiedtags import ClassifiedTags
+from dxfgrabber.tags import ClassifiedTags
 
 class TestClassifiedTags(unittest.TestCase):
     def setUp(self):

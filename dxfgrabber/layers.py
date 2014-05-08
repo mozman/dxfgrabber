@@ -6,7 +6,7 @@
 __author__ = "mozman <mozman@gmx.at>"
 
 from .tags import TagGroups
-from .classifiedtags import ClassifiedTags
+from .tags import ClassifiedTags
 from .dxfentity import DXFEntity
 
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass

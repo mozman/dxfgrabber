@@ -29,5 +29,6 @@ for filename in all_files:
         overall_time += run_time
         print('ok ({:.2f} seconds for opening: {})'.format(run_time, filename))
 
-print("ok: {} - errors: {} - over all time: {:.2f} seconds".format(ok, error, overall_time))
+print("{:.2f} seconds for {} files".format(overall_time, ok))
+print("{} errors".format(error))
 print('success' if error == 0 else 'failed')

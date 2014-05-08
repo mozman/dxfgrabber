@@ -9,6 +9,7 @@ import os
 
 OPTIMIZE = True
 ENV_CYTHON = 'DXFGRABBER_CYTHON'
+
 if ENV_CYTHON in os.environ:
     if os.environ[ENV_CYTHON].upper() in ('1', 'ON', 'TRUE'):
         OPTIMIZE = True
@@ -19,11 +20,11 @@ try:
         raise ImportError
     CYTHON_EXT = True
     from.ctags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
-    from.ctags import DXFStructureError, StringIterator
+    from.ctags import DXFStructureError, StringIterator, ClassifiedTags
 except ImportError:
     CYTHON_EXT = False
     from.ptags import TagIterator, Tags, TagGroups, DXFTag, NONE_TAG
-    from.ptags import DXFStructureError, StringIterator
+    from.ptags import DXFStructureError, StringIterator, ClassifiedTags
 
 
 import sys
