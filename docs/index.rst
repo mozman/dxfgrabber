@@ -343,6 +343,10 @@ Base Class Shape
 
     Element thickness as *float*.
 
+.. attribute:: Shape.extrusion
+
+    Vector as (x, y, z) *tuple*, indicate the the entity's extrusion direction. Default = (0, 0, 1)
+
 .. attribute:: Shape.ltscale
 
     Linetype scale as *float*
@@ -590,9 +594,38 @@ Text
 
     Horizontal alignment as *int*.
 
+===== ==========
+Value Alignment
+===== ==========
+0     Left
+1     Center
+2     Right
+3     Aligned (if vertical alignment = 0)
+4     Middle (if vertical alignment = 0)
+5     Fit (if vertical alignment = 0)
+===== ==========
+
 .. attribute:: Text.valign
 
     Vertical alignment as *int*.
+
+===== ==========
+Value Alignment
+===== ==========
+0     Baseline
+1     Bottom
+2     Middle
+3     Top
+===== ==========
+
+
+.. attribute:: Text.is_backwards
+
+    *True* if text is mirrored in X.
+
+.. attribute:: Text.is_upside_down
+
+    *True* if text is mirrored in Y.
 
 .. attribute:: Text.alignpoint
 
@@ -837,6 +870,8 @@ LWPolyline
 .. attribute:: LWPolyline.is_closed
 
     ``True`` if the polyline is closed.
+
+.. attribute:: LWPolyline.elevation
 
 .. method:: LWPolyline.__len__()
 

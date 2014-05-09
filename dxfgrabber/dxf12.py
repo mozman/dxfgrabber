@@ -19,6 +19,7 @@ def make_attribs(additional=None):
         'thickness': DXFAttr(39),
         'color': DXFAttr(62),  # dxf color index, 0 .. BYBLOCK, 256 .. BYLAYER, default is 256
         'paperspace': DXFAttr(67),  # 0 .. modelspace, 1 .. paperspace, default is 0
+        'extrusion': DXFAttr(210, 'Point3D'),
     }
     if additional:
         dxfattribs.update(additional)
@@ -41,16 +42,16 @@ class Point(DXFEntity):
 class Circle(DXFEntity):
     DXFATTRIBS = make_attribs({
         'center': DXFAttr(10, 'Point2D/3D'),
-        'radius': DXFAttr(40, None),
+        'radius': DXFAttr(40),
     })
 
 
 class Arc(DXFEntity):
     DXFATTRIBS = make_attribs({
         'center': DXFAttr(10, 'Point2D/3D'),
-        'radius': DXFAttr(40, None),
-        'startangle': DXFAttr(50, None),
-        'endangle': DXFAttr(51, None),
+        'radius': DXFAttr(40),
+        'startangle': DXFAttr(50),
+        'endangle': DXFAttr(51),
     })
 
 
@@ -72,62 +73,62 @@ class Face(DXFEntity):
         'vtx1': DXFAttr(11, 'Point2D/3D'),
         'vtx2': DXFAttr(12, 'Point2D/3D'),
         'vtx3': DXFAttr(13, 'Point2D/3D'),
-        'invisible_edge': DXFAttr(70, None),
+        'invisible_edge': DXFAttr(70),
     })
 
 
 class Text(DXFEntity):
     DXFATTRIBS = make_attribs({
         'insert': DXFAttr(10, 'Point2D/3D'),
-        'height': DXFAttr(40,  None),
-        'text': DXFAttr(1,  None),
-        'rotation': DXFAttr(50, None),  # in degrees (circle = 360deg)
-        'oblique': DXFAttr(51, None),  # in degrees, vertical = 0deg
-        'style': DXFAttr(7, None),  # text style
-        'width': DXFAttr(41, None),  # width FACTOR!
-        'textgenerationflag': DXFAttr(71, None),  # 2 = backward (mirr-x), 4 = upside down (mirr-y)
-        'halign': DXFAttr(72, None),  # horizontal justification
-        'valign': DXFAttr(73,  None),  # vertical justification
+        'height': DXFAttr(40),
+        'text': DXFAttr(1),
+        'rotation': DXFAttr(50),  # in degrees (circle = 360deg)
+        'oblique': DXFAttr(51),  # in degrees, vertical = 0deg
+        'style': DXFAttr(7),  # text style
+        'width': DXFAttr(41),  # width FACTOR!
+        'textgenerationflag': DXFAttr(71),  # 2 = backward (mirr-x), 4 = upside down (mirr-y)
+        'halign': DXFAttr(72),  # horizontal justification
+        'valign': DXFAttr(73),  # vertical justification
         'alignpoint': DXFAttr(11, 'Point2D/3D'),
     })
 
 
 class Insert(DXFEntity):
     DXFATTRIBS = make_attribs({
-        'attribsfollow': DXFAttr(66, None),
-        'name': DXFAttr(2, None),
+        'attribsfollow': DXFAttr(66),
+        'name': DXFAttr(2),
         'insert': DXFAttr(10, 'Point2D/3D'),
-        'xscale': DXFAttr(41, None),
-        'yscale': DXFAttr(42, None),
-        'zscale': DXFAttr(43, None),
-        'rotation': DXFAttr(50, None),
-        'colcount': DXFAttr(70, None),
-        'rowcount': DXFAttr(71, None),
-        'colspacing': DXFAttr(44, None),
-        'rowspacing': DXFAttr(45, None),
+        'xscale': DXFAttr(41),
+        'yscale': DXFAttr(42),
+        'zscale': DXFAttr(43),
+        'rotation': DXFAttr(50),
+        'colcount': DXFAttr(70),
+        'rowcount': DXFAttr(71),
+        'colspacing': DXFAttr(44),
+        'rowspacing': DXFAttr(45),
     })
 
 
 class SeqEnd(DXFEntity):
-    DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5, None), 'paperspace': DXFAttr(67, None), }))
+    DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5), 'paperspace': DXFAttr(67), }))
 
 
 class Attrib(DXFEntity):  # also ATTDEF
     DXFATTRIBS = make_attribs({
         'insert': DXFAttr(10, 'Point2D/3D'),
-        'height': DXFAttr(40, None),
-        'text': DXFAttr(1, None),
-        'prompt': DXFAttr(3, None),  # just in ATTDEF not ATTRIB
-        'tag': DXFAttr(2, None),
-        'flags': DXFAttr(70, None),
-        'fieldlength': DXFAttr(73, None),
-        'rotation': DXFAttr(50, None),
-        'oblique': DXFAttr(51, None),
-        'width': DXFAttr(41, None),  # width factor
-        'style': DXFAttr(7, None),
+        'height': DXFAttr(40),
+        'text': DXFAttr(1),
+        'prompt': DXFAttr(3),  # just in ATTDEF not ATTRIB
+        'tag': DXFAttr(2),
+        'flags': DXFAttr(70),
+        'fieldlength': DXFAttr(73),
+        'rotation': DXFAttr(50),
+        'oblique': DXFAttr(51),
+        'width': DXFAttr(41),  # width factor
+        'style': DXFAttr(7),
         'textgenerationflag': DXFAttr(71, None),  # 2 = backward (mirr-x), 4 = upside down (mirr-y)
-        'halign': DXFAttr(72, None),  # horizontal justification
-        'valign': DXFAttr(74, None),  # vertical justification
+        'halign': DXFAttr(72),  # horizontal justification
+        'valign': DXFAttr(74),  # vertical justification
         'alignpoint': DXFAttr(11, 'Point2D/3D'),
     })
 
@@ -136,13 +137,13 @@ class Polyline(DXFEntity):
     DXFATTRIBS = make_attribs({
         'elevation': DXFAttr(10, 'Point2D/3D'),
         'flags': DXFAttr(70, None),
-        'defaultstartwidth': DXFAttr(40, None),
-        'defaultendwidth': DXFAttr(41, None),
-        'mcount': DXFAttr(71, None),
-        'ncount': DXFAttr(72, None),
-        'msmoothdensity': DXFAttr(73, None),
-        'nsmoothdensity': DXFAttr(74, None),
-        'smoothtype': DXFAttr(75, None),
+        'defaultstartwidth': DXFAttr(40),
+        'defaultendwidth': DXFAttr(41),
+        'mcount': DXFAttr(71),
+        'ncount': DXFAttr(72),
+        'msmoothdensity': DXFAttr(73),
+        'nsmoothdensity': DXFAttr(74),
+        'smoothtype': DXFAttr(75),
     })
 
     def get_vertex_flags(self):
@@ -173,27 +174,27 @@ class Polyline(DXFEntity):
 class Vertex(DXFEntity):
     DXFATTRIBS = make_attribs({
         'location': DXFAttr(10, 'Point2D/3D'),
-        'startwidth': DXFAttr(40, None),
-        'endwidth': DXFAttr(41, None),
-        'bulge': DXFAttr(42, None),
-        'flags': DXFAttr(70, None),
-        'tangent': DXFAttr(50, None),
-        'vtx0': DXFAttr(71, None),
-        'vtx1': DXFAttr(72, None),
-        'vtx2': DXFAttr(73, None),
-        'vtx3': DXFAttr(74, None),
+        'startwidth': DXFAttr(40),
+        'endwidth': DXFAttr(41),
+        'bulge': DXFAttr(42),
+        'flags': DXFAttr(70),
+        'tangent': DXFAttr(50),
+        'vtx0': DXFAttr(71),
+        'vtx1': DXFAttr(72),
+        'vtx2': DXFAttr(73),
+        'vtx3': DXFAttr(74),
     })
 
 
 class Block(DXFEntity):
     DXFATTRIBS = make_attribs({
-        'name': DXFAttr(2, None),
-        'name2': DXFAttr(3, None),
-        'flags': DXFAttr(70, None),
+        'name': DXFAttr(2),
+        'name2': DXFAttr(3),
+        'flags': DXFAttr(70),
         'basepoint': DXFAttr(10, 'Point2D/3D'),
-        'xrefpath': DXFAttr(1, None),
+        'xrefpath': DXFAttr(1),
     })
 
 
 class EndBlk(SeqEnd):
-    DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5, None)}))
+    DXFATTRIBS = DXFAttributes(DefSubclass(None, {'handle': DXFAttr(5)}))

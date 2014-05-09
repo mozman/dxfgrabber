@@ -31,6 +31,7 @@ class Shape(Entity):
         self.layer = get_dxf('layer', '0')
         self.linetype = get_dxf('linetype', None)  # None=BYLAYER
         self.thickness = get_dxf('thickness', 0.0)
+        self.extrusion = get_dxf('extrusion', (0., 0., 1.))
         self.ltscale = get_dxf('ltscale', 1.0)
         self.invisible = get_dxf('invisible', 0)  # 0=visible
         self.color = get_dxf('color', const.BYLAYER)  # 256=BYLAYER, 0=BYBLOCK
@@ -129,6 +130,8 @@ class Text(Shape):
         self.halign = get_dxf('halign', 0)
         self.valign = get_dxf('valign', 0)
         self.alignpoint = get_dxf('alignpoint', None)
+        self.is_backwards = bool(get_dxf('textgenerationflag', 0) & 2)
+        self.is_upside_down = bool(get_dxf('textgenerationflag', 0) & 4)
 
 
 class Insert(Shape):
@@ -686,7 +689,7 @@ class Surface(Body):
 EntityTable = {
     'LINE': (Line, dxf12.Line, dxf13.Line),
     'POINT': (Point, dxf12.Point, dxf13.Point),
-    'CIRCLE': (Circle, dxf12.Circle, dxf13.Arc),
+    'CIRCLE': (Circle, dxf12.Circle, dxf13.Circle),
     'ARC': (Arc, dxf12.Arc, dxf13.Arc),
     'TRACE': (Trace, dxf12.Trace, dxf13.Trace),
     'SOLID': (Solid, dxf12.Solid, dxf13.Solid),
