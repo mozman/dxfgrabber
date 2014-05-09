@@ -12,6 +12,8 @@ Version 0.7.3 - 2014-05-..
   * CHANGE: LWPolyline again: LWPolyline.points list of (x, y) or (x, y, z) depends on "assure_3d_coords",
     LWPolyline.width list of (start-width, end-width), .bulge list of floats, removed LWPolyline.get_rstrip_points() and
     added .const_width attribute (if != 0, ignore .width list).
+  * CHANGE: Polyline method points() is now a field (list) and added lists for width and bulge for consistent APIs of
+    LWPolyline and Polyline.
 
 Version 0.7.2 - 2014-05-09
 

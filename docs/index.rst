@@ -655,13 +655,29 @@ Polyline
     separated classes for this entities see: :class:`Polyface` and
     :class:`Polymesh`.
 
-.. attribute:: is_closed
+.. attribute:: Polyline.is_closed
 
     ``True`` if polyline is closed.
 
-.. attribute:: default_start_width
+.. attribute:: Polyline.default_start_width
 
-.. attribute:: default_end_width
+   Default line segment start width, if not set in vertex entity.
+
+.. attribute:: Polyline.default_end_width
+
+   Default line segment end width, if not set in vertex entity.
+
+.. attribute:: Polyline.points
+
+    List off all vertex locations as (x, y[, z]) *tuple*.
+
+.. attribute:: Polyline.width
+
+    List off all vertex width values as (start_width, end_width) *tuple*.
+
+.. attribute:: Polyline.bulge
+
+    List off all vertex bulge values as *floats*.
 
 .. method:: Polyline.__getitem__(index)
 
@@ -676,9 +692,6 @@ Polyline
 
     Iterate of all vertices, as :class:`Vertex` entity.
 
-.. method:: Polyline.points()
-
-    Returns a generator over all vertex locations as (x, y, z)-tuple.
 
 Vertex
 ------

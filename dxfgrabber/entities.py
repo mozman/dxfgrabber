@@ -161,7 +161,7 @@ class Attrib(Text):  # also ATTDEF
 class Polyline(Shape):
     def __init__(self, wrapper):
         super(Polyline, self).__init__(wrapper)
-        self.vertices = None
+        self.vertices = []  # set in append data
         self.mode = wrapper.get_mode()
         self.flags = wrapper.flags
         get_dxf = wrapper.get_dxf_attrib
@@ -172,6 +172,9 @@ class Polyline(Shape):
         self.is_mclosed = wrapper.is_mclosed()
         self.is_nclosed = wrapper.is_nclosed()
         self.elevation = get_dxf('elevation', (0., 0., 0.))
+        self.points = []  # set in append data
+        self.width = []  # set in append data
+        self.bulge = []  # set in append data
 
     def __len__(self):
         return len(self.vertices)
@@ -186,11 +189,20 @@ class Polyline(Shape):
     def is_closed(self):
         return self.is_mclosed
 
-    def points(self):
-        return (vertex.location for vertex in self.vertices)
-
     def append_data(self, vertices):
+        def default_width(start_width, end_width):
+            if start_width == 0.:
+                start_width = self.default_start_width
+            if end_width == 0.:
+                end_width = self.default_end_width
+            return start_width, end_width
+
         self.vertices = vertices
+        if self.mode.startswith('polyline'):
+            for vertex in self.vertices:
+                self.points.append(vertex.location)
+                self.width.append(default_width(vertex.start_width, vertex.end_width))
+                self.bulge.append(vertex.bulge)
 
     def cast(self):
         if self.mode == 'polyface':

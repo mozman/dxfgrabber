@@ -32,8 +32,15 @@ class TestPolylineDXF12(unittest.TestCase):
 
     def test_polyline_points(self):
         polyline = self.entities[0]
-        points = list(polyline.points())
-        self.assertEqual(points[3], (0., 1., 0.))
+        self.assertEqual(polyline.points[3], (0., 1., 0.))
+
+    def test_polyline_width(self):
+        polyline = self.entities[0]
+        self.assertEqual(len(polyline.width), len(polyline.points))
+
+    def test_polyline_bulge(self):
+        polyline = self.entities[0]
+        self.assertEqual(len(polyline.bulge), len(polyline.points))
 
 
 class TestPolylineDXF13(unittest.TestCase):

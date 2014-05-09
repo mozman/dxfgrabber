@@ -34,7 +34,7 @@ class TestAssure3dCoords(unittest.TestCase):
 
     def test_polyline2d(self):
         polyline = [e for e in DWG.entities if e.dxftype == 'POLYLINE'][0]
-        self.assertEqual(pcoords, list(polyline.points()))
+        self.assertEqual(pcoords, list(polyline.points))
 
 
 if __name__ == '__main__':
