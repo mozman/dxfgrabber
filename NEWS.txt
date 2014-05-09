@@ -2,6 +2,10 @@
 News
 ====
 
+Version 0.7.3 - 2014-05-..
+
+  * NEW: ``options = {"assure_3d_coords": True}``, guarantees (x, y, z) tuples for ALL coordinates, except LWPOLYLINE
+
 Version 0.7.2 - 2014-05-09
 
   * NEW: grabs SAB data of BODY, 3DSOLID, ... entities for DXF version AC1027 (R2013) and later

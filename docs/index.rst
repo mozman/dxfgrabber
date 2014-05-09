@@ -42,7 +42,8 @@ Options dict for reading DXF files
 default options::
 
     DEFAULT_OPTIONS = {
-        "grab_blocks": True
+        "grab_blocks": True,
+        "assure_3d_coords": False,
     }
 
 ================ ==========================================================
@@ -50,6 +51,8 @@ key              description
 ================ ==========================================================
 grab_blocks      if ``True`` read block definitions from DXF file, else the
                  dict :attr:`Drawing.blocks` is empty.
+assure_3d_coords guarantees (x, y, z) tuples for ALL coordinates, except
+                 LWPOLYLINE
 ================ ==========================================================
 
 

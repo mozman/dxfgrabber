@@ -24,14 +24,16 @@ cdef class TagIterator:
     cdef object undo_coord
     cdef bint eof
     cdef bint undo
+    cdef bint assure_3d_coords
 
-    def __init__(self, textfile):
+    def __init__(self, textfile, assure_3D_coords=False):
         self.textfile = textfile
         self.readline = textfile.readline
         self.undo = False
         self.last_tag = NONE_TAG
         self.undo_coord = None
         self.eof = False
+        self.assure_3d_coords = assure_3D_coords
 
     def __iter__(self):
         return self
@@ -96,11 +98,17 @@ cdef class TagIterator:
             code_z, value_z = self.read_next_tag()
         except StopIteration:  # 2D point at end of file
             self.eof = True  # store reaching end of file
-            value = (value_x, value_y)
+            if self.assure_3d_coords:
+                value = (value_x, value_y, 0.)
+            else:
+                value = (value_x, value_y)
         else:
             if code_z != code_x + 20:  # not a Z coordinate -> 2D point
                 self.undo_coord = (code_z, value_z)
-                value = (value_x, value_y)
+                if self.assure_3d_coords:
+                    value = (value_x, value_y, 0.)
+                else:
+                    value = (value_x, value_y)
             else:  # is a 3D point
                 value = (value_x, value_y, float(value_z))
         return value

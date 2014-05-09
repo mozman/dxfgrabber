@@ -9,7 +9,7 @@ import os
 from setuptools import setup
 from setuptools import Extension
 
-VERSION = "0.7.2"
+VERSION = "0.7.3"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
 

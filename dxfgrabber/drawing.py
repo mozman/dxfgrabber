@@ -9,20 +9,22 @@ from .tags import TagIterator
 from .sections import Sections
 
 DEFAULT_OPTIONS = {
-    "grab_blocks": True,
+    "grab_blocks": True,  # import block definitions True=yes, False=No
+    "assure_3d_coords": False,  # guarantees (x, y, z) tuples for ALL coordinates, except LWPOLYLINE
 }
 
 
 class Drawing(object):
     def __init__(self, stream, options=None):
-        tagreader = TagIterator(stream)
-        self.dxfversion = 'AC1009'
-        self.encoding = 'cp1252'
-        self.filename = None
         if options is None:
             options = DEFAULT_OPTIONS
         self.grab_blocks = options.get('grab_blocks', True)
+        self.assure_3d_coords = options.get('assure_3d_coords', False)
 
+        tagreader = TagIterator(stream, self.assure_3d_coords)
+        self.dxfversion = 'AC1009'
+        self.encoding = 'cp1252'
+        self.filename = None
         sections = Sections(tagreader, self)
         self.header = sections.header
         self.layers = sections.tables.layers

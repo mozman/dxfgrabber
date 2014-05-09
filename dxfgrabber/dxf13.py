@@ -218,7 +218,7 @@ class LWPolyline(DXFEntity):
                 if tag.code == 10:
                     if point is not None:
                         yield get_vertex()
-                    point = list(tag.value)
+                    point = list(tag.value[:2])
                     attribs = {}
                 else:
                     attribs[tag.code] = tag.value
