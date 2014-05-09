@@ -659,6 +659,10 @@ Polyline
 
     ``True`` if polyline is closed.
 
+.. attribute:: default_start_width
+
+.. attribute:: default_end_width
+
 .. method:: Polyline.__getitem__(index)
 
     Returns vertex *index* as :class:`Vertex` entity. support for
@@ -684,6 +688,10 @@ Vertex
 .. attribute:: Vertex.location
 
     Location as (x, y, z)-tuple.
+
+.. attribute:: Vertex.start_width
+
+.. attribute:: Vertex.end_width
 
 .. attribute:: Vertex.bulge
 

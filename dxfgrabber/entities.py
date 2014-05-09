@@ -283,6 +283,8 @@ class Vertex(Shape):
         get_dxf = wrapper.get_dxf_attrib
         self.location = get_dxf('location')
         self.flags = get_dxf('flags', 0)
+        self.start_width = get_dxf('start_width', 0)
+        self.end_width = get_dxf('end_width', 0)
         self.bulge = get_dxf('bulge', 0)
         self.tangent = get_dxf('tangent', None)
         self.vtx = self._get_vtx(wrapper)
