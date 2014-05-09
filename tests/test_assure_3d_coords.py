@@ -30,8 +30,7 @@ class TestAssure3dCoords(unittest.TestCase):
     def test_lwpolyline(self):
         # LWPOLYLINE can not return 3d coordinates (x, y, start_width, end_width, bulge)
         lwpolyline = [e for e in DWG.entities if e.dxftype == 'LWPOLYLINE'][0]
-        pcoords2 = tuple((c[0], c[1], 0, 0, 0) for c in pcoords)
-        self.assertEqual(pcoords2, lwpolyline.points)
+        self.assertEqual(pcoords, lwpolyline.points)
 
     def test_polyline2d(self):
         polyline = [e for e in DWG.entities if e.dxftype == 'POLYLINE'][0]

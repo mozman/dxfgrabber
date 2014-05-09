@@ -4,7 +4,14 @@ News
 
 Version 0.7.3 - 2014-05-..
 
-  * NEW: ``options = {"assure_3d_coords": True}``, guarantees (x, y, z) tuples for ALL coordinates, except LWPOLYLINE
+  * NEW: ``options = {"assure_3d_coords": True}``, guarantees (x, y, z) tuples for ALL coordinates, this option is by default
+    ``False``
+  * NEW: extended TrueColor() class, see docs
+  * NEW: dxfgrabber.aci_to_true_color(index) returns the DXF default true color value for AutoCAD Color Index *index*
+    as TrueColor()
+  * CHANGE: LWPolyline again: LWPolyline.points list of (x, y) or (x, y, z) depends on "assure_3d_coords",
+    LWPolyline.width list of (start-width, end-width), .bulge list of floats, removed LWPolyline.get_rstrip_points() and
+    added .const_width attribute (if != 0, ignore .width list).
 
 Version 0.7.2 - 2014-05-09
 

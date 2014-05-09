@@ -190,7 +190,7 @@ class SeqEnd(dxf12.SeqEnd):
 lwpolyline_subclass = DefSubclass('AcDbPolyline', {
     'elevation': DXFAttr(38),
     'flags': DXFAttr(70),
-    'constwidth': DXFAttr(43),
+    'const_width': DXFAttr(43),
     'count': DXFAttr(90),
     'extrusion': DXFAttr(210, 'Point3D'),
 })
@@ -218,19 +218,24 @@ class LWPolyline(DXFEntity):
                 if tag.code == 10:
                     if point is not None:
                         yield get_vertex()
-                    point = list(tag.value[:2])
+                    point = list(tag.value)
                     attribs = {}
                 else:
                     attribs[tag.code] = tag.value
         if point is not None:
             yield get_vertex()  # last point
 
-    def get_rstrip_points(self):
-        last0 = 4
-        for point in self:
-            while point[last0] == 0 and last0 > 1:
-                last0 -= 1
-            yield tuple(point[:last0+1])
+    def data(self):
+        full_points = list(self)
+        points = []
+        width = []
+        bulge = []
+        for point in full_points:
+            x = 2 if len(point) == 5 else 3
+            points.append(point[:x])
+            width.append((point[-3], point[-2]))
+            bulge.append(point[-1])
+        return points, width, bulge
 
     @property
     def flags(self):
@@ -238,11 +243,6 @@ class LWPolyline(DXFEntity):
 
     def is_closed(self):
         return bool(self.flags & const.LWPOLYLINE_CLOSED)
-
-    @property
-    def points(self):
-        for point in self:
-            yield (point[0].value, point[1].value)
 
 
 insert_subclass = DefSubclass('AcDbBlockReference', {

@@ -56,6 +56,14 @@ assure_3d_coords guarantees (x, y, z) tuples for ALL coordinates, except
 ================ ==========================================================
 
 
+Helper Functions
+================
+
+.. method:: aci_to_true_color(index)
+
+   Returns the DXF default true color value for AutoCAD Color Index *index* as :class:`TrueColor` object.
+   Raises *IndexError* for *index* < 0 and *index* > 255.
+
 
 Drawing Content
 ===============
@@ -346,7 +354,7 @@ Base Class Shape
 
 .. attribute:: Shape.color
 
-    Entity color as *int*, where 256 means color by layer and 0 means color by
+    Entity color as ACI (AutoCAD Color Index) where 256 means color by layer and 0 means color by
     block.
 
 .. attribute:: Shape.true_color
@@ -371,9 +379,50 @@ None  if not set
 
 .. class:: TrueColor(int)
 
+   Represents a true color value as *int*. Create true colors::
+
+       t = TrueColor(0xAABBCC)
+       t = TrueColor.from_rgb(0xAA, 0xBB, 0xCC)
+       t = TrueColor.from_aci(1)  # ACI for red
+
+   Unpack TrueColor::
+
+       r, g, b = t.rgb()  # fastest way
+       r, g, b = t  # unpacking by t.__getitem__()
+
+       red = t.r
+       green = t.g
+       blue = t.b
+
+       red = t[0]
+       green = t[1]
+       blue = t[2]
+
+
+.. attribute:: TrueColor.r
+
+   Red value as int
+
+.. attribute:: TrueColor.g
+
+   Green value as int
+
+.. attribute:: TrueColor.b
+
+   Blue value as int
+
 .. method:: TrueColor.rgb()
 
    Returns a tuple (red, green, blue) each value in range 0 to 255. (255, 255, 255) = white.
+
+.. method:: TrueColor.from_rgb(r, g, b)
+
+   Returns a :class:`TrueColor` object.
+
+.. method:: TrueColor.from_aci(index)
+
+   Returns the DXF default true color value for AutoCAD Color Index *index* as :class:`TrueColor` object.
+   Raises *IndexError* for *index* < 0 and *index* > 255.
 
 Block
 -----
@@ -751,7 +800,19 @@ LWPolyline
 
 .. attribute:: LWPolyline.points
 
-    *List* of 2D polyline points (x, y) as *tuple*.
+    *List* of 2D polyline points as (x, y) *tuple*, or (x, y, z=0) *tuple* if option assure_3d_points is *True*.
+
+.. attribute:: LWPolyline.width
+
+    *List* of (start_width, end_width) values. To be ignored if :attr:`~LWPolyline.const_width` is not 0.
+
+.. attribute:: LWPolyline.bulge
+
+    *List* of bulge values as *float*
+
+.. attribute:: LWPolyline.const_width
+
+    Polyline has this constant width, if this value is not 0.
 
 .. attribute:: LWPolyline.is_closed
 
@@ -763,12 +824,11 @@ LWPolyline
 
 .. method:: LWPolyline.__getitem__(index)
 
-    Returns polyline point (x, y) as *tuple* at position *index*, *slicing* is
-    supported. Raises *IndexError*
+    Returns polyline point at position *index*, *slicing* is supported. Raises *IndexError*
 
 .. method:: LWPolyline.__iter__()
 
-    Iterate over all polyline points (x, y) as *tuple*.
+    Iterate over all polyline points.
 
 Ellipse
 -------

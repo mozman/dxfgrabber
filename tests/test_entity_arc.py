@@ -6,7 +6,6 @@ __author__ = "mozman <mozman@gmx.at>"
 import unittest
 from dxfgrabber.tags import ClassifiedTags
 from dxfgrabber.entities import entity_factory
-from dxfgrabber.entities import TrueColor
 
 
 class TestArcDXF12(unittest.TestCase):
@@ -38,15 +37,6 @@ class TestArcDXF13(TestArcDXF12):
     def setUp(self):
         tags = ClassifiedTags.from_text(ARC_DXF13)
         self.entity = entity_factory(tags, 'AC1024')
-
-
-class TestTrueColor(unittest.TestCase):
-    def test_rgb(self):
-        t = TrueColor(0xA0B0C0)
-        r, g, b = t.rgb()
-        self.assertTrue(0xA0, r)
-        self.assertTrue(0xB0, g)
-        self.assertTrue(0xC0, b)
 
 
 ARC_DXF12 = """  0

@@ -9,13 +9,8 @@ from . import dxf12, dxf13
 from . import const
 from .juliandate import calendar_date
 from datetime import datetime
-
+from .color import TrueColor
 import math
-
-
-class TrueColor(int):
-    def rgb(self):
-        return (self >> 16) & 0xFF, (self >> 8) & 0xFF, self & 0xFF
 
 
 class SeqEnd(object):
@@ -306,7 +301,8 @@ class Vertex(Shape):
 class LWPolyline(Shape):
     def __init__(self, wrapper):
         super(LWPolyline, self).__init__(wrapper)
-        self.points = tuple(wrapper)
+        self.points, self.width, self.bulge = wrapper.data()
+        self.const_width = wrapper.get_dxf_attrib('const_width', 0)
         self.is_closed = wrapper.is_closed()
         self.elevation = wrapper.get_dxf_attrib('elevation', (0., 0., 0.))
 
@@ -318,13 +314,6 @@ class LWPolyline(Shape):
 
     def __iter__(self):
         return iter(self.points)
-
-    def get_rstrip_points(self):
-        last0 = 4
-        for point in self.points:
-            while point[last0] == 0 and last0 > 1:
-                last0 -= 1
-            yield tuple(point[:last0+1])
 
 
 class Ellipse(Shape):
