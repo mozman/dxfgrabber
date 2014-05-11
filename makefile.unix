@@ -3,7 +3,7 @@
 
 FLAGS = --inplace --force
 CMD = setup.py build_ext
-RUNTESTS = -m unittest discover
+RUNTESTS = -m unittest discover -s tests
 
 PYTHON2 = python
 PYTHON3 = python3

@@ -1,12 +1,17 @@
+import sys
 import glob
 import dxfgrabber
 import time
 from itertools import chain
 
 from dxfgrabber.tags import CYTHON_EXT
+if "win" in sys.platform:
+    DIR1 = r"D:\Source\dxftest\CADKitSamples\*.dxf"
+    DIR2 = r"D:\Source\dxftest\*.dxf"
+else:
+    DIR1 = r"/media/sf_winsource/dxftest/CADKitSamples/*.dxf"
+    DIR2 = r"/media/sf_winsource/dxftest/*.dxf"
 
-DIR1 = r"D:\Source\dxftest\CADKitSamples\*.dxf"
-DIR2 = r"D:\Source\dxftest\*.dxf"
 all_files = chain(glob.glob(DIR1), glob.glob(DIR2))
 overall_time = 0
 ok = 0
