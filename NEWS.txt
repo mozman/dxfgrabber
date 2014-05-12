@@ -9,9 +9,12 @@ Version 0.7.3 - 2014-05-..
   * NEW: extended TrueColor() class, see docs
   * NEW: dxfgrabber.aci_to_true_color(index) returns the DXF default true color value for AutoCAD Color Index *index*
     as TrueColor()
-  * NEW: added is_backwards and is_upside_down attributes to TEXT, ATTRIB, ATTDEF entities
+  * NEW: added is_backwards, is_upside_down, width, oblique attributes to TEXT, ATTRIB, ATTDEF entities
   * NEW: added extrusion direction to all entities
+  * NEW: added row_count, col_count, row_spacing, col_spacing attributes to INSERT.
   * NEW: MText.plain_text(split=False) tries to remove format codes, returns a single string or a list of strings
+  * NEW: added n_smooth_density, m_smooth_density, smooth_type to Polymesh
+  * NEW: added smooth_type to Polyface
   * CHANGE: LWPolyline again: LWPolyline.points list of (x, y) or (x, y, z) depends on "assure_3d_coords",
     LWPolyline.width list of (start-width, end-width), .bulge list of floats, removed LWPolyline.get_rstrip_points() and
     added .const_width attribute (if != 0, ignore .width list).

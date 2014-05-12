@@ -16,8 +16,11 @@ class Style(object):
         self.height = wrapper.get_dxf_attrib('height')
         self.width = wrapper.get_dxf_attrib('width')
         self.oblique = wrapper.get_dxf_attrib('oblique')
-        self.backward = bool(wrapper.get_dxf_attrib('generation_flags') and 2)
-        self.mirror_y = bool(wrapper.get_dxf_attrib('generation_flags') and 4)
+        # backward & mirror_y was first and stays for compatibility
+        self.backward = bool(wrapper.get_dxf_attrib('generation_flags') & 2)
+        self.mirror_y = bool(wrapper.get_dxf_attrib('generation_flags') & 4)
+        self.is_backward = self.backward
+        self.is_upside_down = self.mirror_y
         self.font = wrapper.get_dxf_attrib('font')
         self.bigfont = wrapper.get_dxf_attrib('bigfont', "")
 

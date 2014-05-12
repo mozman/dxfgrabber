@@ -124,14 +124,20 @@ class Text(Shape):
         get_dxf = wrapper.get_dxf_attrib
         self.insert = get_dxf('insert')
         self.text = get_dxf('text')
-        self.height = get_dxf('height', 1.)
+        self.height = get_dxf('height', 0)
+        self.width = get_dxf('width', 0)
+        self.oblique = get_dxf('oblique', None)
         self.rotation = get_dxf('rotation', 0.)
         self.style = get_dxf('style', "")
         self.halign = get_dxf('halign', 0)
         self.valign = get_dxf('valign', 0)
         self.alignpoint = get_dxf('alignpoint', None)
-        self.is_backwards = bool(get_dxf('textgenerationflag', 0) & 2)
-        self.is_upside_down = bool(get_dxf('textgenerationflag', 0) & 4)
+        if get_dxf('textgenerationflag', None) is not None:
+            self.is_backwards = bool(get_dxf('textgenerationflag', 0) & 2)
+            self.is_upside_down = bool(get_dxf('textgenerationflag', 0) & 4)
+        else:
+            self.is_backwards = None
+            self.is_upside_down = None
 
 
 class Insert(Shape):
@@ -142,6 +148,10 @@ class Insert(Shape):
         self.insert = get_dxf('insert')
         self.rotation = get_dxf('rotation', 0.)
         self.scale = get_dxf('xscale', 1.), get_dxf('yscale', 1.), get_dxf('zscale', 1.)
+        self.row_count = get_dxf('rowcount', 1)
+        self.row_spacing = get_dxf('rowspacing', 0.)
+        self.col_count = get_dxf('colcount', 1)
+        self.col_spacing = get_dxf('colspacing', 0.)
         self.attribsfollow = bool(get_dxf('attribsfollow', 0))
         self.attribs = []
 
@@ -178,6 +188,9 @@ class Polyline(Shape):
         self.points = []  # set in append data
         self.width = []  # set in append data
         self.bulge = []  # set in append data
+        self.m_smooth_density = get_dxf("msmoothdensity", 0.)
+        self.n_smooth_density = get_dxf("nsmoothdensity", 0.)
+        self.smooth_type = get_dxf("smoothtype", 0)
 
     def __len__(self):
         return len(self.vertices)
@@ -274,6 +287,9 @@ class Polymesh(PolyShape):
         self.is_mclosed = polyline.is_mclosed
         self.is_nclosed = polyline.is_nclosed
         self._vertices = polyline.vertices
+        self.m_smooth_density = polyline.m_smooth_density
+        self.n_smooth_density = polyline.n_smooth_density
+        self.smooth_type = polyline.smooth_type
 
     def __iter__(self):
         return iter(self._vertices)

@@ -222,7 +222,33 @@ Style
 
 .. class:: Style
 
-**TODO**
+.. attribute:: Style.name
+
+   Text style name.
+
+.. attribute:: Style.height
+
+    Text fixed height as *float*, is 0 for no fixed height.
+
+.. attribute:: Style.width
+
+    Text width factor.
+
+.. attribute:: Style.oblique
+
+    Text oblique angle. (0 deg = veritcal)
+
+.. attribute:: Style.is_backwards
+
+    *True* if text is mirrored in X.
+
+.. attribute:: Style.is_upside_down
+
+    *True* if text is mirrored in Y.
+
+.. attribute:: Style.font
+
+    Primary font file name
 
 Linetype Table
 --------------
@@ -580,7 +606,16 @@ Text
 
 .. attribute:: Text.height
 
-    Text height as *float*
+    Text height as *float*, if *0* you have to look into the styles table :attr:`drawing.styles` with :attr:`Text.style`
+    as key.
+
+.. attribute:: Text.width
+
+    Text width factor.
+
+.. attribute:: Text.oblique
+
+    Text oblique angle. (0 deg = veritcal)
 
 .. attribute:: Text.rotation
 
@@ -669,6 +704,22 @@ Insert
 .. attribute:: Insert.scale
 
     (x, y, z) block scaling as *tuple*, default is (1.0, 1.0, 1.0)
+
+.. attribute:: Insert.row_count
+
+    Row count for multiple block references.
+
+.. attribute:: Insert.col_count
+
+    Column count for multiple block references.
+
+.. attribute:: Insert.row_spacing
+
+    Row distance for multiple block references.
+
+.. attribute:: Insert.col_spacing
+
+    col distance for multiple block references.
 
 .. attribute:: Insert.attribs
 
@@ -775,6 +826,19 @@ Polyface
 
     Iterate of all faces, as :class:`SubFace` objects.
 
+.. attribute:: Polyface.smooth_type
+
+    Smooth surface type; integer codes, not bit-coded:
+
+===== =========================
+Value Description
+===== =========================
+0     No smooth surface fitted
+5     Quadratic B-spline surface
+6     Cubic B-spline surface
+8     Bezier surface
+===== =========================
+
 SubFace
 ^^^^^^^
 
@@ -807,7 +871,6 @@ SubFace
 
     Returns *True* if face edge *pos* is visible else *False*.
 
-
 Polymesh
 --------
 
@@ -833,6 +896,27 @@ Polymesh
 .. attribute:: Polymesh.is_nclosed
 
     ``True`` if *Polymesh* is closed in n direction.
+
+.. attribute:: Polymesh.m_smooth_density
+
+    Smooth surface M density.
+
+.. attribute:: Polymesh.n_smooth_density
+
+    Smooth surface N density.
+
+.. attribute:: Polymesh.smooth_type
+
+    Smooth surface type; integer codes, not bit-coded:
+
+===== =========================
+Value Description
+===== =========================
+0     No smooth surface fitted
+5     Quadratic B-spline surface
+6     Cubic B-spline surface
+8     Bezier surface
+===== =========================
 
 .. method:: Polymesh.get_vertex(pos)
 
