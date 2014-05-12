@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Created: 22.07.12
 # License: MIT License
 from __future__ import unicode_literals
