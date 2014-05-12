@@ -11,6 +11,7 @@ Version 0.7.3 - 2014-05-..
     as TrueColor()
   * NEW: added is_backwards and is_upside_down attributes to TEXT, ATTRIB, ATTDEF entities
   * NEW: added extrusion direction to all entities
+  * NEW: MText.plain_text(split=False) tries to remove format codes, returns a single string or a list of strings
   * CHANGE: LWPolyline again: LWPolyline.points list of (x, y) or (x, y, z) depends on "assure_3d_coords",
     LWPolyline.width list of (start-width, end-width), .bulge list of floats, removed LWPolyline.get_rstrip_points() and
     added .const_width attribute (if != 0, ignore .width list).

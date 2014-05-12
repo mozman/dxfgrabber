@@ -422,6 +422,64 @@ def normalized(vector):
     m = (x**2 + y**2 + z**2)**0.5
     return x/m, y/m, z/m
 
+##################################################
+# MTEXT inline codes
+# \L	Start underline
+# \l	Stop underline
+# \O	Start overstrike
+# \o	Stop overstrike
+# \K	Start strike-through
+# \k	Stop strike-through
+# \P	New paragraph (new line)
+# \pxi	Control codes for bullets, numbered paragraphs and columns
+# \X	Paragraph wrap on the dimension line (only in dimensions)
+# \Q	Slanting (obliquing) text by angle - e.g. \Q30;
+# \H	Text height - e.g. \H3x;
+# \W	Text width - e.g. \W0.8x;
+# \F	Font selection
+#
+#     e.g. \Fgdt;o - GDT-tolerance
+#     e.g. \Fkroeger|b0|i0|c238|p10 - font Kroeger, non-bold, non-italic, codepage 238, pitch 10
+#
+# \S	Stacking, fractions
+#
+#     e.g. \SA^B:
+#     A
+#     B
+#     e.g. \SX/Y:
+#     X
+#     -
+#     Y
+#     e.g. \S1#4:
+#     1/4
+#
+# \A	Alignment
+#
+#     \A0; = bottom
+#     \A1; = center
+#     \A2; = top
+#
+# \C	Color change
+#
+#     \C1; = red
+#     \C2; = yellow
+#     \C3; = green
+#     \C4; = cyan
+#     \C5; = blue
+#     \C6; = magenta
+#     \C7; = white
+#
+# \T	Tracking, char.spacing - e.g. \T2;
+# \~	Non-wrapping space, hard space
+# {}	Braces - define the text area influenced by the code
+# \	Escape character - e.g. \\ = "\", \{ = "{"
+#
+# Codes and braces can be nested up to 8 levels deep
+
+ESCAPED_CHARS = "\\{}"
+GROUP_CHARS = "{}"
+ONE_CHAR_COMMANDS = "PLlOoKkX"
+
 
 class MText(Shape):
     def __init__(self, wrapper):
@@ -443,6 +501,43 @@ class MText(Shape):
 
     def lines(self):
         return self.rawtext.split('\P')
+
+    def plain_text(self, split=False):
+        chars = []
+        raw_chars = list(reversed(self.rawtext))  # text splitted into chars, in reversed order for efficient pop()
+        while len(raw_chars):
+            char = raw_chars.pop()
+            if char == '\\':
+                try:
+                    char = raw_chars.pop()
+                except IndexError:
+                    break  # premature end of text - just ignore
+
+                if char in ESCAPED_CHARS:  # \ { }
+                    chars.append(char)
+                elif char in ONE_CHAR_COMMANDS:
+                    if char == 'P':  # new line
+                        chars.append('\n')
+                    # discard other commands
+                else:  # more character commands are terminated by ';'
+                    stacking = char == 'S'
+                    try:
+                        while char != ';':  # end of format marker
+                            char = raw_chars.pop()
+                            if stacking and char != ';':
+                                chars.append(char)
+                    except IndexError:
+                        break  # premature end of text - just ignore
+            elif char in GROUP_CHARS:  # { }
+                pass
+            else:
+                chars.append(char)
+
+        plain_text = "".join(chars)
+        if split:
+            return plain_text.split('\n')
+        else:
+            return plain_text
 
 
 class Block(Shape):

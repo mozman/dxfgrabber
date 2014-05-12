@@ -1088,6 +1088,11 @@ MText
     Returns a *list* of lines. It is the :attr:`MText.rawtext` splitted into
     lines by the ``\P`` character.
 
+.. method:: MText.plain_text(split=False)
+
+   Tries to remove format codes, returns a single string if *split* is *False* else multiple lines as list of strings
+   without ``\n``.
+
 
 Sun
 ---
