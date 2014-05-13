@@ -12,6 +12,8 @@ from datetime import datetime
 from .color import TrueColor
 import math
 
+from .styles import default_text_style
+
 
 class SeqEnd(object):
     def __init__(self, wrapper):
@@ -138,6 +140,27 @@ class Text(Shape):
         else:
             self.is_backwards = None
             self.is_upside_down = None
+        self.font = ""
+        self.bigfont = ""
+
+    def resolve_text_style(self, text_styles):
+        style = text_styles.get(self.style, None)
+        if style is not None:
+            style = default_text_style
+        if self.height == 0:
+            self.height = style.height
+        if self.width == 0:
+            self.width = style.width
+        if self.oblique is None:
+            self.oblique = style.oblique
+        if self.is_backwards is None:
+            self.is_backwards = style.is_backwards
+        if self.is_upside_down is None:
+            self.is_upside_down = style.is_upside_down
+        if self.font is None:
+            self.font = style.font
+        if self.bigfont is None:
+            self.bigfont = style.bigfont
 
 
 class Insert(Shape):
@@ -504,7 +527,7 @@ class MText(Shape):
         self.insert = wrapper.get_dxf_attrib('insert')
         self.rawtext = wrapper.rawtext()
         get_dxf = wrapper.get_dxf_attrib
-        self.height = get_dxf('height', 1.0)
+        self.height = get_dxf('height', 0)
         self.linespacing = get_dxf('linespacing', 1.0)
         self.attachmentpoint = get_dxf('attachmentpoint', 1)
         self.style = get_dxf('style', 'STANDARD')
@@ -514,6 +537,7 @@ class MText(Shape):
         except ValueError:
             xdir = deg2vec(get_dxf('rotation', 0.0))
         self.xdirection = normalized(xdir)
+        self.font = None
 
     def lines(self):
         return self.rawtext.split('\P')
@@ -546,6 +570,13 @@ class MText(Shape):
                         break  # premature end of text - just ignore
             elif char in GROUP_CHARS:  # { }
                 pass
+            elif char == '%':  # old formatting codes?
+                if len(raw_chars) and raw_chars[-1] == '%':
+                    raw_chars.pop()  # '%'
+                    if len(raw_chars):
+                        raw_chars.pop()  # command char
+                else:
+                    chars.append(char)
             else:
                 chars.append(char)
 
@@ -554,6 +585,15 @@ class MText(Shape):
             return plain_text.split('\n')
         else:
             return plain_text
+
+    def resolve_text_style(self, text_styles):
+        style = text_styles.get(self.style, None)
+        if style is not None:
+            style = default_text_style
+        if self.height == 0:
+            self.height = style.height
+        if self.font is None:
+            self.font = style.font
 
 
 class Block(Shape):

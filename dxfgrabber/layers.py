@@ -29,8 +29,14 @@ class Table(object):
 
     # start public interface
 
-    def get(self, name):
-        return self._table_entries[name]
+    def get(self, name, default=KeyError):
+        try:
+            return self._table_entries[name]
+        except KeyError:
+            if default is KeyError:
+                raise
+            else:
+                return default
 
     def __getitem__(self, item):
         return self.get(item)

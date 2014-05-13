@@ -44,15 +44,16 @@ default options::
     DEFAULT_OPTIONS = {
         "grab_blocks": True,
         "assure_3d_coords": False,
+        "resolve_text_styles": True,
     }
 
-================ ==========================================================
-key              description
-================ ==========================================================
-grab_blocks      if ``True`` read block definitions from DXF file, else the
-                 dict :attr:`Drawing.blocks` is empty.
-assure_3d_coords guarantees (x, y, z) tuples for ALL coordinates
-================ ==========================================================
+=================== ===========
+key                 description
+=================== ===========
+grab_blocks         if ``True`` read block definitions from DXF file, else the dict :attr:`Drawing.blocks` is empty.
+assure_3d_coords    guarantees (x, y, z) tuples for ALL coordinates
+resolve_text_styles if ``True`` :class:`Text`, :class:`Attrib`, :class:`Attdef` and :class:`MText` attributes will be set by the associated text style if necessary
+=================== ===========
 
 
 Helper Functions
@@ -430,15 +431,15 @@ None  if not set
 
 .. attribute:: TrueColor.r
 
-   Red value as int
+   Red value as *int*.
 
 .. attribute:: TrueColor.g
 
-   Green value as int
+   Green value as *int*.
 
 .. attribute:: TrueColor.b
 
-   Blue value as int
+   Blue value as *int*.
 
 .. method:: TrueColor.rgb()
 
@@ -451,7 +452,7 @@ None  if not set
 .. method:: TrueColor.from_aci(index)
 
    Returns the DXF default true color value for AutoCAD Color Index *index* as :class:`TrueColor` object.
-   Raises *IndexError* for *index* < 0 and *index* > 255.
+   Raises *IndexError* for *index* < 1 and *index* > 255.
 
 Block
 -----
@@ -482,7 +483,6 @@ Block
 .. attribute:: Block.is_xref_overlay
 
     ``True`` if block is an external overlay reference.
-
 
 .. attribute:: Block.is_anonymous
 
@@ -594,6 +594,14 @@ Face
 Text
 ----
 
+The attributes :attr:`~Text.height`, :attr:`~Text.width`, :attr:`~Text.oblique`, :attr:`~Text.is_backwards` and
+:attr:`~Text.is_upside_down` are defined in the associated :class:`Style` object, if the value of these attributes are
+*0* (:attr:`~Text.height`, :attr:`~Text.width`) or *None* (:attr:`~Text.oblique`, :attr:`~Text.is_backwards`,
+:attr:`~Text.is_upside_down`).
+
+If the import option ``"resolve_text_styles"`` is *True*, all the above mentioned attributes and :attr:`~MText.font`
+and :attr:`~MText.bigfont` already have the 'final' value, no need to look into the :class:`Style` object.
+
 .. class:: Text(Shape)
 
 .. attribute:: Text.insert
@@ -606,7 +614,7 @@ Text
 
 .. attribute:: Text.height
 
-    Text height as *float*, if *0* you have to look into the styles table :attr:`drawing.styles` with :attr:`Text.style`
+    Text height as *float*, if *0* you have to look into the styles table :attr:`Drawing.styles` with :attr:`Text.style`
     as key.
 
 .. attribute:: Text.width
@@ -665,6 +673,14 @@ Value Alignment
 .. attribute:: Text.alignpoint
 
     Second alignment point as tuple or *None*.
+
+.. attribute:: Text.font
+
+    Font name as string, if import option "resolve_text_styles" is *True* else ``""``.
+
+.. attribute:: Text.bigfont
+
+    Bigfont name as string, if import option "resolve_text_styles" is *True* else ``""``.
 
 Attrib
 ------
@@ -1120,6 +1136,12 @@ Helix
 MText
 -----
 
+The :attr:`~MText.height` attribute is defined in the associated :class:`Style` object, if the value of
+:attr:`~MText.height` is *0*.
+
+If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`, :attr:`~MText.font` and
+:attr:`~MText.bigfont` already have the 'final' value, no need to look into the :class:`Style` object.
+
 
 .. class:: MText(Shape)
 
@@ -1166,6 +1188,14 @@ MText
 .. attribute:: MText.xdirection
 
     X-Axis direction vector as (x, y, z) as *tuple*. (unit vector)
+
+.. attribute:: MText.font
+
+    Font name as string, if import option ``"resolve_text_styles"`` is *True* else ``""``.
+
+.. attribute:: MText.bigfont
+
+    Bigfont name as string, if import option ``"resolve_text_styles"`` is *True* else ``""``.
 
 .. method:: MText.lines()
 

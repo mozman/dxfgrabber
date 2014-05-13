@@ -11,6 +11,7 @@ from .sections import Sections
 DEFAULT_OPTIONS = {
     "grab_blocks": True,  # import block definitions True=yes, False=No
     "assure_3d_coords": False,  # guarantees (x, y, z) tuples for ALL coordinates, except LWPOLYLINE
+    "resolve_text_styles": True,  # Text, Attrib, Attdef and MText attributes will be set by the associated text style if necessary
 }
 
 
@@ -20,6 +21,7 @@ class Drawing(object):
             options = DEFAULT_OPTIONS
         self.grab_blocks = options.get('grab_blocks', True)
         self.assure_3d_coords = options.get('assure_3d_coords', False)
+        self.resolve_text_styles = options.get('resolve_text_styles', True)
 
         tagreader = TagIterator(stream, self.assure_3d_coords)
         self.dxfversion = 'AC1009'
@@ -39,6 +41,11 @@ class Drawing(object):
             if self.dxfversion >= 'AC1027':
                 self.collect_sab_data()
 
+        if self.resolve_text_styles:
+            resolve_text_styles(self.entities, self.styles)
+            for block in self.blocks:
+                resolve_text_styles(block, self.styles)
+
     def modelspace(self):
         return (entity for entity in self.entities if not entity.paperspace)
 
@@ -50,3 +57,9 @@ class Drawing(object):
             if hasattr(entity, 'set_sab_data'):
                 sab_data = self.acdsdata.sab_data[entity.handle]
                 entity.set_sab_data(sab_data)
+
+
+def resolve_text_styles(entities, text_styles):
+    for entity in entities:
+        if hasattr(entity, 'resolve_text_style'):
+            entity.resolve_text_style(text_styles)

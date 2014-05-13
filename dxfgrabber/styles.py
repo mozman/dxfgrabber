@@ -2,12 +2,13 @@
 # Created: 06.01.2014
 # Copyright (C) 2014, Manfred Moitzi
 # License: MIT License
-
+from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 from .dxfentity import DXFEntity
 from .layers import Table
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
+from .tags import ClassifiedTags
 
 
 class Style(object):
@@ -19,7 +20,7 @@ class Style(object):
         # backward & mirror_y was first and stays for compatibility
         self.backward = bool(wrapper.get_dxf_attrib('generation_flags') & 2)
         self.mirror_y = bool(wrapper.get_dxf_attrib('generation_flags') & 4)
-        self.is_backward = self.backward
+        self.is_backwards = self.backward
         self.is_upside_down = self.mirror_y
         self.font = wrapper.get_dxf_attrib('font')
         self.bigfont = wrapper.get_dxf_attrib('bigfont', "")
@@ -73,3 +74,27 @@ style_subclass = DefSubclass('AcDbTextStyleTableRecord', {
 
 class DXF13Style(DXF12Style):
     DXFATTRIBS = DXFAttributes(none_subclass, symbol_subclass, style_subclass)
+
+DEFAULT_STYLE = """  0
+STYLE
+  2
+STANDARD
+ 70
+0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+0
+ 42
+1.0
+  3
+Arial
+  4
+
+"""
+
+default_text_style = Style(DXF12Style(ClassifiedTags.from_text(DEFAULT_STYLE)))
