@@ -1159,6 +1159,10 @@ If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`,
 
     Text height as *float*
 
+.. attribute:: MText.width
+
+    Reference rectangle width as *float* in drawing units.
+
 .. attribute:: MText.linespacing
 
     Text line spacing as *float*, valid from 0.25 to 4.00.

@@ -145,7 +145,7 @@ class Text(Shape):
 
     def resolve_text_style(self, text_styles):
         style = text_styles.get(self.style, None)
-        if style is not None:
+        if style is None:
             style = default_text_style
         if self.height == 0:
             self.height = style.height
@@ -528,6 +528,7 @@ class MText(Shape):
         self.rawtext = wrapper.rawtext()
         get_dxf = wrapper.get_dxf_attrib
         self.height = get_dxf('height', 0)
+        self.width = get_dxf('reference_rectangle_width', None)
         self.linespacing = get_dxf('linespacing', 1.0)
         self.attachmentpoint = get_dxf('attachmentpoint', 1)
         self.style = get_dxf('style', 'STANDARD')
@@ -538,6 +539,7 @@ class MText(Shape):
             xdir = deg2vec(get_dxf('rotation', 0.0))
         self.xdirection = normalized(xdir)
         self.font = None
+        self.bigfont = None
 
     def lines(self):
         return self.rawtext.split('\P')
@@ -588,12 +590,14 @@ class MText(Shape):
 
     def resolve_text_style(self, text_styles):
         style = text_styles.get(self.style, None)
-        if style is not None:
+        if style is None:
             style = default_text_style
         if self.height == 0:
             self.height = style.height
         if self.font is None:
             self.font = style.font
+        if self.bigfont is None:
+            self.bigfont = style.font
 
 
 class Block(Shape):

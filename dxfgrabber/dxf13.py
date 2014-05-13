@@ -415,6 +415,7 @@ class Helix(Spline):
 mtext_subclass = DefSubclass('AcDbMText', {
     'insert': DXFAttr(10, 'Point3D'),
     'height': DXFAttr(40),
+    'reference_rectangle_width': DXFAttr(41),
     'attachmentpoint': DXFAttr(71),
     'text': DXFAttr(1),  # also group code 3, if more than 255 chars
     'style': DXFAttr(7),  # text style
