@@ -10,6 +10,7 @@ Version 0.7.3 - 2014-05-..
   * NEW: dxfgrabber.aci_to_true_color(index) returns the DXF default true color value for AutoCAD Color Index *index*
     as TrueColor()
   * NEW: added is_backwards, is_upside_down, width, oblique, font, bigfont attributes to TEXT, ATTRIB, ATTDEF entities
+  * NEW: added plain_text() method to TEXT, ATTRIB and ATTDEF to get text content without formatting codes like '%%u'
   * NEW: added font, bigfont, rect_width attributes to MTEXT
   * NEW: added resolve_text_styles(text_styles) method to TEXT, ATTRIB, ATTDEF, MTEXT entities
   * NEW: new import option "resolve_text_styles" and it is *True* by default

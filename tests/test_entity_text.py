@@ -32,6 +32,17 @@ class TestTextDXF12(unittest.TestCase):
         self.assertEqual(entity.valign, 0)
         self.assertEqual(entity.alignpoint, None)
 
+    def test_text_plain_text_old_formatting_code(self):
+        text = self.entity
+        text.text = "das ist %%u ein text mit %"
+        expected = "das ist  ein text mit %"
+        self.assertEqual(expected, text.plain_text())
+
+    def test_mtext_plain_text_old_formatting_code_2(self):
+        text = self.entity
+        text.text = "%%u2 CAR GARAGE"
+        self.assertEqual("2 CAR GARAGE", text.plain_text())
+
 
 class TestTextDXF12(TestTextDXF12):
     def setUp(self):

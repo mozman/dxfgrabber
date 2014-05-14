@@ -686,6 +686,11 @@ Value Alignment
 
     Bigfont name as string, if import option ``resolve_text_styles`` is *True* else ``""``.
 
+.. method:: Text.plain_text()
+
+    Get text content without formatting codes like ``%%u``.
+
+
 Attrib
 ------
 

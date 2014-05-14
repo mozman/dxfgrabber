@@ -42,13 +42,6 @@ class TestMText(unittest.TestCase):
         expected = "Das ist eine MText\nZeile mit Formatierung\nänder die Farbe\n1.^INummerierung\n2.^INummerierung\n\n1/2500  ein Bruch"
         self.assertEqual(expected, mtext.plain_text())
 
-    def test_mtext_plain_text_old_formatting_code(self):
-        mtext = self.entity
-        mtext.rawtext = "das ist %%u ein text mit %"
-        expected = "das ist  ein text mit %"
-        self.assertEqual(expected, mtext.plain_text())
-
-
 MTEXT = """  0
 MTEXT
   5

@@ -162,6 +162,22 @@ class Text(Shape):
         if self.bigfont is None:
             self.bigfont = style.bigfont
 
+    def plain_text(self):
+        chars = []
+        raw_chars = list(reversed(self.text))  # text splitted into chars, in reversed order for efficient pop()
+        while len(raw_chars):
+            char = raw_chars.pop()
+            if char == '%':  # formatting codes?
+                if len(raw_chars) and raw_chars[-1] == '%':
+                    raw_chars.pop()  # '%'
+                    if len(raw_chars):
+                        raw_chars.pop()  # command char
+                else:
+                    chars.append(char)
+            else:
+                chars.append(char)
+        return "".join(chars)
+
 
 class Insert(Shape):
     def __init__(self, wrapper):
@@ -572,13 +588,6 @@ class MText(Shape):
                         break  # premature end of text - just ignore
             elif char in GROUP_CHARS:  # { }
                 pass
-            elif char == '%':  # old formatting codes?
-                if len(raw_chars) and raw_chars[-1] == '%':
-                    raw_chars.pop()  # '%'
-                    if len(raw_chars):
-                        raw_chars.pop()  # command char
-                else:
-                    chars.append(char)
             else:
                 chars.append(char)
 
