@@ -528,7 +528,7 @@ class MText(Shape):
         self.rawtext = wrapper.rawtext()
         get_dxf = wrapper.get_dxf_attrib
         self.height = get_dxf('height', 0)
-        self.width = get_dxf('reference_rectangle_width', None)
+        self.rect_width = get_dxf('reference_rectangle_width', None)
         self.linespacing = get_dxf('linespacing', 1.0)
         self.attachmentpoint = get_dxf('attachmentpoint', 1)
         self.style = get_dxf('style', 'STANDARD')

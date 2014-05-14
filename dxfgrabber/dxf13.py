@@ -67,23 +67,14 @@ circle_subclass = DefSubclass('AcDbCircle', {
 class Circle(dxf12.Circle):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, circle_subclass)
 
-
-arc_subclass = (
-    DefSubclass('AcDbCircle', {
-        'center': DXFAttr(10, 'Point2D/3D'),
-        'radius': DXFAttr(40),
-        'thickness': DXFAttr(39),
-    }),
-    DefSubclass('AcDbArc', {
-        'startangle': DXFAttr(50),
-        'endangle': DXFAttr(51),
-        'extrusion': DXFAttr(210, 'Point3D'),
-    }),
-)
+arc_subclass = DefSubclass('AcDbArc', {
+    'startangle': DXFAttr(50),
+    'endangle': DXFAttr(51),
+})
 
 
 class Arc(dxf12.Arc):
-    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *arc_subclass)
+    DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, circle_subclass, arc_subclass)
 
 
 trace_subclass = DefSubclass('AcDbTrace', {

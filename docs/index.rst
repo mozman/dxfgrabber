@@ -251,6 +251,10 @@ Style
 
     Primary font file name
 
+.. attribute:: Style.bigfont
+
+    Bigfont file name
+
 Linetype Table
 --------------
 
@@ -409,11 +413,11 @@ None  if not set
 
 .. class:: TrueColor(int)
 
-   Represents a true color value as *int*. Create true colors::
+   Represents a true color value as *int*. Create new :class:`TrueColor` objects::
 
        t = TrueColor(0xAABBCC)
        t = TrueColor.from_rgb(0xAA, 0xBB, 0xCC)
-       t = TrueColor.from_aci(1)  # ACI for red
+       t = TrueColor.from_aci(1)  # ACI for red (AutoCAD Color Index)
 
    Unpack TrueColor::
 
@@ -676,11 +680,11 @@ Value Alignment
 
 .. attribute:: Text.font
 
-    Font name as string, if import option "resolve_text_styles" is *True* else ``""``.
+    Font name as string, if import option ``resolve_text_styles`` is *True* else ``""``.
 
 .. attribute:: Text.bigfont
 
-    Bigfont name as string, if import option "resolve_text_styles" is *True* else ``""``.
+    Bigfont name as string, if import option ``resolve_text_styles`` is *True* else ``""``.
 
 Attrib
 ------
@@ -1159,7 +1163,7 @@ If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`,
 
     Text height as *float*
 
-.. attribute:: MText.width
+.. attribute:: MText.rect_width
 
     Reference rectangle width as *float* in drawing units.
 

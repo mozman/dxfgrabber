@@ -27,6 +27,7 @@ from .const import BYBLOCK, BYLAYER
 
 import io
 from .tags import dxfinfo
+from .color import aci_to_true_color
 
 
 def read(stream, options=None):
@@ -64,7 +65,3 @@ def _read_encoded_file(filename, options=None, encoding='utf-8', errors='strict'
         dwg = Drawing(fp, options)
     dwg.filename = filename
     return dwg
-
-
-def aci_to_true_color(aci):
-    pass
