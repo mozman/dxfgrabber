@@ -30,6 +30,9 @@ class TestMText(unittest.TestCase):
         self.assertEqual(mtext.extrusion, (0.0, 0.0, 1.0))
         self.assertEqual(mtext.xdirection, (1.0, 0.0, 0.0))
         self.assertEqual(mtext.linespacing, 1.0)
+        self.assertEqual(mtext.rect_width, 50.0)
+        self.assertEqual(mtext.horizontal_width, 45.0)
+        self.assertEqual(mtext.vertical_height, 99.0)
 
     def test_mtext_text(self):
         mtext = self.entity
@@ -70,6 +73,10 @@ AcDbMText
 3.0
  41
 50.0
+ 42
+45.0
+ 43
+99.0
  46
 0.0
  71

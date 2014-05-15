@@ -1172,6 +1172,15 @@ If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`,
 
     Reference rectangle width as *float* in drawing units.
 
+.. attribute:: MText.horizontal_width
+
+    Horizontal width of the characters that make up the :class:`MText` entity. This value will always be equal to or
+    less than the :attr:`MText.rect_width` value. In drawing units as *float*.
+
+.. attribute:: MText.vertical_height
+
+    Vertical height of the :class:`MText` entity in drawing units as *float*.
+
 .. attribute:: MText.linespacing
 
     Text line spacing as *float*, valid from 0.25 to 4.00.

@@ -407,6 +407,8 @@ mtext_subclass = DefSubclass('AcDbMText', {
     'insert': DXFAttr(10, 'Point3D'),
     'height': DXFAttr(40),
     'reference_rectangle_width': DXFAttr(41),
+    'horizontal_width': DXFAttr(42),
+    'vertical_height': DXFAttr(43),
     'attachmentpoint': DXFAttr(71),
     'text': DXFAttr(1),  # also group code 3, if more than 255 chars
     'style': DXFAttr(7),  # text style

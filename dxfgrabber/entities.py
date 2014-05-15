@@ -545,6 +545,8 @@ class MText(Shape):
         get_dxf = wrapper.get_dxf_attrib
         self.height = get_dxf('height', 0)
         self.rect_width = get_dxf('reference_rectangle_width', None)
+        self.horizontal_width = get_dxf('horizontal_width', None)
+        self.vertical_height = get_dxf('vertical_height', None)
         self.linespacing = get_dxf('linespacing', 1.0)
         self.attachmentpoint = get_dxf('attachmentpoint', 1)
         self.style = get_dxf('style', 'STANDARD')
