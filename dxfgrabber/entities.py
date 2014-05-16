@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Purpose: entity classes
 # Created: 21.07.2012, parts taken from my ezdxf project
 # Copyright (C) 2012, Manfred Moitzi
@@ -14,6 +15,9 @@ import math
 
 from .styles import default_text_style
 
+SPECIAL_CHARS = {
+    'd': '°'
+}
 
 class SeqEnd(object):
     def __init__(self, wrapper):
@@ -167,11 +171,12 @@ class Text(Shape):
         raw_chars = list(reversed(self.text))  # text splitted into chars, in reversed order for efficient pop()
         while len(raw_chars):
             char = raw_chars.pop()
-            if char == '%':  # formatting codes?
+            if char == '%':  # formatting codes and special characters
                 if len(raw_chars) and raw_chars[-1] == '%':
                     raw_chars.pop()  # '%'
                     if len(raw_chars):
-                        raw_chars.pop()  # command char
+                        special_char = raw_chars.pop()  # command char
+                        chars.append(SPECIAL_CHARS.get(special_char, ""))
                 else:
                     chars.append(char)
             else:
@@ -590,6 +595,14 @@ class MText(Shape):
                         break  # premature end of text - just ignore
             elif char in GROUP_CHARS:  # { }
                 pass
+            elif char == '%':  # special characters
+                if len(raw_chars) and raw_chars[-1] == '%':
+                    raw_chars.pop()  # '%'
+                    if len(raw_chars):
+                        special_char = raw_chars.pop()
+                        chars.append(SPECIAL_CHARS.get(special_char, ""))
+                else:
+                    chars.append(char)
             else:
                 chars.append(char)
 
