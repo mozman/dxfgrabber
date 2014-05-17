@@ -221,6 +221,7 @@ class Polyline(Shape):
         self.vertices = []  # set in append data
         self.mode = wrapper.get_mode()
         self.flags = wrapper.flags
+        self.is_2d_spline = bool(self.flags & const.POLYLINE_SPLINE_FIT_VERTICES_ADDED)
         get_dxf = wrapper.get_dxf_attrib
         self.mcount = get_dxf("mcount", 0)
         self.ncount = get_dxf("ncount", 0)
@@ -230,11 +231,21 @@ class Polyline(Shape):
         self.is_nclosed = wrapper.is_nclosed()
         self.elevation = get_dxf('elevation', (0., 0., 0.))
         self.points = []  # set in append data
+        self.controlpoints = []  # set in append data
         self.width = []  # set in append data
         self.bulge = []  # set in append data
+        self.tangents = []  # set in append data
         self.m_smooth_density = get_dxf("msmoothdensity", 0.)
         self.n_smooth_density = get_dxf("nsmoothdensity", 0.)
         self.smooth_type = get_dxf("smoothtype", 0)
+        self.spline_type = None
+        if self.is_2d_spline:
+            if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
+                self.spline_type = 'cubic_bspline'
+            elif self.smooth_type == const.POLYMESH_QUADRIC_BSPLINE:
+                self.spline_type = 'quadratic_bspline'
+            elif self.smooth_type == const.POLYMESH_BEZIER_SURFACE:
+                self.spline_type = 'bezier_curve'  # is this supported by DXF12
 
     def __len__(self):
         return len(self.vertices)
@@ -260,9 +271,13 @@ class Polyline(Shape):
         self.vertices = vertices
         if self.mode.startswith('polyline'):
             for vertex in self.vertices:
-                self.points.append(vertex.location)
-                self.width.append(default_width(vertex.start_width, vertex.end_width))
-                self.bulge.append(vertex.bulge)
+                if vertex.flags & const.VTX_SPLINE_FRAME_CONTROL_POINT:
+                    self.controlpoints.append(vertex.location)
+                else:
+                    self.points.append(vertex.location)
+                    self.width.append(default_width(vertex.start_width, vertex.end_width))
+                    self.bulge.append(vertex.bulge)
+                    self.tangents.append(vertex.tangent if vertex.flags & const.VTX_CURVE_FIT_TANGENT else None)
 
     def cast(self):
         if self.mode == 'polyface':

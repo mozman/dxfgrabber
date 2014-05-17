@@ -2,6 +2,10 @@
 News
 ====
 
+Version 0.7.4 - 2014-05-..
+
+  * NEW: added support for R12 2d splines (by POLYLINE)
+
 Version 0.7.3 - 2014-05-16
 
   * NEW: ``options = {"assure_3d_coords": True}``, guarantees (x, y, z) tuples for ALL coordinates, this option is by default

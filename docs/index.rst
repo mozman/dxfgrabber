@@ -768,6 +768,15 @@ Polyline
 
     ``True`` if polyline is closed.
 
+.. attribute:: Polyline.is_2d_spline
+
+    ``True`` if polyline is a 2d spline curve.
+
+.. attribute:: Polyline.spline_type
+
+   If this line is a 2D spline: ``quadratic_bspline``, ``cubic_bspline``, ``bezier_curve`` or *None* if this polyline is
+   not a 2D spline.
+
 .. attribute:: Polyline.default_start_width
 
    Default line segment start width, if not set in vertex entity.
@@ -778,15 +787,25 @@ Polyline
 
 .. attribute:: Polyline.points
 
-    List off all vertex locations as (x, y[, z]) *tuple*.
+    List of all vertex locations as (x, y[, z]) *tuple*. If this polyline is a 2d spline these points are just the fit
+    points.
+
+.. attribute:: Polyline.controlpoints
+
+    List of all control points as (x, y[, z]) *tuple*, if this polyline is a 2d spline.
+
+.. attribute:: Polyline.tangents
+
+    List of all vertex tangent angles as *float* in degrees or *None* if not defined. (Just for fit points)
 
 .. attribute:: Polyline.width
 
-    List off all vertex width values as (start_width, end_width) *tuple*.
+    List of all vertex width values as (start_width, end_width) *tuple*. Just for fit points if this polyline is a 2D
+    spline.
 
 .. attribute:: Polyline.bulge
 
-    List off all vertex bulge values as *floats*.
+    List of all vertex bulge values as *floats*.
 
 .. method:: Polyline.__getitem__(index)
 
@@ -826,6 +845,7 @@ Vertex
 
     Curve fitting tangent in degrees as *float* or *None*. (full circle = 360
     degrees)
+
 
 Polyface
 --------

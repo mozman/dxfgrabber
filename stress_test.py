@@ -6,13 +6,15 @@ from itertools import chain
 
 from dxfgrabber.tags import CYTHON_EXT
 if "win" in sys.platform:
-    DIR1 = r"D:\Source\dxftest\CADKitSamples\*.dxf"
-    DIR2 = r"D:\Source\dxftest\*.dxf"
+    DIRS = (r"D:\Source\dxftest\CADKitSamples\*.dxf",
+    r"D:\Source\dxftest\*.dxf",
+    r"D:\Source\dxftest\R12_test_files\*.dxf")
 else:
-    DIR1 = r"/media/sf_winsource/dxftest/CADKitSamples/*.dxf"
-    DIR2 = r"/media/sf_winsource/dxftest/*.dxf"
+    DIRS = ("/media/sf_winsource/dxftest/CADKitSamples/*.dxf",
+    "/media/sf_winsource/dxftest/*.dxf",
+    "/media/sf_winsource/dxftest/R12_test_files/*.dxf")
 
-all_files = chain(glob.glob(DIR1), glob.glob(DIR2))
+all_files = chain(*[glob.glob(d)for d in DIRS])
 overall_time = 0
 ok = 0
 error = 0
