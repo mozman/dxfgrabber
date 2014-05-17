@@ -155,11 +155,13 @@ class Polyline(DXFEntity):
 
     def get_mode(self):
         flags = self.flags
-        if flags & const.POLYLINE_3D_POLYLINE > 0:
+        if flags & const.POLYLINE_SPLINE_FIT_VERTICES_ADDED:
+            return 'spline2d'
+        elif flags & const.POLYLINE_3D_POLYLINE:
             return 'polyline3d'
-        elif flags & const.POLYLINE_3D_POLYMESH > 0:
+        elif flags & const.POLYLINE_3D_POLYMESH:
             return 'polymesh'
-        elif flags & const.POLYLINE_POLYFACE > 0:
+        elif flags & const.POLYLINE_POLYFACE:
             return 'polyface'
         else:
             return 'polyline2d'

@@ -767,15 +767,14 @@ Polyline
 .. attribute:: Polyline.is_closed
 
     ``True`` if polyline is closed.
+    
+.. attribute:: Polyline.mode
 
-.. attribute:: Polyline.is_2d_spline
-
-    ``True`` if polyline is a 2d spline curve.
+   Returns the polyline mode: ``polyline2d``, ``polyline3d`` or ``spline2d``.
 
 .. attribute:: Polyline.spline_type
 
-   If this line is a 2D spline: ``quadratic_bspline``, ``cubic_bspline``, ``bezier_curve`` or *None* if this polyline is
-   not a 2D spline.
+   If polyline is a 2D spline: ``quadratic_bspline``, ``cubic_bspline``, ``bezier_curve`` else *None*.
 
 .. attribute:: Polyline.default_start_width
 

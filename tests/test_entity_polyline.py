@@ -56,7 +56,7 @@ class Test2DSplineDXF12(unittest.TestCase):
 
     def test_2d_spline_type(self):
         spline = self.entities[0]
-        self.assertTrue(spline.is_2d_spline)
+        self.assertEqual('spline2d', spline.mode)
 
     def test_get_spline_points(self):
         spline = self.entities[0]

@@ -10,7 +10,7 @@ from .sections import Sections
 
 DEFAULT_OPTIONS = {
     "grab_blocks": True,  # import block definitions True=yes, False=No
-    "assure_3d_coords": False,  # guarantees (x, y, z) tuples for ALL coordinates, except LWPOLYLINE
+    "assure_3d_coords": False,  # guarantees (x, y, z) tuples for ALL coordinates
     "resolve_text_styles": True,  # Text, Attrib, Attdef and MText attributes will be set by the associated text style if necessary
 }
 

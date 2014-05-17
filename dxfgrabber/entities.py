@@ -214,6 +214,8 @@ class Attrib(Text):  # also ATTDEF
         super(Attrib, self).__init__(wrapper)
         self.tag = wrapper.get_dxf_attrib('tag')
 
+_LINE_TYPES = frozenset(('spline2d', 'polyline2d', 'polyline3d'))
+
 
 class Polyline(Shape):
     def __init__(self, wrapper):
@@ -221,7 +223,6 @@ class Polyline(Shape):
         self.vertices = []  # set in append data
         self.mode = wrapper.get_mode()
         self.flags = wrapper.flags
-        self.is_2d_spline = bool(self.flags & const.POLYLINE_SPLINE_FIT_VERTICES_ADDED)
         get_dxf = wrapper.get_dxf_attrib
         self.mcount = get_dxf("mcount", 0)
         self.ncount = get_dxf("ncount", 0)
@@ -239,7 +240,7 @@ class Polyline(Shape):
         self.n_smooth_density = get_dxf("nsmoothdensity", 0.)
         self.smooth_type = get_dxf("smoothtype", 0)
         self.spline_type = None
-        if self.is_2d_spline:
+        if self.mode == 'spline2d':
             if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
                 self.spline_type = 'cubic_bspline'
             elif self.smooth_type == const.POLYMESH_QUADRIC_BSPLINE:
@@ -269,7 +270,7 @@ class Polyline(Shape):
             return start_width, end_width
 
         self.vertices = vertices
-        if self.mode.startswith('polyline'):
+        if self.mode in _LINE_TYPES:
             for vertex in self.vertices:
                 if vertex.flags & const.VTX_SPLINE_FRAME_CONTROL_POINT:
                     self.controlpoints.append(vertex.location)
