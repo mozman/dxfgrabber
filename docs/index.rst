@@ -767,7 +767,7 @@ Polyline
 .. attribute:: Polyline.is_closed
 
     ``True`` if polyline is closed.
-    
+
 .. attribute:: Polyline.mode
 
    Returns the polyline mode: ``polyline2d``, ``polyline3d`` or ``spline2d``.

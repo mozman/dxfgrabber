@@ -41,7 +41,7 @@ class cyDXFEntity:
         # no subclass is subclass index 0
         subclass_tags = self.tags.subclasses[dxfattr.subclass]
         if dxfattr.xtype is not None:
-            return self._get_extented_type(subclass_tags, <int> dxfattr.code, <str> dxfattr.xtype)
+            return self._get_extented_type(subclass_tags, <int> dxfattr.code, <basestring> dxfattr.xtype)
         else:
             return subclass_tags.get_value(<int> dxfattr.code)
 
@@ -52,7 +52,7 @@ class cyDXFEntity:
         pass
 
     @staticmethod
-    def _get_extented_type(tags, int code, str xtype):
+    def _get_extented_type(tags, int code, basestring xtype):
         cdef int index = tags.tag_index(code)
         value = tags[index].value
         if <int> len(value) == 2:
