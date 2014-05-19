@@ -7,7 +7,7 @@ __author__ = "mozman <mozman@gmx.at>"
 
 import os
 
-from .const import ENV_CYTHON, XTYPE_NONE, XTYPE_2D, XTYPE_3D
+from .const import ENV_CYTHON, XTYPE_NONE, XTYPE_2D, XTYPE_3D, XTYPE_2D_3D
 
 cyDXFEntity = None
 OPTIMIZE = True
@@ -56,8 +56,9 @@ class pyDXFEntity(object):
     def _get_dxf_attrib(self, dxfattr):
         # no subclass is subclass index 0
         subclass_tags = self.tags.subclasses[dxfattr.subclass]
-        if dxfattr.xtype != XTYPE_NONE:
-            return self._get_extented_type(subclass_tags, dxfattr.code, dxfattr.xtype)
+        xtype = dxfattr.xtype
+        if xtype != XTYPE_NONE and xtype != XTYPE_2D_3D:
+            return self._get_extented_type(subclass_tags, dxfattr.code, xtype)
         else:
             return subclass_tags.get_value(dxfattr.code)
 
@@ -69,10 +70,8 @@ class pyDXFEntity(object):
 
     @staticmethod
     def _get_extented_type(tags, code, xtype):
-        index = tags.tag_index(code)
-        value = tags[index].value
-        length = len(value)
-        if length == 2:
+        value = tags.get_value(code)
+        if len(value) == 2:
             if xtype == XTYPE_3D:
                 return value[0], value[1], 0.
         elif xtype == XTYPE_2D:

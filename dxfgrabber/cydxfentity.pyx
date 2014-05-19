@@ -6,16 +6,19 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .const import XTYPE_NONE, XTYPE_2D, XTYPE_3D
+from .const import XTYPE_NONE, XTYPE_2D, XTYPE_3D, XTYPE_2D_3D
 
 cdef enum:
     _XT_NONE = 0
     _XT_2D = 1
     _XT_3D = 2
+    _XT_2D_3D = 3
 
 assert _XT_NONE == XTYPE_NONE
 assert _XT_2D == XTYPE_2D
 assert _XT_3D == XTYPE_3D
+assert _XT_2D_3D == XTYPE_2D_3D
+
 
 class cyDXFEntity:
     DXFATTRIBS = {}
@@ -51,8 +54,8 @@ class cyDXFEntity:
         # no subclass is subclass index 0
         subclass_tags = self.tags.subclasses[dxfattr.subclass]
         cdef int xtype = <int> dxfattr.xtype
-        if xtype != _XT_NONE:
-            return self._get_extented_type(subclass_tags, <int> dxfattr.code, <int> xtype)
+        if xtype != _XT_NONE and xtype != _XT_2D_3D:
+            return self._get_extented_type(subclass_tags, <int> dxfattr.code, xtype)
         else:
             return subclass_tags.get_value(<int> dxfattr.code)
 
@@ -64,8 +67,7 @@ class cyDXFEntity:
 
     @staticmethod
     def _get_extented_type(tags, int code, int xtype):
-        cdef int index = tags.tag_index(code)
-        value = tags[index].value
+        value = tags.get_value(code)
         if <int> len(value) == 2:
             if xtype == _XT_3D:
                 return value[0], value[1], 0.
