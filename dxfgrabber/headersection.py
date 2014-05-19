@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-from .tags import TagGroups, DXFStructureError, DXFTag
+from .tags import TagGroups, DXFTag
 
 class HeaderSection(dict):
     name = "header"

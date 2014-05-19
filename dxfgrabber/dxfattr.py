@@ -6,9 +6,11 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 from collections import namedtuple
+from .const import XTYPE_NONE
 
 
-def DXFAttr(code, xtype=None):
+def DXFAttr(code, xtype=XTYPE_NONE):
+    # assert type(xtype) is int
     return _DXFAttr(code, xtype)
 
 _DXFAttr = namedtuple('DXFAttr', 'code xtype')

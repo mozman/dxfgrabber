@@ -10,7 +10,8 @@ from . import dxf12
 from .dxfentity import DXFEntity
 from .dxfattr import DXFAttr, DXFAttributes, DefSubclass
 from . import const
-from .tags import Tags, DXFTag
+from .const import XTYPE_2D, XTYPE_3D, XTYPE_2D_3D
+from .tags import Tags
 from .decode import decode
 
 none_subclass = DefSubclass(None, {
@@ -35,10 +36,10 @@ entity_subclass = DefSubclass('AcDbEntity', {
 })
 
 line_subclass = DefSubclass('AcDbLine', {
-    'start': DXFAttr(10, 'Point2D/3D'),
-    'end': DXFAttr(11, 'Point2D/3D'),
+    'start': DXFAttr(10, XTYPE_2D_3D),
+    'end': DXFAttr(11, XTYPE_2D_3D),
     'thickness': DXFAttr(39),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -46,9 +47,9 @@ class Line(dxf12.Line):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, line_subclass)
 
 point_subclass = DefSubclass('AcDbPoint', {
-    'point': DXFAttr(10, 'Point2D/3D'),
+    'point': DXFAttr(10, XTYPE_2D_3D),
     'thickness': DXFAttr(39),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -57,10 +58,10 @@ class Point(dxf12.Point):
 
 
 circle_subclass = DefSubclass('AcDbCircle', {
-    'center': DXFAttr(10, 'Point2D/3D'),
+    'center': DXFAttr(10, XTYPE_2D_3D),
     'radius': DXFAttr(40),
     'thickness': DXFAttr(39),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -78,12 +79,12 @@ class Arc(dxf12.Arc):
 
 
 trace_subclass = DefSubclass('AcDbTrace', {
-    'vtx0': DXFAttr(10, 'Point2D/3D'),
-    'vtx1': DXFAttr(11, 'Point2D/3D'),
-    'vtx2': DXFAttr(12, 'Point2D/3D'),
-    'vtx3': DXFAttr(13, 'Point2D/3D'),
+    'vtx0': DXFAttr(10, XTYPE_2D_3D),
+    'vtx1': DXFAttr(11, XTYPE_2D_3D),
+    'vtx2': DXFAttr(12, XTYPE_2D_3D),
+    'vtx3': DXFAttr(13, XTYPE_2D_3D),
     'thickness': DXFAttr(39),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -95,10 +96,10 @@ Solid = Trace
 
 
 face_subclass = DefSubclass('AcDbFace', {
-    'vtx0': DXFAttr(10, 'Point2D/3D'),
-    'vtx1': DXFAttr(11, 'Point2D/3D'),
-    'vtx2': DXFAttr(12, 'Point2D/3D'),
-    'vtx3': DXFAttr(13, 'Point2D/3D'),
+    'vtx0': DXFAttr(10, XTYPE_2D_3D),
+    'vtx1': DXFAttr(11, XTYPE_2D_3D),
+    'vtx2': DXFAttr(12, XTYPE_2D_3D),
+    'vtx3': DXFAttr(13, XTYPE_2D_3D),
     'invisible_edge': DXFAttr(70),
 })
 
@@ -109,7 +110,7 @@ class Face(dxf12.Face):
 
 text_subclass = (
     DefSubclass('AcDbText', {
-        'insert': DXFAttr(10, 'Point2D/3D'),
+        'insert': DXFAttr(10, XTYPE_2D_3D),
         'height': DXFAttr(40),
         'text': DXFAttr(1),
         'rotation': DXFAttr(50),  # in degrees (circle = 360deg)
@@ -118,9 +119,9 @@ text_subclass = (
         'width': DXFAttr(41),  # width FACTOR!
         'textgenerationflag': DXFAttr(71),  # 2 = backward (mirr-x), 4 = upside down (mirr-y)
         'halign': DXFAttr(72),  # horizontal justification
-        'alignpoint': DXFAttr(11, 'Point2D/3D'),
+        'alignpoint': DXFAttr(11, XTYPE_2D_3D),
         'thickness': DXFAttr(39),
-        'extrusion': DXFAttr(210, 'Point3D'),
+        'extrusion': DXFAttr(210, XTYPE_3D),
     }),
     DefSubclass('AcDbText', {'valign': DXFAttr(73)}))
 
@@ -129,7 +130,7 @@ class Text(dxf12.Text):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, *text_subclass)
 
 polyline_subclass = DefSubclass('AcDb2dPolyline', {
-    'elevation': DXFAttr(10, 'Point3D'),
+    'elevation': DXFAttr(10, XTYPE_3D),
     'flags': DXFAttr(70),
     'defaultstartwidth': DXFAttr(40),
     'defaultendwidth': DXFAttr(41),
@@ -139,7 +140,7 @@ polyline_subclass = DefSubclass('AcDb2dPolyline', {
     'nsmoothdensity': DXFAttr(74),
     'smoothtype': DXFAttr(75),
     'thickness': DXFAttr(39),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -150,7 +151,7 @@ class Polyline(dxf12.Polyline):
 vertex_subclass = (
     DefSubclass('AcDbVertex', {}),  # subclasses[2]
     DefSubclass('AcDb2dVertex', {  # subclasses[3]
-        'location': DXFAttr(10, 'Point2D/3D'),
+        'location': DXFAttr(10, XTYPE_2D_3D),
         'startwidth': DXFAttr(40),
         'endwidth': DXFAttr(41),
         'bulge': DXFAttr(42),
@@ -183,7 +184,7 @@ lwpolyline_subclass = DefSubclass('AcDbPolyline', {
     'flags': DXFAttr(70),
     'const_width': DXFAttr(43),
     'count': DXFAttr(90),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -239,7 +240,7 @@ class LWPolyline(DXFEntity):
 insert_subclass = DefSubclass('AcDbBlockReference', {
     'attribsfollow': DXFAttr(66),
     'name': DXFAttr(2),
-    'insert': DXFAttr(10, 'Point2D/3D'),
+    'insert': DXFAttr(10, XTYPE_2D_3D),
     'xscale': DXFAttr(41),
     'yscale': DXFAttr(42),
     'zscale': DXFAttr(43),
@@ -248,7 +249,7 @@ insert_subclass = DefSubclass('AcDbBlockReference', {
     'rowcount': DXFAttr(71),
     'colspacing': DXFAttr(44),
     'rowspacing': DXFAttr(45),
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
 })
 
 
@@ -258,7 +259,7 @@ class Insert(dxf12.Insert):
 
 attrib_subclass = (
     DefSubclass('AcDbText', {
-        'insert': DXFAttr(10, 'Point2D/3D'),
+        'insert': DXFAttr(10, XTYPE_2D_3D),
         'thickness': DXFAttr(39),
         'height': DXFAttr(40),
         'text': DXFAttr(1),
@@ -274,8 +275,8 @@ attrib_subclass = (
         'textgenerationflag': DXFAttr(71),
         'halign': DXFAttr(72),
         'valign': DXFAttr(74),
-        'alignpoint': DXFAttr(11, 'Point2D/3D'),
-        'extrusion': DXFAttr(210, 'Point3D'),
+        'alignpoint': DXFAttr(11, XTYPE_2D_3D),
+        'extrusion': DXFAttr(210, XTYPE_3D),
     })
 )
 
@@ -286,7 +287,7 @@ class Attrib(dxf12.Attrib):
 
 attdef_subclass = (
     DefSubclass('AcDbText', {
-        'insert': DXFAttr(10, 'Point2D/3D'),
+        'insert': DXFAttr(10, XTYPE_2D_3D),
         'thickness': DXFAttr(39),
         'height': DXFAttr(40),
         'text': DXFAttr(1),
@@ -313,9 +314,9 @@ class Attdef(dxf12.Attrib):
 
 
 ellipse_subclass = DefSubclass('AcDbEllipse', {
-    'center': DXFAttr(10, 'Point2D/3D'),
-    'majoraxis': DXFAttr(11, 'Point2D/3D'),  # relative to the center
-    'extrusion': DXFAttr(210, 'Point3D'),
+    'center': DXFAttr(10, XTYPE_2D_3D),
+    'majoraxis': DXFAttr(11, XTYPE_2D_3D),  # relative to the center
+    'extrusion': DXFAttr(210, XTYPE_3D),
     'ratio': DXFAttr(40),
     'startparam': DXFAttr(41),  # this value is 0.0 for a full ellipse
     'endparam': DXFAttr(42),  # this value is 2*pi for a full ellipse
@@ -327,8 +328,8 @@ class Ellipse(DXFEntity):
 
 
 ray_subclass = DefSubclass('AcDbRay', {
-    'start': DXFAttr(10, 'Point3D'),
-    'unitvector': DXFAttr(11, 'Point3D'),
+    'start': DXFAttr(10, XTYPE_3D),
+    'unitvector': DXFAttr(11, XTYPE_3D),
 })
 
 
@@ -337,8 +338,8 @@ class Ray(DXFEntity):
 
 
 xline_subclass = DefSubclass('AcDbXline', {
-    'start': DXFAttr(10, 'Point3D'),
-    'unitvector': DXFAttr(11, 'Point3D'),
+    'start': DXFAttr(10, XTYPE_3D),
+    'unitvector': DXFAttr(11, XTYPE_3D),
 })
 
 
@@ -347,7 +348,7 @@ class XLine(DXFEntity):
 
 
 spline_subclass = DefSubclass('AcDbSpline', {
-    'normalvector': DXFAttr(210, 'Point3D'),  # omitted if spline is not planar
+    'normalvector': DXFAttr(210, XTYPE_3D),  # omitted if spline is not planar
     'flags': DXFAttr(70),
     'degree': DXFAttr(71),
     'nknots': DXFAttr(72),
@@ -356,8 +357,8 @@ spline_subclass = DefSubclass('AcDbSpline', {
     'knot_tolerance': DXFAttr(42),  # default 0.0000001
     'controlpoint_tolerance': DXFAttr(43),  # default 0.0000001
     'fit_tolerance': DXFAttr(44),  # default 0.0000000001
-    'starttangent': DXFAttr(12, 'Point3D'),  # optional
-    'endtangent': DXFAttr(13, 'Point3D'),  # optional
+    'starttangent': DXFAttr(12, XTYPE_3D),  # optional
+    'endtangent': DXFAttr(13, XTYPE_3D),  # optional
 })
 
 
@@ -389,9 +390,9 @@ class Spline(DXFEntity):
 helix_subclass = DefSubclass('AcDbHelix', {
     'helix_major_version': DXFAttr(90),
     'helix_maintainance_version': DXFAttr(91),
-    'axis_base_point': DXFAttr(10, 'Point3D'),
-    'start_point': DXFAttr(11, 'Point3D'),
-    'axis_vector': DXFAttr(12, 'Point3D'),
+    'axis_base_point': DXFAttr(10, XTYPE_3D),
+    'start_point': DXFAttr(11, XTYPE_3D),
+    'axis_vector': DXFAttr(12, XTYPE_3D),
     'radius': DXFAttr(40),
     'turns': DXFAttr(41),
     'turn_height': DXFAttr(42),
@@ -404,7 +405,7 @@ class Helix(Spline):
     DXFATTRIBS = DXFAttributes(none_subclass, entity_subclass, spline_subclass, helix_subclass)
 
 mtext_subclass = DefSubclass('AcDbMText', {
-    'insert': DXFAttr(10, 'Point3D'),
+    'insert': DXFAttr(10, XTYPE_3D),
     'height': DXFAttr(40),
     'reference_rectangle_width': DXFAttr(41),
     'horizontal_width': DXFAttr(42),
@@ -412,8 +413,8 @@ mtext_subclass = DefSubclass('AcDbMText', {
     'attachmentpoint': DXFAttr(71),
     'text': DXFAttr(1),  # also group code 3, if more than 255 chars
     'style': DXFAttr(7),  # text style
-    'extrusion': DXFAttr(210, 'Point3D'),
-    'xdirection': DXFAttr(11, 'Point3D'),
+    'extrusion': DXFAttr(210, XTYPE_3D),
+    'xdirection': DXFAttr(11, XTYPE_3D),
     'rotation': DXFAttr(50),  # xdirection beats rotation
     'linespacing': DXFAttr(44),  # valid from 0.25 to 4.00
 })
@@ -435,7 +436,7 @@ block_subclass = (
         'name2': DXFAttr(3),
         'description': DXFAttr(4),
         'flags': DXFAttr(70),
-        'basepoint': DXFAttr(10, 'Point2D/3D'),
+        'basepoint': DXFAttr(10, XTYPE_2D_3D),
         'xrefpath': DXFAttr(1),
     })
 )
@@ -491,8 +492,8 @@ light_subclass = DefSubclass('AcDbLight', {
     'true_color': DXFAttr(421),  # 24-bit color 0x00RRGGBB
     'plot_glyph': DXFAttr(291),
     'intensity': DXFAttr(40),
-    'position': DXFAttr(10, 'Point3D'),
-    'target': DXFAttr(11, 'Point3D'),
+    'position': DXFAttr(10, XTYPE_3D),
+    'target': DXFAttr(11, XTYPE_3D),
     'attenuation_type': DXFAttr(72),  # 0 = None; 1 = Inverse Linear; 2 = Inverse Square
     'use_attenuation_limits': DXFAttr(292),  # bool
     'attenuation_start_limit': DXFAttr(41),

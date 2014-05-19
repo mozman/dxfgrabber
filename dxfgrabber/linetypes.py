@@ -37,11 +37,11 @@ class LinetypeTable(Table):
 
 class DXF12Linetype(DXFEntity):
     DXFATTRIBS = DXFAttributes(DefSubclass(None, {
-        'handle': DXFAttr(5, None),
-        'name': DXFAttr(2, None),
-        'description': DXFAttr(3, None),
-        'length': DXFAttr(40, None),
-        'items': DXFAttr(73, None),
+        'handle': DXFAttr(5),
+        'name': DXFAttr(2),
+        'description': DXFAttr(3),
+        'length': DXFAttr(40),
+        'items': DXFAttr(73),
     }))
 
     def get_pattern(self):
@@ -52,13 +52,13 @@ class DXF12Linetype(DXFEntity):
             tags = self.tags.noclass
             return [pattern_tag.value for pattern_tag in tags.find_all(49)]
 
-none_subclass = DefSubclass(None, {'handle': DXFAttr(5, None)})
+none_subclass = DefSubclass(None, {'handle': DXFAttr(5)})
 symbol_subclass = DefSubclass('AcDbSymbolTableRecord', {})
 linetype_subclass = DefSubclass('AcDbLinetypeTableRecord', {
-    'name': DXFAttr(2,  None),
-    'description': DXFAttr(3, None),
-    'length': DXFAttr(40, None),
-    'items': DXFAttr(73, None),
+    'name': DXFAttr(2),
+    'description': DXFAttr(3),
+    'length': DXFAttr(40),
+    'items': DXFAttr(73),
 })
 
 
