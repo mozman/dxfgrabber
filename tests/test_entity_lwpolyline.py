@@ -21,6 +21,7 @@ class TestLWPolyline(unittest.TestCase):
         self.assertEqual(polyline.layer, '0')
         self.assertEqual(polyline.linetype, None)
         self.assertEqual(polyline.elevation, (0., 0., 0.))
+        self.assertEqual(polyline.thickness, 2.7)
         self.assertFalse(polyline.paperspace)
 
     def test_lwpolyline_first_point(self):
@@ -68,6 +69,8 @@ AcDbPolyline
         7
  70
      1
+ 39
+2.7
  43
 0.0
  10
@@ -117,6 +120,8 @@ AcDbPolyline
      3
  70
      1
+ 39
+2.7
  43
 0.0
  10

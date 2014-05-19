@@ -6,6 +6,7 @@ Version 0.7.4 - 2014-05-..
 
   * NEW: added support for R12 2d splines (by POLYLINE); POLYLINE.mode == "spline2d"
   * BUGFIX: unicode/str error in Cython extension in the Python 2 version
+  * BUGFIX: every LWPolyline in DXF version > AC1009 had default thickness of 0.0
 
 Version 0.7.3 - 2014-05-16
 

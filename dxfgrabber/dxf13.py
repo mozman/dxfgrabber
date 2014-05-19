@@ -181,6 +181,7 @@ class SeqEnd(dxf12.SeqEnd):
     
 lwpolyline_subclass = DefSubclass('AcDbPolyline', {
     'elevation': DXFAttr(38),
+    'thickness': DXFAttr(39),
     'flags': DXFAttr(70),
     'const_width': DXFAttr(43),
     'count': DXFAttr(90),
