@@ -23,8 +23,8 @@ class TestPolylineDXF12(unittest.TestCase):
 
     def test_polyline_attribs(self):
         polyline = self.entities[0]
-        self.assertEqual(polyline.default_start_width, 0.)
-        self.assertEqual(polyline.default_end_width, 0.)
+        self.assertEqual(polyline.default_start_width, 0.5)
+        self.assertEqual(polyline.default_end_width, 0.6)
 
     def test_polyline_data(self):
         polyline = self.entities[0]
@@ -37,6 +37,12 @@ class TestPolylineDXF12(unittest.TestCase):
     def test_polyline_width(self):
         polyline = self.entities[0]
         self.assertEqual(len(polyline.width), len(polyline.points))
+        start_width, end_width = polyline.width[0]
+        self.assertEqual(1.0, start_width)
+        self.assertEqual(2.0, end_width)
+        start_width, end_width = polyline.width[1]
+        self.assertEqual(0.5, start_width)
+        self.assertEqual(0.6, end_width)
 
     def test_polyline_bulge(self):
         polyline = self.entities[0]
@@ -96,6 +102,10 @@ mozman
 0.0
  70
 8
+ 40
+ 0.5
+ 41
+ 0.6
   0
 VERTEX
   8
@@ -106,6 +116,10 @@ VERTEX
 0.0
  30
 0.0
+ 40
+ 1.0
+ 41
+ 2.0
   0
 VERTEX
   8
@@ -141,6 +155,7 @@ SEQEND
   0
 ENDSEC
 """
+
 POLYLINE_2D_SPLINE = """  0
 SECTION
   2

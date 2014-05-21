@@ -19,6 +19,7 @@ SPECIAL_CHARS = {
     'd': '°'
 }
 
+
 class SeqEnd(object):
     def __init__(self, wrapper):
         self.dxftype = wrapper.dxftype()
@@ -177,9 +178,9 @@ class Text(Shape):
                     if len(raw_chars):
                         special_char = raw_chars.pop()  # command char
                         chars.append(SPECIAL_CHARS.get(special_char, ""))
-                else:
+                else:  # char is just a single '%'
                     chars.append(char)
-            else:
+            else:  # char is what it is, a character
                 chars.append(char)
         return "".join(chars)
 
@@ -221,24 +222,24 @@ class Polyline(Shape):
     def __init__(self, wrapper):
         super(Polyline, self).__init__(wrapper)
         self.vertices = []  # set in append data
-        self.mode = wrapper.get_mode()
-        self.flags = wrapper.flags
-        get_dxf = wrapper.get_dxf_attrib
-        self.mcount = get_dxf("mcount", 0)
-        self.ncount = get_dxf("ncount", 0)
-        self.default_start_width = get_dxf("defaultstartwidth", 0.)
-        self.default_end_width = get_dxf("defaultendwidth", 0.)
-        self.is_mclosed = wrapper.is_mclosed()
-        self.is_nclosed = wrapper.is_nclosed()
-        self.elevation = get_dxf('elevation', (0., 0., 0.))
         self.points = []  # set in append data
         self.controlpoints = []  # set in append data
         self.width = []  # set in append data
         self.bulge = []  # set in append data
         self.tangents = []  # set in append data
-        self.m_smooth_density = get_dxf("msmoothdensity", 0.)
-        self.n_smooth_density = get_dxf("nsmoothdensity", 0.)
-        self.smooth_type = get_dxf("smoothtype", 0)
+        self.flags = wrapper.flags
+        self.mode = wrapper.get_mode()
+        get_dxf = wrapper.get_dxf_attrib
+        self.mcount = get_dxf('mcount', 0)
+        self.ncount = get_dxf('ncount', 0)
+        self.default_start_width = get_dxf('defaultstartwidth', 0.)
+        self.default_end_width = get_dxf('defaultendwidth', 0.)
+        self.is_mclosed = wrapper.is_mclosed()
+        self.is_nclosed = wrapper.is_nclosed()
+        self.elevation = get_dxf('elevation', (0., 0., 0.))
+        self.m_smooth_density = get_dxf('msmoothdensity', 0.)
+        self.n_smooth_density = get_dxf('nsmoothdensity', 0.)
+        self.smooth_type = get_dxf('smoothtype', 0)
         self.spline_type = None
         if self.mode == 'spline2d':
             if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
@@ -246,7 +247,7 @@ class Polyline(Shape):
             elif self.smooth_type == const.POLYMESH_QUADRIC_BSPLINE:
                 self.spline_type = 'quadratic_bspline'
             elif self.smooth_type == const.POLYMESH_BEZIER_SURFACE:
-                self.spline_type = 'bezier_curve'  # is this supported by DXF12
+                self.spline_type = 'bezier_curve'  # is this a valid spline type for DXF12?
 
     def __len__(self):
         return len(self.vertices)
@@ -260,6 +261,10 @@ class Polyline(Shape):
     @property
     def is_closed(self):
         return self.is_mclosed
+
+    @is_closed.setter
+    def is_closed(self, status):
+        self.is_mclosed = status
 
     def append_data(self, vertices):
         def default_width(start_width, end_width):
@@ -374,8 +379,8 @@ class Vertex(Shape):
         get_dxf = wrapper.get_dxf_attrib
         self.location = get_dxf('location')
         self.flags = get_dxf('flags', 0)
-        self.start_width = get_dxf('start_width', 0)
-        self.end_width = get_dxf('end_width', 0)
+        self.start_width = get_dxf('startwidth', 0)
+        self.end_width = get_dxf('endwidth', 0)
         self.bulge = get_dxf('bulge', 0)
         self.tangent = get_dxf('tangent', None)
         self.vtx = self._get_vtx(wrapper)
@@ -588,7 +593,7 @@ class MText(Shape):
         raw_chars = list(reversed(self.rawtext))  # text splitted into chars, in reversed order for efficient pop()
         while len(raw_chars):
             char = raw_chars.pop()
-            if char == '\\':
+            if char == '\\':  # is a formatting command
                 try:
                     char = raw_chars.pop()
                 except IndexError:
@@ -601,32 +606,30 @@ class MText(Shape):
                         chars.append('\n')
                     # discard other commands
                 else:  # more character commands are terminated by ';'
-                    stacking = char == 'S'
+                    stacking = char == 'S'  # stacking command surrounds user data
                     try:
                         while char != ';':  # end of format marker
                             char = raw_chars.pop()
                             if stacking and char != ';':
-                                chars.append(char)
+                                chars.append(char)  # append user data of stacking command
                     except IndexError:
                         break  # premature end of text - just ignore
             elif char in GROUP_CHARS:  # { }
-                pass
+                pass  # discard group markers
             elif char == '%':  # special characters
                 if len(raw_chars) and raw_chars[-1] == '%':
-                    raw_chars.pop()  # '%'
+                    raw_chars.pop()  # discard next '%'
                     if len(raw_chars):
                         special_char = raw_chars.pop()
+                        # replace or discard formatting code
                         chars.append(SPECIAL_CHARS.get(special_char, ""))
-                else:
+                else:  # char is just a single '%'
                     chars.append(char)
-            else:
+            else:  # char is what it is, a character
                 chars.append(char)
 
         plain_text = "".join(chars)
-        if split:
-            return plain_text.split('\n')
-        else:
-            return plain_text
+        return plain_text.split('\n') if split else plain_text
 
     def resolve_text_style(self, text_styles):
         style = text_styles.get(self.style, None)
