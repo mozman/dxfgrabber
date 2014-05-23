@@ -2,6 +2,8 @@
 News
 ====
 
+Version 0.7.5 - 2014-...
+
 Version 0.7.4 - 2014-05-23
 
   * NEW: added support for R12 2d splines (by POLYLINE); POLYLINE.mode == "spline2d"
