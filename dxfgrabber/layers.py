@@ -92,10 +92,10 @@ class DXF12Layer(DXFEntity):
     FROZEN = 0b00000001
 
     def is_frozen(self):
-        return self.get_dxf_attrib('flags') & DXF12Layer.FROZEN > 0
+        return self.get_dxf_attrib('flags', 0) & DXF12Layer.FROZEN > 0
 
     def is_locked(self):
-        return self.get_dxf_attrib('flags') & DXF12Layer.LOCK > 0
+        return self.get_dxf_attrib('flags', 0) & DXF12Layer.LOCK > 0
 
     def is_off(self):
         return self.get_dxf_attrib('color') < 0

@@ -5,6 +5,7 @@ News
 Version 0.7.5 - 2014-...
 
   * accepts block definitions without explicit base point, defaults to (0, 0, 0)
+  * check for required minimum DXF version (AC1009/DXF12) - treyerl
 
 Version 0.7.4 - 2014-05-23
 
