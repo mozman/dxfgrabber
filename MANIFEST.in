@@ -1,0 +1,4 @@
+include NEWS.txt README.txt LICENSE.txt
+recursive-include tests *.py *.dxf
+recursive-include docs/src *
+recursive-include dxfgrabber *.pyx *.pxd
