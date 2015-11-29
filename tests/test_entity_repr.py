@@ -13,7 +13,7 @@ import unittest
 import tempfile
 
 
-
+@unittest.skip  # runs too long
 class TestEntityRepr(unittest.TestCase):
     """
     Tests to make sure all classes in the entities module do not raise an exception when converted to a human-readable
