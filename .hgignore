@@ -10,3 +10,4 @@ docs/_build/*
 *.*~
 *.swp
 MANIFEST
+.idea*

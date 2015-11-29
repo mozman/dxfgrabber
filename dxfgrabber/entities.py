@@ -12,12 +12,15 @@ from .juliandate import calendar_date
 from datetime import datetime
 from .color import TrueColor
 import math
+import sys
 
 from .styles import default_text_style
 
 SPECIAL_CHARS = {
     'd': '°'
 }
+
+NEEDS_ENCODING = sys.version_info[0] == 2
 
 
 class SeqEnd(object):
@@ -29,6 +32,16 @@ class Entity(SeqEnd):
     def __init__(self, wrapper):
         super(Entity, self).__init__(wrapper)
         self.paperspace = bool(wrapper.paperspace())
+
+    def __str__(self):
+        return super(Entity, self).__repr__()
+
+    def __repr__(self):
+        """
+        Same as __str__ for every entity except the dxftype is added
+        :return: a string of the format {dxftype}[str({entity})]
+        """
+        return "%s[%s]" % (self.dxftype, str(self))
 
 
 class Shape(Entity):
@@ -73,6 +86,16 @@ class PolyShape(object):
         self.transparency = polyline.transparency
         self.shadow_mode = polyline.shadow_mode
 
+    def __str__(self):
+        return super(PolyShape, self).__repr__()
+
+    def __repr__(self):
+        """
+        Same as __str__ for every entity except the dxftype is added
+        :return: a string of the format {dxftype}[str({entity})]
+        """
+        return "%s[%s]" % (self.dxftype, str(self))
+
 
 class Line(Shape):
     def __init__(self, wrapper):
@@ -80,11 +103,25 @@ class Line(Shape):
         self.start = wrapper.get_dxf_attrib('start')
         self.end = wrapper.get_dxf_attrib('end')
 
+    def __str__(self):
+        try:
+            start = _coordinate_format(self.start)
+            end = _coordinate_format(self.end)
+            return "%s to %s" % (start, end)
+        except (AttributeError, IndexError):
+            return super(Line, self).__str__()
+
 
 class Point(Shape):
     def __init__(self, wrapper):
         super(Point, self).__init__(wrapper)
         self.point = wrapper.get_dxf_attrib('point')
+
+    def __str__(self):
+        try:
+            return _coordinate_format(self.point)
+        except AttributeError:
+            return super(Point, self).__str__()
 
 
 class Circle(Shape):
@@ -92,6 +129,12 @@ class Circle(Shape):
         super(Circle, self).__init__(wrapper)
         self.center = wrapper.get_dxf_attrib('center')
         self.radius = wrapper.get_dxf_attrib('radius')
+
+    def __str__(self):
+        return _coordinate_format(self.center)
+
+    def __repr__(self):
+        return "%s[center=%s; radius=%s]" % (self.dxftype, _coordinate_format(self.center), self.radius)
 
 
 class Arc(Shape):
@@ -103,6 +146,12 @@ class Arc(Shape):
         self.startangle = get_dxf('startangle')
         self.endangle = get_dxf('endangle')
 
+    def __str__(self):
+        return _coordinate_format(self.center)
+
+    def __repr__(self):
+        return "%s[center=%s; radius=%s]" % (self.dxftype, _coordinate_format(self.center), self.radius)
+
 
 class Trace(Shape):
     def __init__(self, wrapper):
@@ -111,6 +160,9 @@ class Trace(Shape):
         self.points = [
             get_dxf(vname) for vname in const.VERTEXNAMES
         ]
+
+    def __str__(self):
+        return "(%s)" % ', '.join([_coordinate_format(p) for p in self.points])
 
 Solid = Trace
 
@@ -184,6 +236,15 @@ class Text(Shape):
                 chars.append(char)
         return "".join(chars)
 
+    def __str__(self):
+        text = self.plain_text()
+        return text.encode('utf-8', 'ignore') if NEEDS_ENCODING else text
+
+    def __repr__(self):
+        text = "Text('%s')" % self.plain_text().strip()
+        return text.encode('utf-8', 'ignore') if NEEDS_ENCODING else text
+
+
 
 class Insert(Shape):
     def __init__(self, wrapper):
@@ -208,6 +269,9 @@ class Insert(Shape):
 
     def append_data(self, attribs):
         self.attribs = attribs
+
+    def __str__(self):
+        return "'%s' at %s" % (self.name, _coordinate_format(self.insert))
 
 
 class Attrib(Text):  # also ATTDEF
@@ -257,6 +321,9 @@ class Polyline(Shape):
 
     def __iter__(self):
         return iter(self.vertices)
+
+    def __str__(self):
+        return "(%s)" % ", ".join([_coordinate_format(p) for p in self.points])
 
     @property
     def is_closed(self):
@@ -342,6 +409,9 @@ class Polyface(PolyShape):
 
     def __iter__(self):
         return (SubFace(f, self.vertices) for f in self._face_records)
+    
+    def __str__(self):
+        return ", ".join([str(v) for v in self.vertices])
 
 
 class Polymesh(PolyShape):
@@ -395,6 +465,15 @@ class Vertex(Shape):
                 pass
         return tuple(vtx)
 
+    def __getitem__(self, item):
+        return self.location[item]
+
+    def __iter__(self):
+        return iter(self.location)
+
+    def __str__(self):
+        return _coordinate_format(self.location)
+
 
 class LWPolyline(Shape):
     def __init__(self, wrapper):
@@ -413,6 +492,9 @@ class LWPolyline(Shape):
     def __iter__(self):
         return iter(self.points)
 
+    def __str__(self):
+        return "(%s)" % ", ".join([_coordinate_format(p) for p in self.points])
+
 
 class Ellipse(Shape):
     def __init__(self, wrapper):
@@ -423,6 +505,9 @@ class Ellipse(Shape):
         self.ratio = get_dxf('ratio', 1.0)  # circle
         self.startparam = get_dxf('startparam', 0.)
         self.endparam = get_dxf('endparam', 6.283185307179586)  # 2*pi
+
+    def __str__(self):
+        return _coordinate_format(self.center)
 
 
 class Ray(Shape):
@@ -642,6 +727,19 @@ class MText(Shape):
         if self.bigfont is None:
             self.bigfont = style.font
 
+    def __str__(self):
+        text = self.plain_text()
+        return text.encode('utf-8', 'ignore') if NEEDS_ENCODING else text
+
+
+    def __repr__(self):
+        splitlines = self.plain_text().split('\n', 1)
+        text = splitlines[0].strip()
+        if len(splitlines) > 1:
+            text += '...'
+        text = "MText('%s')" % text
+        return text.encode('utf-8', 'ignore') if NEEDS_ENCODING else text
+
 
 class Block(Shape):
     def __init__(self, wrapper):
@@ -675,6 +773,12 @@ class Block(Shape):
 
     def __len__(self):
         return len(self._entities)
+
+    def __str__(self):
+        try:
+            return self.name
+        except AttributeError:
+            return self.dxftype
 
 
 class BlockEnd(SeqEnd):
@@ -928,3 +1032,18 @@ def entity_factory(tags, dxfversion):
     return shape
 
 
+def _coordinate_format(coords):
+        """
+        Given a tuple of length 3 (X, Y, Z), rounds the X and Y component to nearest 2 decimal places and drops the Z
+        component if it is zero.
+
+        :param coords: a tuple of length 3
+        :return: a string formatted to make the points more succinct
+        """
+        try:
+            if coords[2] == 0:
+                coords = coords[:2]
+        except IndexError:
+            pass
+        rounded = tuple([round(i, 3) for i in coords])
+        return repr(rounded)  # gives us the (x, y) or (x, y, z) we want
