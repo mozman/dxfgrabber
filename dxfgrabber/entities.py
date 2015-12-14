@@ -32,6 +32,7 @@ class Entity(SeqEnd):
     def __init__(self, wrapper):
         super(Entity, self).__init__(wrapper)
         self.paperspace = bool(wrapper.paperspace())
+        self.handle = wrapper.get_dxf_attrib('handle', None)
 
     def __str__(self):
         return super(Entity, self).__repr__()
