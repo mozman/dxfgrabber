@@ -4,12 +4,11 @@ News
 
 Version 0.7.5 - 2015-11-29
 
-  * Python only version runs with CPython (2.7, 3.4, 3.5), pypy-4.0.1 and pypy3-2.4.0
-  * can run Cython extensions on Win7 only with CPython 3.4 :(
+  * Python only version runs with CPython (2.7, 3.4, 3.5), pypy-5.0.0 and pypy3-2.4.0
   * accepts block definitions without explicit base point, defaults to (0, 0, 0)
   * NEW: reads DXF versions older than AC1009 (DXF R12), as far I know, I need more old files for testing
   * KNOWN BUG: Win7 and Python 2.7.10 - can't build Cython extension with MingW32, use Python 2.7.9 instead
-  * KNOWN BUG: Win7 and Python 3.5.0 - can't build Cython extension with MingW32
+  * KNOWN BUG: Win7 and Python 3.5.0 - can't build Cython extension with MingW32 but work with VC2015
 
 Version 0.7.4 - 2014-05-23
 
