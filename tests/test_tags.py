@@ -172,3 +172,105 @@ LAST
   1
 TEST2
 """
+
+XDATA = """0
+LINE
+5
+1
+330
+2
+102
+{DXFGrabber
+330
+999
+102
+}
+10
+100
+ 20
+200
+  9
+check mark 1
+ 10
+100
+ 20
+200
+ 30
+300
+  9
+check mark 2
+1001
+DXFGRABBER
+1000
+XDATA_STRING
+"""
+
+
+class TestXData(unittest.TestCase):
+    def setUp(self):
+        self.tags = Tags.from_text(XDATA)
+
+    def test_get_xdata(self):
+        xdata = self.tags.xdata()
+        self.assertEqual([(1001, 'DXFGRABBER'), (1000, 'XDATA_STRING')], xdata)
+
+class TestAppData(unittest.TestCase):
+    def setUp(self):
+        self.tags = Tags.from_text(XDATA)
+
+    def test_get_app_data(self):
+        app_data = self.tags.app_data()
+        self.assertEqual([(102, '{DXFGrabber'), (330, '999'), (102, '}')], app_data['{DXFGrabber'])
+
+    def test_plain_tags(self):
+        plain_tags = list(self.tags.plain_tags())
+        self.assertEqual(7, len(plain_tags))  # coords like 10, 20, 30 are just one tag (10, (x,y,z))
+
+ELLIPSE = """  0
+ELLIPSE
+  5
+3D2
+330
+1F
+100
+AcDbEntity
+  8
+0
+100
+AcDbEllipse
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 11
+2.60
+ 21
+1.50
+ 31
+0.0
+210
+0.0
+220
+0.0
+230
+1.0
+ 40
+0.33
+ 41
+0.0
+ 42
+6.28
+"""
+
+class TestSubclasses(unittest.TestCase):
+    def setUp(self):
+        self.tags = Tags.from_text(ELLIPSE)
+
+    def test_subclasses(self):
+        subclasses = self.tags.subclasses()
+        self.assertEqual(3, len(subclasses))
+        self.assertEqual(3, len(subclasses['noname']))
+        self.assertEqual(1, len(subclasses['AcDbEntity']))
+        self.assertEqual(6, len(subclasses['AcDbEllipse']))

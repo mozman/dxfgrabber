@@ -5,17 +5,13 @@ __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
 
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
-class DrawingProxy:
-    def __init__(self, version):
-        self.dxfversion = version
 
 class TestCircleDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(CIRCLE_DXF12)
-        self.entity = entity_factory(tags, 'AC1009')
+        self.entity = entity_factory(Tags.from_text(CIRCLE_DXF12))
 
     def test_circle_data(self):
         circle = self.entity
@@ -28,10 +24,10 @@ class TestCircleDXF12(unittest.TestCase):
         self.assertEqual(circle.thickness, 0)
         self.assertFalse(circle.paperspace)
 
+
 class TestCircleDXF13(TestCircleDXF12):
     def setUp(self):
-        tags = ClassifiedTags.from_text(CIRCLE_DXF13)
-        self.entity = entity_factory(tags, 'AC1024')
+        self.entity = entity_factory(Tags.from_text(CIRCLE_DXF13))
 
 CIRCLE_DXF13 = """  0
 CIRCLE

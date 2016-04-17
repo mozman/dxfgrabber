@@ -8,7 +8,6 @@ __author__ = "mozman <mozman@gmx.at>"
 from .codepage import toencoding
 from .defaultchunk import DefaultChunk, iterchunks
 from .headersection import HeaderSection
-from .headersection import MinVersionError
 from .tablessection import TablesSection
 from .entitysection import EntitySection, ObjectsSection
 from .blockssection import BlocksSection
@@ -39,8 +38,6 @@ class Sections(object):
             if bootstrap:
                 new_section = HeaderSection.from_tags(section)
                 drawing.dxfversion = new_section.get('$ACADVER', 'AC1009')
-                if drawing.dxfversion < 'AC1009':
-                    drawing.dxfversion = 'AC1009'
                 codepage = new_section.get('$DWGCODEPAGE', 'ANSI_1252')
                 drawing.encoding = toencoding(codepage)
                 bootstrap = False

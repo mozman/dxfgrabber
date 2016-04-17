@@ -5,17 +5,16 @@ __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
 
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 
 class TestLineDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(LINE_DXF12)
-        self.entity = entity_factory(tags, 'AC1009')
+        self.line = entity_factory(Tags.from_text(LINE_DXF12))
 
-    def test_lines_data(self):
-        line = self.entity
+    def test_DXF12_lines_data(self):
+        line = self.line
         self.assertEqual(line.dxftype, 'LINE')
         self.assertEqual(line.start, (0., 0., 0.))
         self.assertEqual(line.end, (1., 0., 0.))
@@ -28,8 +27,7 @@ class TestLineDXF12(unittest.TestCase):
 
 class TestLineDXF13(TestLineDXF12):
     def setUp(self):
-        tags = ClassifiedTags.from_text(LINE_DXF13)
-        self.entity = entity_factory(tags, 'AC1024')
+        self.line = entity_factory(Tags.from_text(LINE_DXF13))
 
 
 LINE_DXF13 = """  0

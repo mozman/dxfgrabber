@@ -2,6 +2,11 @@
 News
 ====
 
+Version 0.8.0 - 2016-05-..
+
+  * internal refactoring - removed extra layer for DXF R12 and DXF R13 implementation
+  * removed parts implemented in Cython
+
 Version 0.7.5 - 2015-11-29
 
   * Python only version runs with CPython (2.7, 3.4, 3.5), pypy-5.0.0 and pypy3-2.4.0

@@ -37,8 +37,8 @@ class TestDXF12Style(unittest.TestCase):
         self.assertEqual(style.height, 0)
         self.assertEqual(style.width, 1)
         self.assertEqual(style.oblique, 0)
-        self.assertFalse(style.backward)
-        self.assertFalse(style.mirror_y)
+        self.assertFalse(style.is_backwards)
+        self.assertFalse(style.is_upside_down)
         self.assertEqual(style.font, 'txt')
         self.assertEqual(style.bigfont, '')
 

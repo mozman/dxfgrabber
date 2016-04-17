@@ -246,7 +246,6 @@ class Text(Shape):
         return text.encode('utf-8', 'ignore') if NEEDS_ENCODING else text
 
 
-
 class Insert(Shape):
     def __init__(self, wrapper):
         super(Insert, self).__init__(wrapper)
@@ -329,10 +328,6 @@ class Polyline(Shape):
     @property
     def is_closed(self):
         return self.is_mclosed
-
-    @is_closed.setter
-    def is_closed(self, status):
-        self.is_mclosed = status
 
     def append_data(self, vertices):
         def default_width(start_width, end_width):
@@ -1026,7 +1021,7 @@ EntityTable = {
 def entity_factory(tags, dxfversion):
     dxftype = tags.get_type()
     cls, dxf12wrapper, dxf13wrapper = EntityTable[dxftype]
-    wrapper = dxf12wrapper(tags) if dxfversion == "AC1009" else dxf13wrapper(tags)
+    wrapper = dxf12wrapper(tags) if dxfversion <= "AC1009" else dxf13wrapper(tags)
     wrapper.post_read_correction()
     shape = cls(wrapper)
     return shape

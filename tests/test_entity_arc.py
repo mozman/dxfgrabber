@@ -4,14 +4,13 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 
 class TestArcDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ARC_DXF12)
-        self.entity = entity_factory(tags, 'AC1009')
+        self.entity = entity_factory(Tags.from_text(ARC_DXF12))
 
     def test_arc_data(self):
         entity = self.entity
@@ -35,8 +34,7 @@ class TestArcDXF12(unittest.TestCase):
 
 class TestArcDXF13(TestArcDXF12):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ARC_DXF13)
-        self.entity = entity_factory(tags, 'AC1024')
+        self.entity = entity_factory(Tags.from_text(ARC_DXF13))
 
 
 ARC_DXF12 = """  0

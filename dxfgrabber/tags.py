@@ -176,12 +176,15 @@ class Tags(list):
         return [tag for tag in self if tag.code == code]
 
     def tag_index(self, code, start=0, end=None):
-        """ Return first index of DXFTag(code, ...). """
+        """Return first index of DXFTag(code, value).
+        """
         if end is None:
             end = len(self)
-        for index, tag in enumerate(islice(self, start, end)):
-            if tag.code == code:
-                return start+index
+        index = start
+        while index < end:
+            if self[index].code == code:
+                return index
+            index += 1
         raise ValueError(code)
 
     def get_value(self, code):
@@ -196,6 +199,63 @@ class Tags(list):
 
     def get_type(self):
         return self.__getitem__(0).value
+
+    def plain_tags(self):  # yield no app data and no xdata
+        is_app_data = False
+        for tag in self:
+            if tag.code >= 1000:  # skip xdata
+                continue
+            if tag.code == APP_DATA_MARKER:
+                if is_app_data:  # tag.value == '}'
+                    is_app_data = False  # end of app data
+                else:  # value == '{APPID'
+                    is_app_data = True  # start of app data
+                continue
+            if not is_app_data:
+                yield tag
+
+    def xdata(self):
+        index = 0
+        end = len(self)
+        while index < end:
+            if self[index].code > 999:  # all xdata tag codes are >= 1000
+                return self[index:]  # xdata is always at the end of the DXF entity
+            index += 1
+        return []
+
+    def app_data(self):
+        app_data = {}
+        app_tags = None
+        for tag in self:
+            if tag.code == APP_DATA_MARKER:
+                if tag.value == '}':  # end of app data
+                    app_tags.append(tag)
+                    app_data[app_tags[0].value] = app_tags
+                    app_tags = None
+                else:
+                    app_tags = [tag]
+            else:
+                if app_tags is not None:  # collection app data
+                    app_tags.append(tag)
+        return app_data
+
+    def subclasses(self):
+        classes = {}
+        name = 'noname'
+        tags = []
+        for tag in self.plain_tags():
+            if tag.code == SUBCLASS_MARKER:
+                classes[name] = tags
+                tags = []
+                name = tag.value
+            else:
+                tags.append(tag)
+        classes[name] = tags
+        return classes
+
+    def get_subclass(self, name):
+        classes = self.subclasses()
+        return classes.get(name, 'noname')
 
 
 class TagGroups(list):
