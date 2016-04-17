@@ -732,7 +732,6 @@ class MText(Shape):
         text = self.plain_text()
         return text.encode('utf-8', 'ignore') if NEEDS_ENCODING else text
 
-
     def __repr__(self):
         splitlines = self.plain_text().split('\n', 1)
         text = splitlines[0].strip()

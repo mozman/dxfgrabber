@@ -5,25 +5,10 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
-import os
-
-from .const import ENV_CYTHON, XTYPE_NONE, XTYPE_2D, XTYPE_3D, XTYPE_2D_3D
-
-cyDXFEntity = None
-OPTIMIZE = True
-if ENV_CYTHON in os.environ:
-    if os.environ[ENV_CYTHON].upper() in ('1', 'ON', 'TRUE'):
-        OPTIMIZE = True
-    else:
-        OPTIMIZE = False
-try:
-    if OPTIMIZE:
-        from.cydxfentity import cyDXFEntity
-except ImportError:
-    pass
+from .const import XTYPE_NONE, XTYPE_2D, XTYPE_3D, XTYPE_2D_3D
 
 
-class pyDXFEntity(object):
+class DXFEntity(object):
     DXFATTRIBS = {}
 
     def __init__(self, tags):
@@ -77,8 +62,3 @@ class pyDXFEntity(object):
         elif xtype == XTYPE_2D:
             return value[0], value[1]
         return value
-
-if cyDXFEntity is not None:
-    DXFEntity = cyDXFEntity
-else:
-    DXFEntity = pyDXFEntity

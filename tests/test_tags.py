@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import unittest
 from io import StringIO
 
-from dxfgrabber.tags import StringIterator, Tags, DXFTag
+from dxfgrabber.tags import Tags, DXFTag, string_tagger
 from dxfgrabber.tags import dxfinfo
 
 TEST_TAGREADER = """  0
@@ -67,44 +67,23 @@ EOF
 
 class TestTagReader(unittest.TestCase):
     def setUp(self):
-        self.reader = StringIterator(TEST_TAGREADER)
+        self.reader = string_tagger(TEST_TAGREADER)
 
     def test_next(self):
         self.assertEqual(DXFTag(0, 'SECTION'), next(self.reader))
-
-    def test_undo_last(self):
-        self.reader.__next__()
-        self.reader.undo_tag()
-        self.assertEqual(DXFTag(0, 'SECTION'), next(self.reader))
-
-    def test_error_on_multiple_undo_last(self):
-        next(self.reader)
-        self.reader.undo_tag()
-        with self.assertRaises(ValueError):
-            self.reader.undo_tag()
 
     def test_to_list(self):
         tags = list(self.reader)
         self.assertEqual(8, len(tags))
 
-    def test_undo_eof(self):
-        for tag in self.reader:
-            if tag == DXFTag(0, 'EOF'):
-                self.reader.undo_tag()
-                break
-        tag = next(self.reader)
-        self.assertEqual(DXFTag(0, 'EOF'), tag)
-        with self.assertRaises(StopIteration):
-            self.reader.__next__()
-
     def test_no_eof(self):
-        tags = list(StringIterator(TEST_NO_EOF))
+        tags = list(string_tagger(TEST_NO_EOF))
         self.assertEqual(7, len(tags))
         self.assertEqual(DXFTag(0, 'ENDSEC'), tags[-1])
 
     def test_skip_comments(self):
-        tags1 = list(StringIterator(TEST_TAGREADER))
-        tags2 = list(StringIterator(TEST_TAGREADER_COMMENTS))
+        tags1 = list(string_tagger(TEST_TAGREADER))
+        tags2 = list(string_tagger(TEST_TAGREADER_COMMENTS))
         self.assertEqual(tags1, tags2)
 
 
@@ -175,7 +154,7 @@ class TestTags(unittest.TestCase):
             tags.tag_index(1)
 
     def test_read_2D_points(self):
-        stri = StringIterator(POINT_2D_TAGS)
+        stri = string_tagger(POINT_2D_TAGS)
         tags = list(stri)
         tag = tags[0]  # 2D point
         self.assertEqual((100, 200), tag.value)

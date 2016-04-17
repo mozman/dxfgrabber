@@ -7,23 +7,10 @@
 
 import os
 from setuptools import setup
-from setuptools import Extension
 
 VERSION = "0.7.5"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
-
-try:
-    from Cython.Distutils import build_ext
-    ext_modules = [
-        Extension("dxfgrabber.cytags", ["dxfgrabber/cytags.pyx", ]),
-        Extension("dxfgrabber.cydxfentity", ["dxfgrabber/cydxfentity.pyx", ])
-    ]
-    commands = {'build_ext': build_ext}
-except ImportError:
-    print("Install Cython to get the speed optimized version of dxfgrabber.")
-    ext_modules = []
-    commands = {}
 
 
 def read(fname):
@@ -43,20 +30,17 @@ setup(name='dxfgrabber',
       packages=['dxfgrabber'],
       provides=['dxfgrabber'],
       keywords=['DXF', 'CAD'],
-      cmdclass=commands,
-      ext_modules=ext_modules,
       long_description=read('README.txt') + read('NEWS.txt'),
       platforms="OS Independent",
       license="MIT License",
       classifiers=[
-          "Development Status :: 4 - Beta",
+          "Development Status :: 5 - Production/Stable",
           "License :: OSI Approved :: MIT License",
           "Operating System :: OS Independent",
           "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3",
           "Programming Language :: Python :: 3.4",
           "Programming Language :: Python :: 3.5",
-          "Programming Language :: Python :: Implementation :: CPython",
           "Programming Language :: Python :: Implementation :: PyPy",
           "Intended Audience :: Developers",
           "Topic :: Software Development :: Libraries :: Python Modules", ]

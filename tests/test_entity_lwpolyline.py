@@ -101,6 +101,8 @@ AcDbPolyline
 4.16
  20
 0.29
+999
+coordinates never at the end of the file
 """
 
 

@@ -4,7 +4,6 @@ import dxfgrabber
 import time
 from itertools import chain
 
-from dxfgrabber.tags import CYTHON_EXT
 if "win" in sys.platform:
     DIRS = (r"D:\Source\dxftest\CADKitSamples\*.dxf",
     r"D:\Source\dxftest\*.dxf",
@@ -22,7 +21,7 @@ def stress_test():
     ok = 0
     error = 0
 
-    print('Cython acceleration is ' + ('on' if CYTHON_EXT else 'off'))
+    print('Cython acceleration is removed since version 0.8.0')
     print("Stress test:")
 
     for filename in all_files:
