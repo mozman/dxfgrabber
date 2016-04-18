@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
+
 
 class TestAttribDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ATTRIB_DXF12)
-        self.entity = entity_factory(tags, 'AC1009')
+        tags = Tags.from_text(ATTRIB_DXF12)
+        self.entity = entity_factory(tags)
 
     def test_attrib_data(self):
         entity = self.entity
@@ -26,10 +27,11 @@ class TestAttribDXF12(unittest.TestCase):
         self.assertEqual(entity.linetype, None)
         self.assertFalse(entity.paperspace)
 
+
 class TestAttribDXF13(TestAttribDXF12):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ATTRIB_DXF13)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(ATTRIB_DXF13)
+        self.entity = entity_factory(tags)
 
 ATTRIB_DXF12 = """  0
 ATTRIB

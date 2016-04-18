@@ -14,6 +14,7 @@ SPECIAL_CHARS = {
     'd': '°'
 }
 
+
 class DXFEntity(object):
     def __init__(self):
         self.dxftype = 'ENTITY'
@@ -258,35 +259,315 @@ class Text(DXFEntity):
         return "".join(chars)
 
 
+class Attrib(Text):
+    def __init__(self):
+        super(Attrib, self).__init__()
+        self.field_length = 0
+        self.tag = ""
+
+    def setup_attributes(self, tags):
+        for code, value in super(Attrib, self).setup_attributes(tags):
+            if code == 2:
+                self.tag = value
+            elif code == 73:
+                self.field_length = value
+            else:
+                yield code, value
+
+
 class Insert(DXFEntity):
-    pass
+    def __init__(self):
+        super(Insert, self).__init__()
+        self.name = ""
+        self.insert = (0., 0., 0.)
+        self.rotation = 0.
+        self.scale = (1., 1., 1.)
+        self.row_count = 1
+        self.row_spacing = 0.
+        self.col_count = 1
+        self.col_spacing = 0.
+        self.attribsfollow = False
+        self.attribs = []
 
+    def setup_attributes(self, tags):
+        xscale = 1.
+        yscale = 1.
+        zscale = 1.
+        for code, value in super(Insert, self).setup_attributes(tags):
+            if code == 2:
+                self.name = value
+            elif code == 10:
+                self.insert = value
+            elif code == 41:
+                xscale = value
+            elif code == 42:
+                yscale = value
+            elif code == 43:
+                zscale = value
+            elif code == 44:
+                self.col_spacing = value
+            elif code == 45:
+                self.row_spacing = value
+            elif code == 50:
+                self.rotation = value
+            elif code == 66:
+                self.attribsfollow = bool(value)
+            elif code == 70:
+                self.col_count = value
+            elif code == 71:
+                self.row_count = value
+            else:
+                yield code, value
+        self.scale = (xscale, yscale, zscale)
+        self.set_default_extrusion()
 
-class SeqEnd(DXFEntity):
-    pass
+    def find_attrib(self, attrib_tag):
+        for attrib in self.attribs:
+            if attrib.tag == attrib_tag:
+                return attrib
+        return None
 
-
-class Attrib(DXFEntity):
-    pass
-
-
-class AttDef(DXFEntity):
-    pass
+    def append_data(self, attribs):
+        self.attribs = attribs
 
 
 class Polyline(DXFEntity):
-    pass
+    LINE_TYPES = frozenset(('spline2d', 'polyline2d', 'polyline3d'))
+
+    def __init__(self):
+        super(Polyline, self).__init__()
+        self.vertices = []  # set in append data
+        self.points = []  # set in append data
+        self.controlpoints = []  # set in append data
+        self.width = []  # set in append data
+        self.bulge = []  # set in append data
+        self.tangents = []  # set in append data
+        self.flags = 0
+        self.mode = 'polyline2d'
+        self.mcount = 0
+        self.ncount = 0
+        self.default_start_width = 0.
+        self.default_end_width = 0.
+        self.is_mclosed = False
+        self.is_nclosed = False
+        self.is_closed = False
+        self.elevation = (0., 0., 0.)
+        self.m_smooth_density = 0.
+        self.n_smooth_density = 0.
+        self.smooth_type = 0
+        self.spline_type = None
+        if self.mode == 'spline2d':
+            if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
+                self.spline_type = 'cubic_bspline'
+            elif self.smooth_type == const.POLYMESH_QUADRIC_BSPLINE:
+                self.spline_type = 'quadratic_bspline'
+            elif self.smooth_type == const.POLYMESH_BEZIER_SURFACE:
+                self.spline_type = 'bezier_curve'  # is this a valid spline type for DXF12?
+
+    def setup_attributes(self, tags):
+        def get_mode():
+            flags = self.flags
+            if flags & const.POLYLINE_SPLINE_FIT_VERTICES_ADDED:
+                return 'spline2d'
+            elif flags & const.POLYLINE_3D_POLYLINE:
+                return 'polyline3d'
+            elif flags & const.POLYLINE_3D_POLYMESH:
+                return 'polymesh'
+            elif flags & const.POLYLINE_POLYFACE:
+                return 'polyface'
+            else:
+                return 'polyline2d'
+
+        for code, value in super(Polyline, self).setup_attributes(tags):
+            if code == 10:
+                self.elevation = value
+            elif code == 40:
+                self.default_start_width = value
+            elif code == 41:
+                self.default_end_width = value
+            elif code == 70:
+                self.flags = value
+            elif code == 71:
+                self.mcount = value
+            elif code == 72:
+                self.ncount = value
+            elif code == 73:
+                self.m_smooth_density = value
+            elif code == 73:
+                self.n_smooth_density = value
+            elif code == 75:
+                self.smooth_type = value
+        self.mode = get_mode()
+        if self.mode == 'spline2d':
+            if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
+                self.spline_type = 'cubic_bspline'
+            elif self.smooth_type == const.POLYMESH_QUADRIC_BSPLINE:
+                self.spline_type = 'quadratic_bspline'
+            elif self.smooth_type == const.POLYMESH_BEZIER_SURFACE:
+                self.spline_type = 'bezier_curve'  # is this a valid spline type for DXF12?
+        self.is_mclosed = bool(self.flags & const.POLYLINE_MESH_CLOSED_M_DIRECTION)
+        self.is_nclosed = bool(self.flags & const.POLYLINE_MESH_CLOSED_N_DIRECTION)
+        self.is_closed = self.is_mclosed
+        self.set_default_extrusion()
+
+    def __len__(self):
+        return len(self.vertices)
+
+    def __getitem__(self, item):
+        return self.vertices[item]
+
+    def __iter__(self):
+        return iter(self.vertices)
+
+    def append_data(self, vertices):
+        def default_width(start_width, end_width):
+            if start_width == 0.:
+                start_width = self.default_start_width
+            if end_width == 0.:
+                end_width = self.default_end_width
+            return start_width, end_width
+
+        self.vertices = vertices
+        if self.mode in Polyline.LINE_TYPES:
+            for vertex in self.vertices:
+                if vertex.flags & const.VTX_SPLINE_FRAME_CONTROL_POINT:
+                    self.controlpoints.append(vertex.location)
+                else:
+                    self.points.append(vertex.location)
+                    self.width.append(default_width(vertex.start_width, vertex.end_width))
+                    self.bulge.append(vertex.bulge)
+                    self.tangents.append(vertex.tangent if vertex.flags & const.VTX_CURVE_FIT_TANGENT else None)
+
+    def cast(self):
+        if self.mode == 'polyface':
+            return PolyFace(self)
+        elif self.mode == 'polymesh':
+            return PolyMesh(self)
+        else:
+            return self
+
+
+class SubFace(object):
+    def __init__(self, face_record, vertices):
+        self._vertices = vertices
+        self.face_record = face_record
+
+    def __len__(self):
+        return len(self.face_record.vtx)
+
+    def __getitem__(self, item):
+        return self._vertices[self._vertex_index(item)]
+
+    def __iter__(self):
+        return (self._vertices[index].location for index in self.indices())
+
+    def _vertex_index(self, pos):
+        return abs(self.face_record.vtx[pos]) - 1
+
+    def indices(self):
+        return tuple(abs(i)-1 for i in self.face_record.vtx if i != 0)
+
+    def is_edge_visible(self, pos):
+        return self.face_record.vtx[pos] > 0
+
+
+class PolyShape(object):
+    def __init__(self, polyline, dxftype):
+        # copy all dxf attributes from polyline
+        for key, value in polyline.__dict__.items():
+            self.__dict__[key] = value
+        self.dxftype = dxftype
+
+
+class PolyFace(PolyShape):
+    def __init__(self, polyline):
+        VERTEX_FLAGS = const.VTX_3D_POLYFACE_MESH_VERTEX + const.VTX_3D_POLYGON_MESH_VERTEX
+
+        def is_vertex(flags):
+            return flags & VERTEX_FLAGS == VERTEX_FLAGS
+
+        super(PolyFace, self).__init__(polyline, 'POLYFACE')
+        vertices = []
+        face_records = []
+        for vertex in polyline.vertices:
+            (vertices if is_vertex(vertex.flags) else face_records).append(vertex)
+
+        self._face_records = face_records
+
+    def __getitem__(self, item):
+        return SubFace(self._face_records[item], self.vertices)
+
+    def __len__(self):
+        return len(self._face_records)
+
+    def __iter__(self):
+        return (SubFace(f, self.vertices) for f in self._face_records)
+
+
+class PolyMesh(PolyShape):
+    def __init__(self, polyline):
+        super(PolyMesh, self).__init__(polyline, 'POLYMESH')
+
+    def __iter__(self):
+        return iter(self.vertices)
+
+    def get_location(self, pos):
+        return self.get_vertex(pos).location
+
+    def get_vertex(self, pos):
+        m, n = pos
+        if 0 <= m < self.mcount and 0 <= n < self.ncount:
+            pos = m * self.ncount + n
+            return self.vertices[pos]
+        else:
+            raise IndexError(repr(pos))
 
 
 class Vertex(DXFEntity):
-    pass
+    def __init__(self):
+        super(Vertex, self).__init__()
+        self.location = (0., 0., 0.)
+        self.flags = 0
+        self.start_width = 0.
+        self.end_width = 0.
+        self.bulge = 0.
+        self.tangent = None
+        self.vtx = None
+
+    def setup_attributes(self, tags):
+        vtx0 = 0
+        vtx1 = 0
+        vtx2 = 0
+        vtx3 = 0
+        for code, value in super(Vertex, self).setup_attributes(tags):
+            if code == 10:
+                self.location = value
+            elif code == 40:
+                self.start_width = value
+            elif code == 41:
+                self.end_width = value
+            elif code == 50:
+                self.tangent = value
+            elif code == 71:
+                vtx0 = value
+            elif code == 72:
+                vtx1 = value
+            elif code == 73:
+                vtx2 = value
+            elif code == 74:
+                vtx3 = value
+        indices = (vtx0, vtx1, vtx2, vtx3)
+        if any(indices):
+            self.vtx = indices
+
+    def __getitem__(self, item):
+        return self.location[item]
+
+    def __iter__(self):
+        return iter(self.location)
 
 
 class Block(DXFEntity):
-    pass
-
-
-class BlockEnd(DXFEntity):
     pass
 
 
@@ -315,10 +596,6 @@ class Helix(DXFEntity):
 
 
 class MText(DXFEntity):
-    pass
-
-
-class Sun(DXFEntity):
     pass
 
 
@@ -352,13 +629,13 @@ EntityTable = {
     '3DFACE': Face,
     'TEXT': Text,
     'INSERT': Insert,
-    'SEQEND': SeqEnd,
+    'SEQEND': DXFEntity,
     'ATTRIB': Attrib,
-    'ATTDEF': AttDef,
+    'ATTDEF': Attrib,
     'POLYLINE': Polyline,
     'VERTEX': Vertex,
     'BLOCK': Block,
-    'ENDBLK': BlockEnd,
+    'ENDBLK': DXFEntity,
     'LWPOLYLINE': LWPolyline,
     'ELLIPSE': Ellipse,
     'RAY': Ray,
@@ -366,7 +643,6 @@ EntityTable = {
     'SPLINE': Spline,
     'HELIX': Helix,
     'MTEXT': MText,
-    'SUN': Sun,
     'MESH': Mesh,
     'LIGHT': Light,
     'BODY': Body,
@@ -382,5 +658,7 @@ def entity_factory(tags):
     cls = EntityTable.get(dxftype, DXFEntity)  # get entity class
     entity = cls()  # call constructor
     list(entity.setup_attributes(tags))  # setup dxf attributes - chain of generators
+    if hasattr(entity, 'cast'):
+        entity = entity.cast()
     return entity
 

@@ -8,15 +8,10 @@ from dxfgrabber.tags import Tags
 from dxfgrabber.styles import StyleTable
 
 
-class DrawingProxy:
-    def __init__(self, version):
-        self.dxfversion = version
-
-
 class TestDXF12Style(unittest.TestCase):
     def setUp(self):
         tags = Tags.from_text(DXF12STYLES)
-        self.styles = StyleTable.from_tags(tags, DrawingProxy("AC1009"))
+        self.styles = StyleTable.from_tags(tags)
 
     def test_get_existing_style(self):
         style = self.styles.get("STANDARD")
@@ -46,7 +41,7 @@ class TestDXF12Style(unittest.TestCase):
 class TestDXF13Style(TestDXF12Style):
     def setUp(self):
         tags = Tags.from_text(DXF13STYLES)
-        self.styles = StyleTable.from_tags(tags, DrawingProxy("AC1024"))
+        self.styles = StyleTable.from_tags(tags)
 
 DXF13STYLES = """  0
 TABLE

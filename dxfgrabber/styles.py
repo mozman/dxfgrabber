@@ -44,7 +44,7 @@ class StyleTable(Table):
     name = 'styles'
 
     @staticmethod
-    def from_tags(tags, drawing):
+    def from_tags(tags):
         styles = StyleTable()
         for entry_tags in styles.entry_tags(tags):
             style = Style(entry_tags)

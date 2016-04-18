@@ -81,7 +81,7 @@ class LayerTable(Table):
     name = 'layers'
 
     @staticmethod
-    def from_tags(tags, drawing):
+    def from_tags(tags):
         layers = LayerTable()
         for entrytags in layers.entry_tags(tags):
             layer = Layer(entrytags)

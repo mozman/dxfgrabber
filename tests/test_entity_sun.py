@@ -7,16 +7,16 @@ __author__ = "mozman <mozman@gmx.at>"
 import unittest
 import dxfgrabber
 
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfobjects import objects_factory
 from datetime import datetime
 import os
 
 
 class TestSun(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(SUN)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(SUN)
+        self.entity = objects_factory(tags)
 
     def test_sun_properties(self):
         sun = self.entity
@@ -36,7 +36,7 @@ class TestSun(unittest.TestCase):
         self.assertEqual(sun.shadow_softness, 1)
 
 
-EXT_FILE = r"D:\source\dxftest\SunLight.dxf"
+EXT_FILE = 'diabled'  # r"D:\source\dxftest\SunLight.dxf"
 
 
 class TestFromFile(unittest.TestCase):

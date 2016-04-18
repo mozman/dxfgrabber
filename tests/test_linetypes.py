@@ -16,7 +16,7 @@ class DrawingProxy:
 class TestDXF12Style(unittest.TestCase):
     def setUp(self):
         tags = Tags.from_text(DXF12LTYPES)
-        self.linetypes = LinetypeTable.from_tags(tags, DrawingProxy("AC1009"))
+        self.linetypes = LinetypeTable.from_tags(tags)
 
     def test_get_existing_style(self):
         style = self.linetypes.get("CONTINUOUS")
@@ -56,7 +56,7 @@ class TestDXF12Style(unittest.TestCase):
 class TestDXF13Style(TestDXF12Style):
     def setUp(self):
         tags = Tags.from_text(DXF13LTYPES)
-        self.linetypes = LinetypeTable.from_tags(tags, DrawingProxy("AC1024"))
+        self.linetypes = LinetypeTable.from_tags(tags)
 
 
 DXF13LTYPES = """  0

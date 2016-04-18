@@ -24,11 +24,12 @@ class Linetype(object):
             elif code == 49:
                 self.pattern.append(value)
 
+
 class LinetypeTable(Table):
     name = 'linetypes'
 
     @staticmethod
-    def from_tags(tags, drawing):
+    def from_tags(tags):
         styles = LinetypeTable()
         for entry_tags in styles.entry_tags(tags):
             style = Linetype(entry_tags)

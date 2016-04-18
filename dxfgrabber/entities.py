@@ -76,16 +76,9 @@ class PolyShape(object):
     """ Base class for Polyface and Polymesh, both are special cases of POLYLINE.
     """
     def __init__(self, polyline, dxftype):
+        for key, value in polyline.__dict__.items():
+            self.__dict__[key] = value
         self.dxftype = dxftype
-        self.paperspace = polyline.paperspace
-        self.layer = polyline.layer
-        self.linetype = polyline.linetype
-        self.ltscale = polyline.ltscale
-        self.invisible = polyline.invisible
-        self.color = polyline.color
-        self.true_color = polyline.true_color
-        self.transparency = polyline.transparency
-        self.shadow_mode = polyline.shadow_mode
 
     def __str__(self):
         return super(PolyShape, self).__repr__()
