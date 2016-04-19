@@ -4,22 +4,22 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 class TestEllipse(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ELLIPSE)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(ELLIPSE)
+        self.entity = entity_factory(tags)
 
     def test_ellipse_data(self):
         entity = self.entity
         self.assertEqual(entity.dxftype, 'ELLIPSE')
         self.assertEqual(entity.center, (0., 0., 0.))
-        self.assertEqual(entity.majoraxis, (2.60, 1.50, 0.))
+        self.assertEqual(entity.major_axis, (2.60, 1.50, 0.))
         self.assertEqual(entity.ratio, 0.33)
-        self.assertEqual(entity.startparam, 0.0)
-        self.assertEqual(entity.endparam, 6.28)
+        self.assertEqual(entity.start_param, 0.0)
+        self.assertEqual(entity.end_param, 6.28)
         self.assertEqual(entity.color, 256)
         self.assertEqual(entity.layer, '0')
         self.assertEqual(entity.linetype, None)

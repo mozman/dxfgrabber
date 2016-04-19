@@ -90,5 +90,5 @@ class _Collector:
 
     def stop(self):
         self.entity.append_data(self._data)
-        if hasattr(self.entity, 'cast'):
+        if hasattr(self.entity, 'cast'):  # TODO: remove after refactoring
             self.entity = self.entity.cast()

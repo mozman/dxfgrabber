@@ -5,13 +5,13 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 class TestMText(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(MTEXT)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(MTEXT)
+        self.entity = entity_factory(tags)
 
     def test_mtext_properties(self):
         mtext = self.entity
@@ -25,29 +25,29 @@ class TestMText(unittest.TestCase):
         mtext = self.entity
         self.assertEqual(mtext.insert, (36.0, 65.0, 0.0))
         self.assertEqual(mtext.height, 3.0)
-        self.assertEqual(mtext.attachmentpoint, 1)
+        self.assertEqual(mtext.attachment_point, 1)
         self.assertEqual(mtext.style, "Notes")
         self.assertEqual(mtext.extrusion, (0.0, 0.0, 1.0))
         self.assertEqual(mtext.xdirection, (1.0, 0.0, 0.0))
-        self.assertEqual(mtext.linespacing, 1.0)
+        self.assertEqual(mtext.line_spacing, 1.0)
         self.assertEqual(mtext.rect_width, 50.0)
         self.assertEqual(mtext.horizontal_width, 45.0)
         self.assertEqual(mtext.vertical_height, 99.0)
 
     def test_mtext_text(self):
         mtext = self.entity
-        self.assertEqual(mtext.rawtext, "first 250 chars\Psecond 250 chars\Pand the rest")
+        self.assertEqual(mtext.raw_text, "first 250 chars\Psecond 250 chars\Pand the rest")
         self.assertEqual(mtext.lines(), ["first 250 chars", "second 250 chars", "and the rest"])
 
     def test_mtext_plain_text(self):
         mtext = self.entity
-        mtext.rawtext = "\A1;Das ist eine MText\PZeile mit {\LFormat}ierung\Pänder die Farbe\P\pi-7.5,l7.5,t7.5;1.^INummerierung\P2.^INummerierung\P\pi0,l0,tz;\P{\H0.7x;\S1/2500;}  ein Bruch"
+        mtext.raw_text = "\A1;Das ist eine MText\PZeile mit {\LFormat}ierung\Pänder die Farbe\P\pi-7.5,l7.5,t7.5;1.^INummerierung\P2.^INummerierung\P\pi0,l0,tz;\P{\H0.7x;\S1/2500;}  ein Bruch"
         expected = "Das ist eine MText\nZeile mit Formatierung\nänder die Farbe\n1.^INummerierung\n2.^INummerierung\n\n1/2500  ein Bruch"
         self.assertEqual(expected, mtext.plain_text())
 
     def test_mtext_plain_text_special_char(self):
         mtext = self.entity
-        mtext.rawtext = "%%d"
+        mtext.raw_text = "%%d"
         self.assertEqual("°", mtext.plain_text())
 
 MTEXT = """  0

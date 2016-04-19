@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
+
 
 class TestRay(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(RAY)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(RAY)
+        self.entity = entity_factory(tags)
 
     def test_ray_properties(self):
         ray = self.entity
@@ -23,7 +24,7 @@ class TestRay(unittest.TestCase):
     def test_ray_data(self):
         ray = self.entity
         self.assertEqual(ray.start, (3.0, 7.0, 0.0))
-        self.assertEqual(ray.unitvector, (0.37, -0.92, 0.0))
+        self.assertEqual(ray.unit_vector, (0.37, -0.92, 0.0))
 
 RAY = """  0
 RAY

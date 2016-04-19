@@ -6,9 +6,11 @@
 from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
+import math
 from . import const
 from .color import TrueColor
 from .styles import default_text_style
+from .decode import decode
 
 SPECIAL_CHARS = {
     'd': '°'
@@ -37,7 +39,7 @@ class DXFEntity(object):
     def setup_attributes(self, tags):
         self.dxftype = tags.get_type()
         for code, value in tags.plain_tags():
-            if code == 5:   # special case 105 handled by STYLE TABLE
+            if code == 5:
                 self.handle = value
             elif code == 6:
                 self.linetype = value
@@ -317,7 +319,7 @@ class Insert(DXFEntity):
             elif code == 71:
                 self.row_count = value
             else:
-                yield code, value
+                yield code, value  # chain of generators
         self.scale = (xscale, yscale, zscale)
         self.set_default_extrusion()
 
@@ -397,6 +399,9 @@ class Polyline(DXFEntity):
                 self.n_smooth_density = value
             elif code == 75:
                 self.smooth_type = value
+            else:
+                yield code, value  # chain of generators
+
         self.mode = get_mode()
         if self.mode == 'spline2d':
             if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
@@ -556,6 +561,8 @@ class Vertex(DXFEntity):
                 vtx2 = value
             elif code == 74:
                 vtx3 = value
+            else:
+                yield code, value  # chain of generators
         indices = (vtx0, vtx1, vtx2, vtx3)
         if any(indices):
             self.vtx = indices
@@ -568,23 +575,158 @@ class Vertex(DXFEntity):
 
 
 class Block(DXFEntity):
-    pass
+    def __init__(self):
+        super(Block, self).__init__()
+        self.basepoint = (0, 0, 0)
+        self.name = ''
+        self.description = ''
+        self.flags = 0
+        self.xrefpath = ""
+        self._entities = []
+
+    def setup_attributes(self, tags):
+        for code, value in super(Block, self).setup_attributes(tags):
+            if code == 2:
+                self.name = value
+            elif code == 4:
+                self.description = value
+            elif code == 1:
+                self.xrefpath = value
+            elif code == 10:
+                self.basepoint = value
+            elif code == 70:
+                self.flags = value
+            else:
+                yield code, value  # chain of generators
+
+    @property
+    def is_xref(self):
+        return bool(self.flags & const.BLK_XREF)
+
+    @property
+    def is_xref_overlay(self):
+        return bool(self.flags & const.BLK_XREF_OVERLAY)
+
+    @property
+    def is_anonymous(self):
+        return bool(self.flags & const.BLK_ANONYMOUS)
+
+    def set_entities(self, entities):
+        self._entities = entities
+
+    def __iter__(self):
+        return iter(self._entities)
+
+    def __getitem__(self, item):
+        return self._entities[item]
+
+    def __len__(self):
+        return len(self._entities)
 
 
 class LWPolyline(DXFEntity):
-    pass
+    def __init__(self):
+        super(LWPolyline, self).__init__()
+        self.points = []
+        self.width = []
+        self.bulge = []
+        self.elevation = 0.
+        self.const_width = 0.
+        self.flags = 0
+
+    def setup_attributes(self, tags):
+        bulge, start_width, end_width = 0., 0., 0.
+        init = True
+
+        for code, value in super(LWPolyline, self).setup_attributes(tags):
+            if code == 10:
+                if not init:
+                    self.bulge.append(bulge)
+                    self.width.append((start_width, end_width))
+                    bulge, start_width, end_width = 0., 0., 0.
+                self.points.append(value)
+                init = False
+            elif code == 40:
+                start_width = value
+            elif code == 41:
+                end_width = value
+            elif code == 42:
+                bulge = value
+            elif code == 38:
+                self.elevation = value
+            elif code == 39:
+                self.thickness = value
+            elif code == 43:
+                self.const_width = value
+            elif code == 70:
+                self.flags = value
+            elif code == 210:
+                self.extrusion = value
+            else:
+                yield code, value  # chain of generators
+
+        # add values for the last point
+        self.bulge.append(bulge)
+        self.width.append((start_width, end_width))
+
+        if self.const_width != 0.:
+            self.width = []
+        self.set_default_extrusion()
+
+    @property
+    def is_closed(self):
+        return bool(self.flags & 1)
+
+    def __len__(self):
+        return len(self.points)
+
+    def __getitem__(self, item):
+        return self.points[item]
+
+    def __iter__(self):
+        return iter(self.points)
 
 
 class Ellipse(DXFEntity):
-    pass
+    def __init__(self):
+        super(Ellipse, self).__init__()
+        self.center = (0., 0., 0.)
+        self.major_axis = (1., 0., 0.)
+        self.ratio = 1.0
+        self.start_param = 0.
+        self.end_param = 6.283185307179586
+
+    def setup_attributes(self, tags):
+        for code, value in super(Ellipse, self).setup_attributes(tags):
+            if code == 10:
+                self.center = value
+            elif code == 11:
+                self.major_axis = value
+            elif code == 40:
+                self.ratio = value
+            elif code == 41:
+                self.start_param = value
+            elif code == 42:
+                self.end_param = value
+            else:
+                yield code, value  # chain of generators
+        self.set_default_extrusion()
 
 
 class Ray(DXFEntity):
-    pass
+    def __init__(self):
+        super(Ray, self).__init__()
+        self.start = (0, 0, 0)
+        self.unit_vector = (1, 0, 0)
 
-
-class XLine(DXFEntity):
-    pass
+    def setup_attributes(self, tags):
+        for code, value in super(Ray, self).setup_attributes(tags):
+            if code == 10:
+                self.start = value
+            elif code == 11:
+                self.unit_vector = value
+            else:
+                yield code, value  # chain of generators
 
 
 class Spline(DXFEntity):
@@ -595,8 +737,187 @@ class Helix(DXFEntity):
     pass
 
 
+def deg2vec(deg):
+    rad = float(deg) * math.pi / 180.0
+    return math.cos(rad), math.sin(rad), 0.
+
+
+def normalized(vector):
+    x, y, z = vector
+    m = (x**2 + y**2 + z**2)**0.5
+    return x/m, y/m, z/m
+
+##################################################
+# MTEXT inline codes
+# \L	Start underline
+# \l	Stop underline
+# \O	Start overstrike
+# \o	Stop overstrike
+# \K	Start strike-through
+# \k	Stop strike-through
+# \P	New paragraph (new line)
+# \pxi	Control codes for bullets, numbered paragraphs and columns
+# \X	Paragraph wrap on the dimension line (only in dimensions)
+# \Q	Slanting (obliquing) text by angle - e.g. \Q30;
+# \H	Text height - e.g. \H3x;
+# \W	Text width - e.g. \W0.8x;
+# \F	Font selection
+#
+#     e.g. \Fgdt;o - GDT-tolerance
+#     e.g. \Fkroeger|b0|i0|c238|p10 - font Kroeger, non-bold, non-italic, codepage 238, pitch 10
+#
+# \S	Stacking, fractions
+#
+#     e.g. \SA^B:
+#     A
+#     B
+#     e.g. \SX/Y:
+#     X
+#     -
+#     Y
+#     e.g. \S1#4:
+#     1/4
+#
+# \A	Alignment
+#
+#     \A0; = bottom
+#     \A1; = center
+#     \A2; = top
+#
+# \C	Color change
+#
+#     \C1; = red
+#     \C2; = yellow
+#     \C3; = green
+#     \C4; = cyan
+#     \C5; = blue
+#     \C6; = magenta
+#     \C7; = white
+#
+# \T	Tracking, char.spacing - e.g. \T2;
+# \~	Non-wrapping space, hard space
+# {}	Braces - define the text area influenced by the code
+# \	Escape character - e.g. \\ = "\", \{ = "{"
+#
+# Codes and braces can be nested up to 8 levels deep
+
+ESCAPED_CHARS = "\\{}"
+GROUP_CHARS = "{}"
+ONE_CHAR_COMMANDS = "PLlOoKkX"
+
+
 class MText(DXFEntity):
-    pass
+    def __init__(self):
+        super(MText, self).__init__()
+        self.insert = (0., 0., 0.)
+        self.raw_text = ""
+        self.height = 0.
+        self.rect_width = None
+        self.horizontal_width = None
+        self.vertical_height = None
+        self.line_spacing = 1.
+        self.attachment_point = 1
+        self.style = 'STANDARD'
+        self.xdirection = (1., 0., 0.)
+        self.font = None
+        self.bigfont = None
+
+    def setup_attributes(self, tags):
+        text = ""
+        lines = []
+        rotation = 0.
+        xdir = None
+        for code, value in super(MText, self).setup_attributes(tags):
+            if code == 10:
+                self.insert = value
+            elif code == 11:
+                xdir = value
+            elif code == 1:
+                text = value
+            elif code == 3:
+                lines.append(value)
+            elif code == 7:
+                self.style = value
+            elif code == 40:
+                self.height = value
+            elif code == 41:
+                self.rect_width = value
+            elif code == 42:
+                self.horizontal_width = value
+            elif code == 43:
+                self.vertical_height = value
+            elif code == 44:
+                self.lines_pacing = value
+            elif code == 50:
+                rotation = value
+            elif code == 71:
+                self.attachment_point = value
+            else:
+                yield code, value  # chain of generators
+
+        lines.append(text)
+        self.raw_text = "".join(lines)
+        if xdir is None:
+            xdir = deg2vec(rotation)
+        self.xdirection = normalized(xdir)
+        self.set_default_extrusion()
+
+    def lines(self):
+        return self.raw_text.split('\P')
+
+    def plain_text(self, split=False):
+        chars = []
+        raw_chars = list(reversed(self.raw_text))  # text splitted into chars, in reversed order for efficient pop()
+        while len(raw_chars):
+            char = raw_chars.pop()
+            if char == '\\':  # is a formatting command
+                try:
+                    char = raw_chars.pop()
+                except IndexError:
+                    break  # premature end of text - just ignore
+
+                if char in ESCAPED_CHARS:  # \ { }
+                    chars.append(char)
+                elif char in ONE_CHAR_COMMANDS:
+                    if char == 'P':  # new line
+                        chars.append('\n')
+                        # discard other commands
+                else:  # more character commands are terminated by ';'
+                    stacking = char == 'S'  # stacking command surrounds user data
+                    try:
+                        while char != ';':  # end of format marker
+                            char = raw_chars.pop()
+                            if stacking and char != ';':
+                                chars.append(char)  # append user data of stacking command
+                    except IndexError:
+                        break  # premature end of text - just ignore
+            elif char in GROUP_CHARS:  # { }
+                pass  # discard group markers
+            elif char == '%':  # special characters
+                if len(raw_chars) and raw_chars[-1] == '%':
+                    raw_chars.pop()  # discard next '%'
+                    if len(raw_chars):
+                        special_char = raw_chars.pop()
+                        # replace or discard formatting code
+                        chars.append(SPECIAL_CHARS.get(special_char, ""))
+                else:  # char is just a single '%'
+                    chars.append(char)
+            else:  # char is what it is, a character
+                chars.append(char)
+
+        plain_text = "".join(chars)
+        return plain_text.split('\n') if split else plain_text
+
+    def resolve_text_style(self, text_styles):
+        style = text_styles.get(self.style, None)
+        if style is None:
+            style = default_text_style
+        if self.height == 0:
+            self.height = style.height
+        if self.font is None:
+            self.font = style.font
+        if self.bigfont is None:
+            self.bigfont = style.font
 
 
 class Mesh(DXFEntity):
@@ -608,15 +929,49 @@ class Light(DXFEntity):
 
 
 class Body(DXFEntity):
-    pass
+    def __init__(self):
+        super(Body, self).__init__()
+        # need handle to get SAB data in DXF version AC1027 and later
+        self.version = 1
+        self.acis = []
+
+    def setup_attributes(self, tags):
+        sat = []
+        for code, value in super(Body, self).setup_attributes(tags):
+            if code == 70:
+                self.version = value
+            elif code in (1, 3):
+                sat.append(value)
+            else:
+                yield code, value  # chain of generators
+        self.acis = decode(sat)
+
+    def set_sab_data(self, sab_data):
+        self.acis = sab_data
+
+    @property
+    def is_sat(self):
+        return isinstance(self.acis, list)  # but could be an empty list
+
+    @property
+    def is_sab(self):
+        return not self.is_sat  # has binary encoded ACIS data
 
 
-class Solid3d(DXFEntity):
-    pass
+class Surface(Body):
+    def __init__(self):
+        super(Body, self).__init__()
+        self.u_isolines = 0
+        self.v_isolines = 0
 
-
-class Surface(DXFEntity):
-    pass
+    def setup_attributes(self, tags):
+        for code, value in super(Surface, self).setup_attributes(tags):
+            if code == 71:
+                self.u_isolines = value
+            elif code == 72:
+                self.v_isolines = value
+            else:
+                yield code, value  # chain of generators
 
 
 EntityTable = {
@@ -639,7 +994,7 @@ EntityTable = {
     'LWPOLYLINE': LWPolyline,
     'ELLIPSE': Ellipse,
     'RAY': Ray,
-    'XLINE': XLine,
+    'XLINE': Ray,
     'SPLINE': Spline,
     'HELIX': Helix,
     'MTEXT': MText,
@@ -647,7 +1002,7 @@ EntityTable = {
     'LIGHT': Light,
     'BODY': Body,
     'REGION': Body,
-    '3DSOLID': Solid3d,
+    '3DSOLID': Body,
     'SURFACE': Surface,
     'PLANESURFACE': Surface,
 }

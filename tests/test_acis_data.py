@@ -5,14 +5,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 
-class TestMesh(unittest.TestCase):
+class TestACISData(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(SOLID3D)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(SOLID3D)
+        self.entity = entity_factory(tags)
 
     def test_acis(self):
         expected_lines = EXPECTED.splitlines()

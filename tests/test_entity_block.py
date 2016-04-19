@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
+
 
 class TestBlockDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(BLOCK_DXF12)
-        self.entity = entity_factory(tags, 'AC1009')
+        tags = Tags.from_text(BLOCK_DXF12)
+        self.entity = entity_factory(tags)
 
     def test_block_properties(self):
         block = self.entity
@@ -27,23 +28,26 @@ class TestBlockDXF12(unittest.TestCase):
         self.assertEqual(block.flags, 0)
         self.assertEqual(block.xrefpath, "/x/ref.dxf")
 
+
 class TestBlockEndDXF12(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ENDBLK_DXF12)
-        self.entity = entity_factory(tags, 'AC1009')
+        tags = Tags.from_text(ENDBLK_DXF12)
+        self.entity = entity_factory(tags)
 
     def test_existence(self):
         self.assertEqual(self.entity.dxftype, 'ENDBLK')
 
+
 class TestBlockDXF13(TestBlockDXF12):
     def setUp(self):
-        tags = ClassifiedTags.from_text(BLOCK_DXF13)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(BLOCK_DXF13)
+        self.entity = entity_factory(tags)
+
 
 class TestBlockEndDXF13(TestBlockEndDXF12):
     def setUp(self):
-        tags = ClassifiedTags.from_text(ENDBLK_DXF13)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(ENDBLK_DXF13)
+        self.entity = entity_factory(tags)
 
 BLOCK_DXF12 = """  0
 BLOCK

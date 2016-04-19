@@ -4,14 +4,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 
 class TestLWPolyline(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(LWPOLYLINE)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(LWPOLYLINE)
+        self.entity = entity_factory(tags)
 
     def test_lwpolyline_properties(self):
         polyline = self.entity
@@ -20,7 +20,7 @@ class TestLWPolyline(unittest.TestCase):
         self.assertEqual(polyline.color, 256)
         self.assertEqual(polyline.layer, '0')
         self.assertEqual(polyline.linetype, None)
-        self.assertEqual(polyline.elevation, (0., 0., 0.))
+        self.assertEqual(polyline.elevation, 0.)
         self.assertEqual(polyline.thickness, 2.7)
         self.assertFalse(polyline.paperspace)
 
@@ -37,8 +37,8 @@ class TestLWPolyline(unittest.TestCase):
 
 class TestLWPolyline2(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(LWPOLYLINE2)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(LWPOLYLINE2)
+        self.entity = entity_factory(tags)
 
     def test_points(self):
         polyline = self.entity

@@ -4,14 +4,10 @@ import dxfgrabber
 import time
 from itertools import chain
 
-if "win" in sys.platform:
-    DIRS = (r"D:\Source\dxftest\CADKitSamples\*.dxf",
-    r"D:\Source\dxftest\*.dxf",
-    r"D:\Source\dxftest\R12_test_files\*.dxf")
-else:
-    DIRS = ("/media/sf_winsource/dxftest/CADKitSamples/*.dxf",
-    "/media/sf_winsource/dxftest/*.dxf",
-    "/media/sf_winsource/dxftest/R12_test_files/*.dxf")
+
+DIRS = (r"D:\Source\dxftest\CADKitSamples\*.dxf",
+r"D:\Source\dxftest\*.dxf",
+r"D:\Source\dxftest\R12_test_files\*.dxf")
 
 all_files = chain(*[glob.glob(d)for d in DIRS])
 
