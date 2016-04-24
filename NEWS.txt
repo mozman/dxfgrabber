@@ -6,6 +6,7 @@ Version 0.8.0 - 2016-05-..
 
   * internal refactoring - removed extra layer for DXF R12 and DXF R13 implementation
   * removed parts implemented in Cython
+  * some pep8 refactorings, renamed attributes like startparam to start_param
 
 Version 0.7.5 - 2015-11-29
 
