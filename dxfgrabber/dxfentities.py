@@ -75,6 +75,9 @@ class DXFEntity(object):
         if self.extrusion is None:
             self.extrusion = (0., 0., 1.)
 
+    def __str__(self):
+        return "{} [{}]".format(self.dxftype, self.handle)
+
 
 class Point(DXFEntity):
     def __init__(self):
@@ -359,13 +362,6 @@ class Polyline(DXFEntity):
         self.n_smooth_density = 0.
         self.smooth_type = 0
         self.spline_type = None
-        if self.mode == 'spline2d':
-            if self.smooth_type == const.POLYMESH_CUBIC_BSPLINE:
-                self.spline_type = 'cubic_bspline'
-            elif self.smooth_type == const.POLYMESH_QUADRIC_BSPLINE:
-                self.spline_type = 'quadratic_bspline'
-            elif self.smooth_type == const.POLYMESH_BEZIER_SURFACE:
-                self.spline_type = 'bezier_curve'  # is this a valid spline type for DXF12?
 
     def setup_attributes(self, tags):
         def get_mode():
@@ -483,6 +479,9 @@ class PolyShape(object):
         for key, value in polyline.__dict__.items():
             self.__dict__[key] = value
         self.dxftype = dxftype
+
+    def __str__(self):
+        return "{} [{}]".format(self.dxftype, self.handle)
 
 
 class PolyFace(PolyShape):
@@ -1260,10 +1259,8 @@ EntityTable = {
 
 def entity_factory(tags):
     dxftype = tags.get_type()
-    cls = EntityTable.get(dxftype, DXFEntity)  # get entity class
+    cls = EntityTable[dxftype]  # get entity class or raise KeyError
     entity = cls()  # call constructor
     list(entity.setup_attributes(tags))  # setup dxf attributes - chain of generators
-    if hasattr(entity, 'cast'):
-        entity = entity.cast()
     return entity
 

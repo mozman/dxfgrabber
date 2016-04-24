@@ -4,13 +4,13 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 class TestXLine(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(XLINE)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(XLINE)
+        self.entity = entity_factory(tags)
 
     def test_xline_properties(self):
         xline = self.entity
@@ -23,7 +23,7 @@ class TestXLine(unittest.TestCase):
     def test_xline_data(self):
         xline = self.entity
         self.assertEqual(xline.start, (40.0, 45.0, 0.0))
-        self.assertEqual(xline.unitvector, (0.66, 0.74, 0.0))
+        self.assertEqual(xline.unit_vector, (0.66, 0.74, 0.0))
 
 XLINE = """  0
 XLINE

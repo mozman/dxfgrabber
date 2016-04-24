@@ -71,7 +71,7 @@ def build_entities(tag_groups):
                     collector = None
                 else:
                     collector.append(entity)
-            elif entity.dxftype == 'POLYLINE':
+            elif entity.dxftype in ('POLYLINE', 'POLYFACE', 'POLYMESH'):
                 collector = _Collector(entity)
             elif entity.dxftype == 'INSERT' and entity.attribsfollow:
                 collector = _Collector(entity)
@@ -90,5 +90,5 @@ class _Collector:
 
     def stop(self):
         self.entity.append_data(self._data)
-        #if hasattr(self.entity, 'cast'):  # TODO: remove after refactoring
-        #    self.entity = self.entity.cast()
+        if hasattr(self.entity, 'cast'):
+            self.entity = self.entity.cast()
