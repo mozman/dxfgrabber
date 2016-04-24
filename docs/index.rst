@@ -251,7 +251,7 @@ Style
 
     Primary font file name
 
-.. attribute:: Style.bigfont
+.. attribute:: Style.big_font
 
     Bigfont file name
 
@@ -552,13 +552,13 @@ Arc
 
     Arc radius as *float*
 
-.. attribute:: arc.startangle
+.. attribute:: arc.start_angle
 
-    Arc startangle in degrees as *float*. (full circle = 360 degrees)
+    Arc start angle in degrees as *float*. (full circle = 360 degrees)
 
-.. attribute:: arc.endangle
+.. attribute:: arc.end_angle
 
-    Arc endangle in degrees as *float*. (full circle = 360 degrees)
+    Arc end angle in degrees as *float*. (full circle = 360 degrees)
 
 Solid
 -----
@@ -604,7 +604,7 @@ The attributes :attr:`~Text.height`, :attr:`~Text.width`, :attr:`~Text.oblique`,
 :attr:`~Text.is_upside_down`).
 
 If the import option ``"resolve_text_styles"`` is *True*, all the above mentioned attributes and :attr:`~MText.font`
-and :attr:`~MText.bigfont` already have the 'final' value, no need to look into the :class:`Style` object.
+and :attr:`~MText.big_font` already have the 'final' value, no need to look into the :class:`Style` object.
 
 .. class:: Text(Shape)
 
@@ -674,7 +674,7 @@ Value Alignment
 
     *True* if text is mirrored in Y.
 
-.. attribute:: Text.alignpoint
+.. attribute:: Text.align_point
 
     Second alignment point as tuple or *None*.
 
@@ -682,7 +682,7 @@ Value Alignment
 
     Font name as string, if import option ``resolve_text_styles`` is *True* else ``""``.
 
-.. attribute:: Text.bigfont
+.. attribute:: Text.big_font
 
     Bigfont name as string, if import option ``resolve_text_styles`` is *True* else ``""``.
 
@@ -789,7 +789,7 @@ Polyline
     List of all vertex locations as (x, y[, z]) *tuple*. If this polyline is a 2d spline these points are just the fit
     points.
 
-.. attribute:: Polyline.controlpoints
+.. attribute:: Polyline.control_points
 
     List of all control points as (x, y[, z]) *tuple*, if this polyline is a 2d spline.
 
@@ -1022,7 +1022,7 @@ Ellipse
 
     Location of ellipse center point (x, y[, z]) as *tuple*
 
-.. attribute:: Ellipse.majoraxis
+.. attribute:: Ellipse.major_axis
 
     End point of major axis (x, y[, z]) as *tuple*
 
@@ -1030,11 +1030,11 @@ Ellipse
 
     Ratio of minor axis to major axis as *float*.
 
-.. attribute:: Ellipse.startparam
+.. attribute:: Ellipse.start_param
 
     Start parameter (this value is 0.0 for a full ellipse).
 
-.. attribute:: Ellipse.endparam
+.. attribute:: Ellipse.end_param
 
     End parameter (this value is 2pi for a full ellipse)
 
@@ -1047,7 +1047,7 @@ Ray
 
     Location of the ray start point (x, y, z) as *tuple*
 
-.. attribute:: Ray.unitvector
+.. attribute:: Ray.unit_vector
 
     Ray direction as unit vector (x, y, z) as *tuple*
 
@@ -1082,19 +1082,19 @@ SPLINE_LINEAR   16 (a linear spline is also a planar spline)
 
     Degree of the spline curve as *int*
 
-.. attribute:: Spline.starttangent
+.. attribute:: Spline.start_tangent
 
     Start tangent as (x, y, z) as *tuple* or *None*
 
-.. attribute:: Spline.endtangent
+.. attribute:: Spline.end_tangent
 
     End tangent as (x, y, z) as *tuple* or *None*
 
-.. attribute:: Spline.controlpoints
+.. attribute:: Spline.control_points
 
     *List* of control points (x, y, z) as *tuple*
 
-.. attribute:: Spline.fitpoints
+.. attribute:: Spline.fit_points
 
     *List* of fit points (x, y, z) as *tuple*
 
@@ -1106,7 +1106,7 @@ SPLINE_LINEAR   16 (a linear spline is also a planar spline)
 
     *List* of weight values as *float*
 
-.. attribute:: Spline.normalvector
+.. attribute:: Spline.normal_vector
 
     Normal vector if spline is planar else *None*.
 
@@ -1179,7 +1179,7 @@ If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`,
 
     Location of text (x, y, z) as *tuple*.
 
-.. attribute:: MText.rawtext
+.. attribute:: MText.raw_text
 
     Whole text content as one *string*.
 
@@ -1200,11 +1200,11 @@ If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`,
 
     Vertical height of the :class:`MText` entity in drawing units as *float*.
 
-.. attribute:: MText.linespacing
+.. attribute:: MText.line_spacing
 
     Text line spacing as *float*, valid from 0.25 to 4.00.
 
-.. attribute:: MText.attachmentpoint
+.. attribute:: MText.attachment_point
 
     Text attachment point as *int*.
 
@@ -1234,7 +1234,7 @@ If the import option ``"resolve_text_styles"`` is *True*, :attr:`~MText.height`,
 
     Font name as string, if import option ``"resolve_text_styles"`` is *True* else ``""``.
 
-.. attribute:: MText.bigfont
+.. attribute:: MText.big_font
 
     Bigfont name as string, if import option ``"resolve_text_styles"`` is *True* else ``""``.
 

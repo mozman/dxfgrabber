@@ -18,6 +18,22 @@ SPECIAL_CHARS = {
 }
 
 
+basic_attribs = {
+    5: 'handle',
+    6: 'linetype',
+    8: 'layer',
+    39: 'thickness',
+    48: 'ltscale',
+    62: 'color',
+    67: 'paperspace',
+    210: 'extrusion',
+    284: 'shadow_mode',
+    330: 'owner',
+    370: 'line_weight',
+    410: 'layout_tab_name',
+}
+
+
 class DXFEntity(object):
     def __init__(self):
         self.dxftype = 'ENTITY'
@@ -40,30 +56,8 @@ class DXFEntity(object):
     def setup_attributes(self, tags):
         self.dxftype = tags.get_type()
         for code, value in tags.plain_tags():
-            if code == 5:
-                self.handle = value
-            elif code == 6:
-                self.linetype = value
-            elif code == 8:
-                self.layer = value
-            elif code == 39:
-                self.thickness = value
-            elif code == 48:
-                self.ltscale = value
-            elif code == 62:
-                self.color = value
-            elif code == 67:
-                self.paperspace = value
-            elif code == 210:
-                self.extrusion = value
-            elif code == 284:
-                self.shadow_mode = value
-            elif code == 330:
-                self.owner = value
-            elif code == 370:
-                self.line_weight = value
-            elif code == 410:
-                self.layout_tab_name = value
+            if code in basic_attribs:
+                self.__setattr__(basic_attribs[code], value)
             elif code == 420:
                 self.true_color = TrueColor(value)
             elif code == 440:
@@ -129,15 +123,15 @@ class Circle(DXFEntity):
 class Arc(Circle):
     def __init__(self):
         super(Arc, self).__init__()
-        self.startangle = 0.
-        self.endangle = 360.
+        self.start_angle = 0.
+        self.end_angle = 360.
 
     def setup_attributes(self, tags):
         for code, value in super(Arc, self).setup_attributes(tags):
             if code == 50:
-                self.startangle = value
+                self.start_angle = value
             elif code == 51:
-                self.endangle = value
+                self.end_angle = value
             else:
                 yield code, value  # chain of generators
         self.set_default_extrusion()
@@ -195,16 +189,16 @@ class Text(DXFEntity):
         self.is_upside_down = False
         self.halign = 0
         self.valign = 0
-        self.alignpoint = None
+        self.align_point = None
         self.font = ""
-        self.bigfont = ""
+        self.big_font = ""
 
     def setup_attributes(self, tags):
         for code, value in super(Text, self).setup_attributes(tags):
             if code == 10:
                 self.insert = value
             elif code == 11:
-                self.alignpoint = value
+                self.align_point = value
             elif code == 1:
                 self.text = value
             elif code == 7:
@@ -244,8 +238,8 @@ class Text(DXFEntity):
             self.is_upside_down = style.is_upside_down
         if self.font is None:
             self.font = style.font
-        if self.bigfont is None:
-            self.bigfont = style.bigfont
+        if self.big_font is None:
+            self.big_font = style.big_font
 
     def plain_text(self):
         chars = []
@@ -814,7 +808,7 @@ class MText(DXFEntity):
         self.style = 'STANDARD'
         self.xdirection = (1., 0., 0.)
         self.font = None
-        self.bigfont = None
+        self.big_font = None
 
     def setup_attributes(self, tags):
         text = ""
@@ -841,7 +835,7 @@ class MText(DXFEntity):
             elif code == 43:
                 self.vertical_height = value
             elif code == 44:
-                self.lines_pacing = value
+                self.line_spacing = value
             elif code == 50:
                 rotation = value
             elif code == 71:
@@ -910,8 +904,8 @@ class MText(DXFEntity):
             self.height = style.height
         if self.font is None:
             self.font = style.font
-        if self.bigfont is None:
-            self.bigfont = style.font
+        if self.big_font is None:
+            self.big_font = style.font
 
 
 class Light(DXFEntity):
@@ -1057,12 +1051,16 @@ class Mesh(DXFEntity):
                 self.blend_crease = bool(value)
             elif code == 91:
                 self.subdivision_levels = value
-            elif 92 <= code <= 95:  # 92 = vertices; 93 = faces; 94 = edges; 95 = edge creases
+            elif 92 <= code <= 95:  # 92 = vertices, 93 = faces; 94 = edges 95 = edge creases
+                if code in (92, 95):
+                    continue  # ignore vertices and edge creases count
                 status = code
                 count = value
                 if status == 94:  # edge count
                     count *= 2
-            elif count > 0:  # and (code == 90 or code == 140):
+            elif code == 140:
+                self.edge_crease_list.append(value)
+            elif code == 90 and count > 0:  # faces or edges
                 count -= 1
                 index_tags.append(value)
                 if count < 1:
@@ -1070,10 +1068,8 @@ class Mesh(DXFEntity):
                         self.setup_faces(index_tags)
                     elif status == 94:
                         self.setup_edges(index_tags)
-                    elif status == 95:
-                        self.edge_crease_list = index_tags
                     index_tags = []
-            elif code == 90:  # start of overridden properties (group code 90 after face or edge list)
+            elif code == 90:  # count == 0; start of overridden properties (group code 90 after face or edge list)
                 status = -1
             else:
                 yield code, value  # chain of generators

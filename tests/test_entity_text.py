@@ -29,7 +29,7 @@ class TestTextDXF12(unittest.TestCase):
         entity = self.entity
         self.assertEqual(entity.halign, 0)
         self.assertEqual(entity.valign, 0)
-        self.assertEqual(entity.alignpoint, None)
+        self.assertEqual(entity.align_point, None)
 
     def test_text_plain_text_old_formatting_code(self):
         text = self.entity

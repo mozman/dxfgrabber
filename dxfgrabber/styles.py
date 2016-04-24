@@ -18,7 +18,7 @@ class Style(object):
         self.is_backwards = False
         self.is_upside_down = False
         self.font = ""
-        self.bigfont = ""
+        self.big_font = ""
         for code, value in tags.plain_tags():
             if code == 2:
                 self.name = value
@@ -37,7 +37,7 @@ class Style(object):
             elif code == 3:
                 self.font = value
             elif code == 4:
-                self.bigfont = value
+                self.big_font = value
 
 
 class StyleTable(Table):
