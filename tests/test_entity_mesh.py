@@ -5,14 +5,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 
 class TestMesh(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(MESH)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(MESH)
+        self.entity = entity_factory(tags)
 
     def test_mesh_properties(self):
         mesh = self.entity

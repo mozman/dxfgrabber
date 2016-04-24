@@ -8,8 +8,8 @@ __author__ = "mozman <mozman@gmx.at>"
 from itertools import islice
 
 from .tags import TagGroups, DXFStructureError
-from .tags import ClassifiedTags
-from .entities import entity_factory
+from .tags import Tags
+from .dxfentities import entity_factory
 
 
 class EntitySection(object):
@@ -21,7 +21,7 @@ class EntitySection(object):
     @classmethod
     def from_tags(cls, tags, drawing):
         entity_section = cls()
-        entity_section._build(tags, drawing.dxfversion)
+        entity_section._build(tags)
         return entity_section
 
     def get_entities(self):
@@ -40,21 +40,21 @@ class EntitySection(object):
 
     # end of public interface
 
-    def _build(self, tags, dxfversion):
+    def _build(self, tags):
         if len(tags) == 3:  # empty entities section
             return
         groups = TagGroups(islice(tags, 2, len(tags)-1))
-        self._entities = build_entities(groups, dxfversion)
+        self._entities = build_entities(groups)
 
 
 class ObjectsSection(EntitySection):
     name = 'objects'
 
 
-def build_entities(tag_groups, dxfversion):
+def build_entities(tag_groups):
     def build_entity(group):
         try:
-            entity = entity_factory(ClassifiedTags(group), dxfversion)
+            entity = entity_factory(Tags(group))
         except KeyError:
             entity = None  # ignore unsupported entities
         return entity
@@ -90,5 +90,5 @@ class _Collector:
 
     def stop(self):
         self.entity.append_data(self._data)
-        if hasattr(self.entity, 'cast'):  # TODO: remove after refactoring
-            self.entity = self.entity.cast()
+        #if hasattr(self.entity, 'cast'):  # TODO: remove after refactoring
+        #    self.entity = self.entity.cast()

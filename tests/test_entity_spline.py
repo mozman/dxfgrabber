@@ -4,13 +4,13 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 class TestSpline(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(SPLINE)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(SPLINE)
+        self.entity = entity_factory(tags)
 
     def test_spline_properties(self):
         spline = self.entity
@@ -22,7 +22,7 @@ class TestSpline(unittest.TestCase):
 
     def test_spline_data(self):
         spline = self.entity
-        self.assertEqual(spline.normalvector, (0.0, 0.0, 1.0))
+        self.assertEqual(spline.normal_vector, (0.0, 0.0, 1.0))
         self.assertEqual(spline.degree, 3)
 
     def test_spline_konts(self):
@@ -39,15 +39,15 @@ class TestSpline(unittest.TestCase):
 
     def test_spline_controlpoints(self):
         spline = self.entity
-        self.assertEqual(len(spline.controlpoints), 6)
-        self.assertEqual(spline.controlpoints[0], (28.40, 40.68, 0.))
-        self.assertEqual(spline.controlpoints[-1], (97.78, 53.96, 0.))
+        self.assertEqual(len(spline.control_points), 6)
+        self.assertEqual(spline.control_points[0], (28.40, 40.68, 0.))
+        self.assertEqual(spline.control_points[-1], (97.78, 53.96, 0.))
 
     def test_spline_fitpoints(self):
         spline = self.entity
-        self.assertEqual(len(spline.fitpoints), 4)
-        self.assertEqual(spline.fitpoints[0], (28.40, 40.68, 0.))
-        self.assertEqual(spline.fitpoints[-1], (97.78, 53.96, 0.))
+        self.assertEqual(len(spline.fit_points), 4)
+        self.assertEqual(spline.fit_points[0], (28.40, 40.68, 0.))
+        self.assertEqual(spline.fit_points[-1], (97.78, 53.96, 0.))
 
 SPLINE = """  0
 SPLINE

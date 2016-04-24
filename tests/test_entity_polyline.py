@@ -70,7 +70,7 @@ class Test2DSplineDXF12(unittest.TestCase):
         self.assertTrue(spline.is_closed)
         self.assertEqual(60, len(spline.points))
         self.assertEqual(60, len(spline.tangents))
-        self.assertEqual(6, len(spline.controlpoints))
+        self.assertEqual(6, len(spline.control_points))
 
 
 

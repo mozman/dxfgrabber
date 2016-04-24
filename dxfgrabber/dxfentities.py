@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import math
+
 from . import const
 from .color import TrueColor
 from .styles import default_text_style
@@ -340,7 +341,7 @@ class Polyline(DXFEntity):
         super(Polyline, self).__init__()
         self.vertices = []  # set in append data
         self.points = []  # set in append data
-        self.controlpoints = []  # set in append data
+        self.control_points = []  # set in append data
         self.width = []  # set in append data
         self.bulge = []  # set in append data
         self.tangents = []  # set in append data
@@ -436,7 +437,7 @@ class Polyline(DXFEntity):
         if self.mode in Polyline.LINE_TYPES:
             for vertex in self.vertices:
                 if vertex.flags & const.VTX_SPLINE_FRAME_CONTROL_POINT:
-                    self.controlpoints.append(vertex.location)
+                    self.control_points.append(vertex.location)
                 else:
                     self.points.append(vertex.location)
                     self.width.append(default_width(vertex.start_width, vertex.end_width))
@@ -553,6 +554,8 @@ class Vertex(DXFEntity):
                 self.end_width = value
             elif code == 50:
                 self.tangent = value
+            elif code == 70:
+                self.flags = value
             elif code == 71:
                 vtx0 = value
             elif code == 72:
@@ -727,14 +730,6 @@ class Ray(DXFEntity):
                 self.unit_vector = value
             else:
                 yield code, value  # chain of generators
-
-
-class Spline(DXFEntity):
-    pass
-
-
-class Helix(DXFEntity):
-    pass
 
 
 def deg2vec(deg):
@@ -920,12 +915,74 @@ class MText(DXFEntity):
             self.bigfont = style.font
 
 
-class Mesh(DXFEntity):
-    pass
-
-
 class Light(DXFEntity):
-    pass
+    def __init__(self):
+        super(Light, self).__init__()
+        self.version = 1
+        self.name = ""
+        self.light_type = 1  # distant = 1; point = 2; spot = 3
+        self.status = False  # on/off ?
+        self.light_color = 0  # 0 is unset
+        self.true_color = None  # None is unset
+        self.plot_glyph = 0
+        self.intensity = 0
+        self.position = (0., 0., 1.)
+        self.target = (0., 0., 0.)
+        self.attenuation_type = 0  # 0 = None; 1 = Inverse Linear; 2 = Inverse Square
+        self.use_attenuation_limits = False
+        self.attenuation_start_limit = 0
+        self.attenuation_end_limit = 0
+        self.hotspot_angle = 0
+        self.fall_off_angle = 0.
+        self.cast_shadows = False
+        self.shadow_type = 0  # 0 = Ray traced shadows; 1 = Shadow maps
+        self.shadow_map_size = 0
+        self.shadow_softness = 0
+
+    def setup_attributes(self, tags):
+        for code, value in super(Light, self).setup_attributes(tags):
+            if code == 1:
+                self.name = value
+            elif code == 10:
+                self.position = value
+            elif code == 11:
+                self.target = value
+            elif code == 40:
+                self.intensity = value
+            elif code == 41:
+                self.attenuation_start_limit = value
+            elif code == 42:
+                self.attenuation_end_limit = value
+            elif code == 50:
+                self.hotspot_angle = value
+            elif code == 51:
+                self.fall_off_angle = value
+            elif code == 63:
+                self.light_color = value
+            elif code == 70:
+                self.light_type = value
+            elif code == 72:
+                self.attenuation_type = value
+            elif code == 73:
+                self.shadow_type = value
+            elif code == 90:
+                self.version = value
+            elif code == 91:
+                self.shadow_map_size = value
+            elif code == 280:
+                self.shadow_softness = value
+            elif code == 290:
+                self.status = value
+            elif code == 291:
+                self.plot_glyph = value
+            elif code == 292:
+                self.use_attenuation_limits = value
+            elif code == 293:
+                self.cast_shadows = value
+            elif code == 421:
+                self.true_color = value
+            else:
+                yield code, value  # chain of generators
 
 
 class Body(DXFEntity):
@@ -972,6 +1029,199 @@ class Surface(Body):
                 self.v_isolines = value
             else:
                 yield code, value  # chain of generators
+
+
+class Mesh(DXFEntity):
+    def __init__(self):
+        super(Mesh, self).__init__()
+        self.version = 2
+        self.blend_crease = False
+        self.subdivision_levels = 1
+        # rest are mostly positional tags
+        self.vertices = []
+        self.faces = []
+        self.edges = []
+        self.edge_crease_list = []
+
+    def setup_attributes(self, tags):
+        status = 0
+        count = 0
+        index_tags = []
+        for code, value in super(Mesh, self).setup_attributes(tags):
+            if code == 10:
+                self.vertices.append(value)
+            elif status == -1:  # ignore overridden properties at the end of the mesh entity
+                pass  # property override uses also group codes 90, 91, 92 but only at the end of the MESH entity
+            elif code == 71:
+                self.version = value
+            elif code == 72:
+                self.blend_crease = bool(value)
+            elif code == 91:
+                self.subdivision_levels = value
+            elif 92 <= code <= 95:  # 92 = vertices; 93 = faces; 94 = edges; 95 = edge creases
+                status = code
+                count = value
+                if status == 94:  # edge count
+                    count *= 2
+            elif count > 0:  # and (code == 90 or code == 140):
+                count -= 1
+                index_tags.append(value)
+                if count < 1:
+                    if status == 93:
+                        self.setup_faces(index_tags)
+                    elif status == 94:
+                        self.setup_edges(index_tags)
+                    elif status == 95:
+                        self.edge_crease_list = index_tags
+                    index_tags = []
+            elif code == 90:  # start of overridden properties (group code 90 after face or edge list)
+                status = -1
+            else:
+                yield code, value  # chain of generators
+
+    def get_face(self, index):
+        return tuple(self.vertices[vertex_index] for vertex_index in self.faces[index])
+
+    def get_edge(self, index):
+        return tuple(self.vertices[vertex_index] for vertex_index in self.edges[index])
+
+    def setup_faces(self, tags):
+        face = []
+        count = 0
+        for value in tags:
+            if count == 0:
+                if len(face):
+                    self.faces.append(tuple(face))
+                    del face[:]
+                count = value
+            else:
+                count -= 1
+                face.append(value)
+
+        if len(face):
+            self.faces.append(tuple(face))
+
+    def setup_edges(self, tags):
+        self.edges = list(zip(tags[::2], tags[1::2]))
+
+
+class Spline(DXFEntity):
+    def __init__(self):
+        super(Spline, self).__init__()
+        self.normal_vector = None
+        self.flags = 0
+        self.degree = 3
+        self.start_tangent = None
+        self.end_tangent = None
+        self.knots = []
+        self.weights = []
+        self.tol_knot = .0000001
+        self.tol_control_point = .0000001
+        self.tol_fit_point = .0000000001
+        self.control_points = []
+        self.fit_points = []
+
+    def setup_attributes(self, tags):
+        subclass = 'AcDbSpline'
+        for code, value in super(Spline, self).setup_attributes(tags):
+            if subclass == 'AcDbHelix':
+                yield code, value # chain of generators
+            elif code == 10:
+                self.control_points.append(value)
+            elif code == 11:
+                self.fit_points.append(value)
+            elif code == 12:
+                self.start_tangent = value
+            elif code == 13:
+                self.end_tangent = value
+            elif code == 40:
+                self.knots.append(value)
+            elif code == 41:
+                self.weights.append(value)
+            elif code == 42:
+                self.tol_knot = value
+            elif code == 43:
+                self.tol_control_point = value
+            elif code == 44:
+                self.tol_fit_point = value
+            elif code == 70:
+                self.flags = value
+            elif code == 71:
+                self.degree = value
+            elif 72 <= code < 75:
+                pass  # ignore knot-, control- and fit point count
+            elif code == 100:
+                subclass = value
+        self.normal_vector = self.extrusion
+        if len(self.weights) == 0:
+            self.weights = [1.0] * len(self.control_points)
+
+    @property
+    def is_closed(self):
+        return bool(self.flags & const.SPLINE_CLOSED)
+
+    @property
+    def is_periodic(self):
+        return bool(self.flags & const.SPLINE_PERIODIC)
+
+    @property
+    def is_rational(self):
+        return bool(self.flags & const.SPLINE_RATIONAL)
+
+    @property
+    def is_planar(self):
+        return bool(self.flags & const.SPLINE_PLANAR)
+
+    @property
+    def is_linear(self):
+        return bool(self.flags & const.SPLINE_LINEAR)
+
+
+class Helix(Spline):
+    def __init__(self):
+        super(Helix, self).__init__()
+        self.helix_version = (1, 1)
+        self.axis_base_point = None
+        self.start_point = None
+        self.axis_vector = None
+        self.radius = 0
+        self.turns = 0
+        self.turn_height = 0
+        self.handedness = 0  # 0 = left, 1 = right
+        self.constrain = 0
+        # 0 = Constrain turn height;
+        # 1 = Constrain turns;
+        # 2 = Constrain height
+
+    def setup_attributes(self, tags):
+        helix_major_version = 1
+        helix_maintainance_version = 1
+        for code, value in super(Helix, self).setup_attributes(tags):
+            if code == 10:
+                self.axis_base_point = value
+            elif code == 11:
+                self.start_point = value
+            elif code == 12:
+                self.axis_vector = value
+            elif code == 90:
+                helix_major_version = value
+            elif code == 91:
+                helix_maintainance_version = value
+            elif code == 91:
+                helix_maintainance_version = value
+            elif code == 40:
+                self.radius = value
+            elif code == 41:
+                self.turns = value
+            elif code == 42:
+                self.turn_height = value
+            elif code == 290:
+                self.handedness = value
+            elif code == 280:
+                self.constrain = value
+            else:
+                yield code, value  # chain of generators
+        self.helix_version = (helix_major_version, helix_maintainance_version)
 
 
 EntityTable = {

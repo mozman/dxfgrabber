@@ -4,14 +4,14 @@ from __future__ import unicode_literals
 __author__ = "mozman <mozman@gmx.at>"
 
 import unittest
-from dxfgrabber.tags import ClassifiedTags
-from dxfgrabber.entities import entity_factory
+from dxfgrabber.tags import Tags
+from dxfgrabber.dxfentities import entity_factory
 
 
 class TestHelix(unittest.TestCase):
     def setUp(self):
-        tags = ClassifiedTags.from_text(HELIX)
-        self.entity = entity_factory(tags, 'AC1024')
+        tags = Tags.from_text(HELIX)
+        self.entity = entity_factory(tags)
 
     def test_helix_properties(self):
         helix = self.entity
@@ -36,8 +36,8 @@ class TestHelix(unittest.TestCase):
         helix = self.entity
         self.assertEqual(helix.flags, 0)
         self.assertEqual(helix.degree, 3)
-        self.assertEqual(len(helix.fitpoints), 0)
-        self.assertEqual(len(helix.controlpoints), 52)
+        self.assertEqual(len(helix.fit_points), 0)
+        self.assertEqual(len(helix.control_points), 52)
         self.assertEqual(len(helix.weights), 52)
         self.assertEqual(len(helix.knots), 56)
 

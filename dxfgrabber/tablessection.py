@@ -37,9 +37,8 @@ class DefaultDrawing(object):
 class TablesSection(object):
     name = 'tables'
 
-    def __init__(self, drawing=DefaultDrawing()):
+    def __init__(self):
         self._tables = dict()
-        self._drawing = drawing
         self._create_default_tables()
 
     def _create_default_tables(self):
@@ -49,7 +48,7 @@ class TablesSection(object):
 
     @staticmethod
     def from_tags(tags, drawing):
-        tables_section = TablesSection(drawing)
+        tables_section = TablesSection()
         tables_section._setup_tables(tags)
         return tables_section
 
