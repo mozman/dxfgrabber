@@ -3,8 +3,37 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-dxfgrabber |version| documentation
-==================================
+==========
+dxfgrabber
+==========
+
+.. image:: https://img.shields.io/pypi/dm/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Downloads
+
+.. image:: https://img.shields.io/pypi/l/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: License
+
+.. image:: https://img.shields.io/pypi/pyversions/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Python Versions
+
+.. image:: https://img.shields.io/pypi/v/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/wheel/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Wheel Status
+
+.. image:: https://img.shields.io/pypi/status/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Status
+
+.. image:: https://readthedocs.org/projects/pip/badge/
+   :target: https://dxfgrabber.readthedocs.org
+   :alt: Read The Docs
 
 last updated |today|.
 

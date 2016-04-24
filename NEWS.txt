@@ -2,10 +2,11 @@
 News
 ====
 
-Version 0.8.0 - 2016-05-..
+Version 0.8.0 - 2016-04-24
 
   * internal refactoring - removed extra layer for DXF R12 and DXF R13 implementation
   * removed parts implemented in Cython
+  * new version is ~30% faster than the old pure Python version but ~15% slower than the version with C-extension
   * some pep8 refactorings, renamed attributes like startparam to start_param
 
 Version 0.7.5 - 2015-11-29

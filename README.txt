@@ -1,6 +1,27 @@
 
+==========
 dxfgrabber
 ==========
+
+.. image:: https://readthedocs.org/projects/pip/badge/
+   :target: https://dxfgrabber.readthedocs.org
+   :alt: Read The Docs
+
+.. image:: https://img.shields.io/pypi/l/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: License
+
+.. image:: https://img.shields.io/pypi/pyversions/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Python Versions
+
+.. image:: https://img.shields.io/pypi/wheel/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Wheel Status
+
+.. image:: https://img.shields.io/pypi/status/dxfgrabber.svg
+   :target: https://pypi.python.org/pypi/dxfgrabber/
+   :alt: Status
 
 Abstract
 --------
