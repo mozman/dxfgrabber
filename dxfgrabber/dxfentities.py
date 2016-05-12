@@ -545,6 +545,8 @@ class Vertex(DXFEntity):
                 self.start_width = value
             elif code == 41:
                 self.end_width = value
+            elif code == 42:
+                self.bulge = value
             elif code == 50:
                 self.tangent = value
             elif code == 70:
