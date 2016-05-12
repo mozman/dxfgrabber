@@ -2,6 +2,10 @@
 News
 ====
 
+Version 0.8.1 - 2016-...
+
+  * BUGFIX: restored VERTEX bulge values
+
 Version 0.8.0 - 2016-04-24
 
   * internal refactoring - removed extra layer for DXF R12 and DXF R13 implementation

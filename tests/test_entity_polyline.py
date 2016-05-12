@@ -73,6 +73,16 @@ class Test2DSplineDXF12(unittest.TestCase):
         self.assertEqual(6, len(spline.control_points))
 
 
+class TestBulgeValue(unittest.TestCase):
+    def setUp(self):
+        tags = Tags.from_text(POLYLINE_WITH_BULGE_VALUES)
+        self.entities = EntitySection.from_tags(tags, DrawingProxy('AC1009'))
+
+    def test_has_bulge_value(self):
+        polyline = self.entities[0]
+        vertex = polyline.vertices[0]
+        self.assertEqual(round(-1.7320508075688741, 4), round(vertex.bulge, 4))
+
 
 POLYLINE_DXF13 = """  0
 SECTION
@@ -1114,6 +1124,110 @@ SEQEND
 2DB
   8
 T-2DPLINE-CURVE
+  0
+ENDSEC
+"""
+
+POLYLINE_WITH_BULGE_VALUES = """  0
+SECTION
+  2
+ENTITIES
+  0
+POLYLINE
+  5
+B6
+  8
+0
+ 66
+     1
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 70
+     1
+  0
+VERTEX
+  5
+B7
+  8
+0
+ 10
+-2.5
+ 20
+6.0358983848622421
+ 30
+0.0
+ 42
+-1.7320508075688741
+  0
+VERTEX
+  5
+B8
+  8
+0
+ 10
+-2.5
+ 20
+12.9641016151377499
+ 30
+0.0
+  0
+VERTEX
+  5
+BA
+  8
+0
+ 10
+-2.5
+ 20
+18.4999999999999893
+ 30
+0.0
+  0
+VERTEX
+  5
+BB
+  8
+0
+ 10
+-12.5
+ 20
+18.5
+ 30
+0.0
+  0
+VERTEX
+  5
+BC
+  8
+0
+ 10
+-12.5
+ 20
+0.4999999999999984
+ 30
+0.0
+  0
+VERTEX
+  5
+BD
+  8
+0
+ 10
+-2.5
+ 20
+0.5000000000000014
+ 30
+0.0
+  0
+SEQEND
+  5
+B9
+  8
+0
   0
 ENDSEC
 """
