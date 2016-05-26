@@ -7,10 +7,6 @@
 dxfgrabber
 ==========
 
-.. image:: https://img.shields.io/pypi/dm/dxfgrabber.svg
-   :target: https://pypi.python.org/pypi/dxfgrabber/
-   :alt: Downloads
-
 .. image:: https://img.shields.io/pypi/l/dxfgrabber.svg
    :target: https://pypi.python.org/pypi/dxfgrabber/
    :alt: License
@@ -32,7 +28,7 @@ dxfgrabber
    :alt: Status
 
 .. image:: https://readthedocs.org/projects/pip/badge/
-   :target: https://dxfgrabber.readthedocs.org
+   :target: https://dxfgrabber.readthedocs.io
    :alt: Read The Docs
 
 last updated |today|.

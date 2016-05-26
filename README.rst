@@ -4,7 +4,7 @@ dxfgrabber
 ==========
 
 .. image:: https://readthedocs.org/projects/pip/badge/
-   :target: https://dxfgrabber.readthedocs.org
+   :target: https://dxfgrabber.readthedocs.io
    :alt: Read The Docs
 
 .. image:: https://img.shields.io/pypi/l/dxfgrabber.svg
