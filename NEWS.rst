@@ -2,9 +2,10 @@
 News
 ====
 
-Version 0.8.1 - 2016-...
+Version 0.8.1 - 2016-08-17
 
   * BUGFIX: restored VERTEX bulge values
+  * NEW: excepts 'inf.0' and '-inf.0' float values created by QGIS (AutoCAD does not read this none standard values)
 
 Version 0.8.0 - 2016-04-24
 

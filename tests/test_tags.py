@@ -4,9 +4,10 @@ from __future__ import unicode_literals
 
 import unittest
 from io import StringIO
+import math
 
 from dxfgrabber.tags import Tags, DXFTag, string_tagger
-from dxfgrabber.tags import dxfinfo
+from dxfgrabber.tags import dxfinfo, to_float_with_infinite
 
 TEST_TAGREADER = """  0
 SECTION
@@ -264,6 +265,7 @@ AcDbEllipse
 6.28
 """
 
+
 class TestSubclasses(unittest.TestCase):
     def setUp(self):
         self.tags = Tags.from_text(ELLIPSE)
@@ -274,3 +276,14 @@ class TestSubclasses(unittest.TestCase):
         self.assertEqual(3, len(subclasses['noname']))
         self.assertEqual(1, len(subclasses['AcDbEntity']))
         self.assertEqual(6, len(subclasses['AcDbEllipse']))
+
+
+class TestInfinite(unittest.TestCase):
+    def test_to_float(self):
+        self.assertEqual(1.0, to_float_with_infinite('1.0'))
+        with self.assertRaises(ValueError):
+            to_float_with_infinite('abc')
+
+    def test_infinite(self):
+        self.assertTrue(math.isinf(to_float_with_infinite(' -inf.0  ')))
+        self.assertTrue(math.isinf(to_float_with_infinite(' INF.0  ')))

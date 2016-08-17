@@ -37,7 +37,7 @@ Installation
 Documentation
 =============
 
-http://dxfgrabber.readthedocs.org
+http://dxfgrabber.readthedocs.io
 
 http://pythonhosted.org/dxfgrabber/
 
