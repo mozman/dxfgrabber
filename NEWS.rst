@@ -2,6 +2,11 @@
 News
 ====
 
+Version 0.8.2 -
+
+  * BGFIX: TEXT font resolving issue
+
+
 Version 0.8.1 - 2016-08-17
 
   * BUGFIX: restored VERTEX bulge values
