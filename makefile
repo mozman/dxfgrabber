@@ -3,18 +3,10 @@
 
 RUNTESTS = -m unittest discover -s tests
 
-PYTHON27 = py -2.7
-PYTHON34 = py -3.4
 PYTHON35 = py -3.5
 
-PYPY = C:\pypy-5.0.0\pypy.exe
-PYPY3 = C:\pypy3-2.4.0\pypy.exe
+PYPY = C:\pypy2-5.6.0\pypy.exe
 
-test27:
-	$(PYTHON27) $(RUNTESTS)
-
-test34:
-	$(PYTHON34) $(RUNTESTS)
 
 test35:
 	$(PYTHON35) $(RUNTESTS)
@@ -22,10 +14,7 @@ test35:
 testpypy:
 	$(PYPY) $(RUNTESTS)
 
-testpypy3:
-	$(PYPY3) $(RUNTESTS)
-
-testall: test27 test34 test35 testpypy testpypy3
+testall: test35 testpypy
 
 packages:
 	py setup.py sdist --formats=zip,gztar
