@@ -35,7 +35,7 @@ last updated |today|.
 
 *dxfgrabber* is a Python library to grab information from DXF drawings - all DXF versions supported.
 
-Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython 3.4, CPython 3.5 and PyPy.
+Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython 3.5, CPython 3.6 and PyPy.
 
 License: *dxfgrabber* is licensed under the MIT license.
 

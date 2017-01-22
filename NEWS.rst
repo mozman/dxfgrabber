@@ -2,9 +2,10 @@
 News
 ====
 
-Version 0.8.2 -
+Version 0.8.2 - 2017-01-22
 
   * BUGFIX: TEXT font resolving issue
+  * Moved to GitHub.com: https://github.com/mozman/dxfgrabber.git
 
 
 Version 0.8.1 - 2016-08-17

@@ -41,8 +41,8 @@ http://dxfgrabber.readthedocs.io
 
 http://pythonhosted.org/dxfgrabber/
 
-Source at bitbucket.org:
+Source at GitHub.com:
 
-http://bitbucket.org/mozman/dxfgrabber
+https://github.com/mozman/dxfgrabber.git
 
 mozman -- <mozman@gmx.at>
