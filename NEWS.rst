@@ -2,6 +2,10 @@
 News
 ====
 
+Version 0.8.3 - 2017-02-06
+
+  * BUGFIX: handles windows line ending '\r\n' in streams correct, some streams do not produce universal line endings
+
 Version 0.8.2 - 2017-01-22
 
   * BUGFIX: TEXT font resolving issue
