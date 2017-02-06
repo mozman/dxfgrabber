@@ -138,7 +138,7 @@ def stream_tagger(stream, assure_3d_coords=False):
         value = stream.readline()
         line.counter += 2
         if code and value:  # StringIO(): empty strings indicates EOF
-            return DXFTag(int(code[:-1]), value[:-1])  # without '\n'
+            return DXFTag(int(code.rstrip('\r\n')), value.rstrip('\r\n'))  # without '\n'
         else:  # StringIO(): missing '\n' indicates EOF
             raise EOFError()
 
