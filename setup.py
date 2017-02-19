@@ -8,7 +8,7 @@
 import os
 from setuptools import setup
 
-VERSION = "0.8.3"
+VERSION = "0.8.4"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
 

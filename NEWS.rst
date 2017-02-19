@@ -2,6 +2,10 @@
 News
 ====
 
+Version 0.8.4 - 2017-02-19
+
+  * dxfgrabber can read DXF files with only an ENTITIES section
+
 Version 0.8.3 - 2017-02-06
 
   * BUGFIX: handles windows line ending '\r\n' in streams correct, some streams do not produce universal line endings
