@@ -7,27 +7,6 @@
 dxfgrabber
 ==========
 
-.. image:: https://img.shields.io/pypi/l/dxfgrabber.svg
-   :target: https://pypi.python.org/pypi/dxfgrabber/
-   :alt: License
-
-.. image:: https://img.shields.io/pypi/pyversions/dxfgrabber.svg
-   :target: https://pypi.python.org/pypi/dxfgrabber/
-   :alt: Python Versions
-
-.. image:: https://img.shields.io/pypi/v/dxfgrabber.svg
-   :target: https://pypi.python.org/pypi/dxfgrabber/
-   :alt: Latest Version
-
-.. image:: https://img.shields.io/pypi/wheel/dxfgrabber.svg
-   :target: https://pypi.python.org/pypi/dxfgrabber/
-   :alt: Wheel Status
-
-.. image:: https://img.shields.io/pypi/status/dxfgrabber.svg
-   :target: https://pypi.python.org/pypi/dxfgrabber/
-   :alt: Status
-
-
 last updated |today|.
 
 *dxfgrabber* is a Python library to grab information from DXF drawings - all DXF versions supported.
