@@ -24,8 +24,6 @@ Documentation
 
 http://dxfgrabber.readthedocs.io
 
-http://pythonhosted.org/dxfgrabber/
-
 Source at GitHub.com:
 
 https://github.com/mozman/dxfgrabber.git

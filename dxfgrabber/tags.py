@@ -8,11 +8,10 @@ __author__ = "mozman <mozman@gmx.at>"
 import sys
 from .codepage import toencoding
 from .const import acadrelease
-from array import array
 
 from io import StringIO
 from collections import namedtuple
-from itertools import chain, islice
+from itertools import chain
 from . import tostr
 
 
@@ -88,6 +87,7 @@ class TagCaster:
             else:
                 raise
 
+
 TYPES = [
     (tostr, range(0, 10)),
     (point_tuple, range(10, 20)),
@@ -124,7 +124,7 @@ cast_tag_value = _TagCaster.cast_value
 
 
 def stream_tagger(stream, assure_3d_coords=False):
-    """ Generates DXFTag() from a stream (untrusted external source). Does not skip comment tags 999.
+    """ Generates DXFTag() from a stream (untrusted external source). Does skip comment tags 999.
     """
     class Counter:
         def __init__(self):
@@ -449,7 +449,8 @@ def dxfinfo(stream):
     info = DXFInfo()
     tag = DXFTag(999999, '')
     tagreader = stream_tagger(stream)
-    while tag != DXFTag(0, 'ENDSEC'):
+    stop_tag = DXFTag(0, 'ENDSEC')
+    while tag != stop_tag:
         tag = next(tagreader)
         if tag.code != 9:
             continue
@@ -461,6 +462,7 @@ def dxfinfo(stream):
 
 
 def binary_encoded_data_to_bytes(data):
+    from array import array
     PY3 = sys.version_info[0] >= 3
     byte_array = array('B' if PY3 else b'B')
     for text in data:
