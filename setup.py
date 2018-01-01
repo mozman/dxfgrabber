@@ -8,7 +8,7 @@
 import os
 from setuptools import setup
 
-VERSION = "0.8.4"
+VERSION = "1.0.0"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'mozman@gmx.at'
 
@@ -39,8 +39,6 @@ setup(name='dxfgrabber',
           "Operating System :: OS Independent",
           "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3",
-          "Programming Language :: Python :: 3.4",
-          "Programming Language :: Python :: 3.5",
           "Programming Language :: Python :: 3.6",
           "Programming Language :: Python :: Implementation :: CPython",
           "Programming Language :: Python :: Implementation :: PyPy",

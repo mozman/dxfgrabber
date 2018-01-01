@@ -2,6 +2,10 @@
 News
 ====
 
+Version 1.0.0 - 2018-01-01
+
+  * entering just maintenance and bugfix mode - no new features planned
+
 Version 0.8.4 - 2017-02-19
 
   * dxfgrabber can read DXF files with only an ENTITIES section

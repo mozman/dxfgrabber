@@ -11,7 +11,7 @@ last updated |today|.
 
 *dxfgrabber* is a Python library to grab information from DXF drawings - all DXF versions supported.
 
-Python compatibility: *dxfgrabber* is tested with CPython 2.7, CPython 3.5, CPython 3.6 and PyPy.
+Python compatibility: *dxfgrabber* is tested with CPython 3.6 and PyPy.
 
 License: *dxfgrabber* is licensed under the MIT license.
 
@@ -23,6 +23,11 @@ simple usage::
     layer_count = len(dxf.layers) # collection of layer definitions
     block_definition_count = len(dxf.blocks) #  dict like collection of block definitions
     entity_count = len(dxf.entities) # list like collection of entities
+
+Development Status
+==================
+
+With version 1.0.0 dxfgrabber enters the just maintenance and bugfix mode, no further development (features) planned.
 
 Read DXF files
 ==============
@@ -86,6 +91,7 @@ Drawing Content
     ``AC1021``  AutoCAD R2007
     ``AC1024``  AutoCAD R2010
     ``AC1027``  AutoCAD R2013
+    ``AC1032``  AutoCAD R2018
     =========== ===============
 
 .. attribute:: Drawing.encoding
