@@ -10,7 +10,7 @@ from setuptools import setup
 
 VERSION = "1.0.0"
 AUTHOR_NAME = 'Manfred Moitzi'
-AUTHOR_EMAIL = 'mozman@gmx.at'
+AUTHOR_EMAIL = 'me@mozman.at'
 
 
 def read(fname):

@@ -28,4 +28,7 @@ Source at GitHub.com:
 
 https://github.com/mozman/dxfgrabber.git
 
-mozman -- <mozman@gmx.at>
+Contact
+=======
+
+dxfgrabber@mozman.at
