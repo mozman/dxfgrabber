@@ -1,23 +1,17 @@
+WARNING
+=======
 
-==========
-dxfgrabber
-==========
+This is an outdated python package, please switch to `ezdxf`: https://pypi.org/project/ezdxf/
 
-.. image:: https://readthedocs.org/projects/pip/badge/
-   :target: https://dxfgrabber.readthedocs.io
-   :alt: Read The Docs
+Advantage of `ezdxf` over `dxfgrabber` is read/write support for DXF versions:
 
-
-Abstract
---------
-
-A Python library to grab information from DXF drawings - all DXF versions supported.
-
-
-Installation
-============
-
-    python setup.py install
+    - R12
+    - R2000
+    - R2004
+    - R2007
+    - R2010
+    - R2013
+    - R2018
 
 Documentation
 =============

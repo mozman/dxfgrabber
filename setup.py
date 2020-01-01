@@ -8,7 +8,7 @@
 import os
 from setuptools import setup
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 AUTHOR_NAME = 'Manfred Moitzi'
 AUTHOR_EMAIL = 'me@mozman.at'
 
@@ -29,15 +29,14 @@ setup(name='dxfgrabber',
       author_email=AUTHOR_EMAIL,
       packages=['dxfgrabber'],
       provides=['dxfgrabber'],
-      keywords=['DXF', 'CAD'],
+      keywords=['DXF'],
       long_description=read('README.rst') + read('NEWS.rst'),
       platforms="OS Independent",
       license="MIT License",
       classifiers=[
-          "Development Status :: 5 - Production/Stable",
+          "Development Status :: 7 - Inactive",
           "License :: OSI Approved :: MIT License",
           "Operating System :: OS Independent",
-          "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3",
           "Programming Language :: Python :: 3.6",
           "Programming Language :: Python :: 3.7",

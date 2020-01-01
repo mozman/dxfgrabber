@@ -20,7 +20,7 @@ class TestACISData(unittest.TestCase):
             self.assertEqual(expected, result)
 
 
-SOLID3D = """  0
+SOLID3D = r"""  0
 3DSOLID
   5
 223

@@ -36,12 +36,12 @@ class TestMText(unittest.TestCase):
 
     def test_mtext_text(self):
         mtext = self.entity
-        self.assertEqual(mtext.raw_text, "first 250 chars\Psecond 250 chars\Pand the rest")
+        self.assertEqual(mtext.raw_text, r"first 250 chars\Psecond 250 chars\Pand the rest")
         self.assertEqual(mtext.lines(), ["first 250 chars", "second 250 chars", "and the rest"])
 
     def test_mtext_plain_text(self):
         mtext = self.entity
-        mtext.raw_text = "\A1;Das ist eine MText\PZeile mit {\LFormat}ierung\Pänder die Farbe\P\pi-7.5,l7.5,t7.5;1.^INummerierung\P2.^INummerierung\P\pi0,l0,tz;\P{\H0.7x;\S1/2500;}  ein Bruch"
+        mtext.raw_text = r"\A1;Das ist eine MText\PZeile mit {\LFormat}ierung\Pänder die Farbe\P\pi-7.5,l7.5,t7.5;1.^INummerierung\P2.^INummerierung\P\pi0,l0,tz;\P{\H0.7x;\S1/2500;}  ein Bruch"
         expected = "Das ist eine MText\nZeile mit Formatierung\nänder die Farbe\n1.^INummerierung\n2.^INummerierung\n\n1/2500  ein Bruch"
         self.assertEqual(expected, mtext.plain_text())
 
@@ -50,7 +50,7 @@ class TestMText(unittest.TestCase):
         mtext.raw_text = "%%d"
         self.assertEqual("°", mtext.plain_text())
 
-MTEXT = """  0
+MTEXT = r"""  0
 MTEXT
   5
 3D2

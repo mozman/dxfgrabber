@@ -2,6 +2,10 @@
 News
 ====
 
+Version 1.0.1 - 2020-01-01
+
+  * WARNING: OUTDATED PACKAGE - switch to `ezdxf`: https://pypi.org/project/ezdxf/
+
 Version 1.0.0 - 2018-01-01
 
   * entering just maintenance and bugfix mode - no new features planned

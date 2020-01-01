@@ -1,7 +1,10 @@
 build/
 dist/
-.idea/
+.idea
+.pytest_cache
+.tox
 dxfgrabber.egg-info/
 docs/_build/
 playground/
 stress_test_results.ods
+tox.ini
